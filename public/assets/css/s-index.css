@@ -620,3 +620,11 @@ i {
 [data-black] {
     color: #000;
 }
+
+[data-center] {
+    text-align: center;
+}
+
+[data-jcc] {
+    justify-content: center;
+}
