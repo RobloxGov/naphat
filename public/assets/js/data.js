@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Send a POST request to your Google Apps Script
         fetch(
-          "https://script.google.com/macros/s/AKfycbyZhtDuzlWU8jUeyEr4bJPlUTcxdk21P9U522v4sfCp_gjmd7M8T9x25lzl8zPsigNR/exec",
+          "https://script.google.com/macros/s/AKfycbzUdlTG4-V5UdigjqXPIXVBZoqP8RJFVa3B6MR-N325lEfiv6ZZofKMPDOGXU_en7ML/exec",
           {
             redirect: "follow",
             method: "POST",
