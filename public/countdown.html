@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>หน้าหลัก</title>
+    <link rel="icon" href="/public/assets/images/NAPHAT_DEV.png" type="image/png">
+    <link rel="stylesheet" href="/public/assets/css/s-index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@100..700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script defer src="/public/assets/js/scripts.js"></script>
+    <script defer src="/public/assets/js/submenu.js"></script>
+    <style>
+        section.countdown-banner {
+            height: calc(100vh - 84.8px);
+            margin: 84.8px 0 0 0;
+        }     
+        
+        .countdown-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+        }
+        .countdown-group:first-child {
+            text-align: right;
+        }
+        .countdown-group {
+            width: 45%;
+        }
+        .countdown-item {
+            margin-bottom: 30px;
+        }
+        .countdown-group:first-child .countdown {
+            justify-content: flex-end;
+        }
+        .countdown {
+            margin: 20px 0;
+            font-size: 24px;
+            color: #d10000;
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+            gap: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="MuiBox-root css-1ltj605 loader css-1ltj605" id="">
+        <span class="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary css-z01bqi" role="progressbar" style="width: 100px; height: 100px;">
+    		<img src="/public/assets/images/NewGear.png" width="150px">
+    	</span>
+    </div>
+    <header>
+        <div data-container>
+            <div data-logo>
+                <img src="/public/assets/images/logo.png" alt="NaphatDev Logo">
+            </div>
+            <nav>
+                <ul data-nav-links="">
+                    <li><a href="index.html">หน้าแรก</a></li>
+                    <li><a href="news.html">ข่าวสาร</a></li>
+                    <li data-has-submenu>
+                        <a>โครงสร้าง</a>
+                        <ul submenu>
+                            <li><a href="team.html">ทีมงาน</a></li>
+                            <li><a href="department.html">แผนก</a></li>
+                        </ul>
+                    </li>
+                    <li data-has-submenu>
+                        <a>เกี่ยวกับ</a>
+                        <ul submenu>
+                            <li><a href="vision.html">วิสัยทัศน์</a></li>
+                            <li><a href="mission.html">พันธกิจ</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="contact.html">ติดต่อ</a></li>
+                </ul>
+                <div data-menu-toggle>
+                    <i data-fas data-icon="0"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <!-- Countdown Banner -->
+    <section class="countdown-banner">
+        <h2 style="color: unset;background: unset;padding: unset;display: flex;justify-content: center;">นับถอยหลังสู่เหตุการณ์สำคัญ</h2>
+        <div class="countdown-wrapper">
+            <div class="countdown-group">
+                <div class="countdown-item">
+                    <b>ประกาศเคลียริงเฮาส์ KMITL (พฤ. 24 มกราคม 2568)</b>
+                    <div class="countdown" id="Clearing-House-countdown">
+                        <div><span id="Clearing-House-days">0</span>วัน</div>
+                        <div><span id="Clearing-House-hours">0</span>ชั่วโมง</div>
+                        <div><span id="Clearing-House-minutes">0</span>นาที</div>
+                        <div><span id="Clearing-House-seconds">0</span>วินาที</div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="countdown-group">
+                <div class="countdown-item">
+                    <b>วันพิธีจบหลักสูตร ม.6 รุ่น 138 (ส. 15 กุมภาพันธ์ 2568)</b>
+                    <div class="countdown" id="graduation-countdown">
+                        <div><span id="graduation-days">26</span>วัน</div>
+                        <div><span id="graduation-hours">4</span>ชั่วโมง</div>
+                        <div><span id="graduation-minutes">10</span>นาที</div>
+                        <div><span id="graduation-seconds">0</span>วินาที</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    
+    <script>
+        function countdown(targetDate, timerPrefix) {
+            var countDownDate = new Date(targetDate).getTime();
+
+            var x = setInterval(function() {
+                var now = new Date().getTime();
+                var distance = countDownDate - now;
+
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById(timerPrefix + '-days').innerHTML = days;
+                document.getElementById(timerPrefix + '-hours').innerHTML = hours;
+                document.getElementById(timerPrefix + '-minutes').innerHTML = minutes;
+                document.getElementById(timerPrefix + '-seconds').innerHTML = seconds;
+
+                if (distance < 0) {
+                    clearInterval(x);
+                    document.getElementById(timerPrefix + '-days').innerHTML = "0";
+                    document.getElementById(timerPrefix + '-hours').innerHTML = "0";
+                    document.getElementById(timerPrefix + '-minutes').innerHTML = "0";
+                    document.getElementById(timerPrefix + '-seconds').innerHTML = "0";
+                }
+            }, 1000);
+        }
+
+        // เรียกใช้งานฟังก์ชัน countdown สำหรับแต่ละเหตุการณ์
+        countdown("Sep 25, 2024 00:00:00", "exam1");
+        countdown("Oct 28, 2024 09:00:00", "tcas");
+        countdown("Jan 13, 2025 00:00:00", "exam2");
+        countdown("Jan 24, 2025 12:35:00", "Clearing-House");
+        countdown("Feb 15, 2025 00:00:00", "graduation");
+        countdown("Nov 16, 2024 00:00:00", "nationalacademictest");
+
+        function toggleMenu() {
+            const fullMenu = document.getElementById('fullMenu');
+            fullMenu.classList.toggle('show');
+        }
+
+        // Calculate age dynamically based on the birthdate
+        function calculateAge() {
+            const birthdate = new Date('2007-04-30'); // Set birthdate here
+            const today = new Date();
+            let age = today.getFullYear() - birthdate.getFullYear();
+            const monthDifference = today.getMonth() - birthdate.getMonth();
+            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthdate.getDate())) {
+                age--;
+            }
+            document.getElementById('age').textContent = `${age} ปี`;
+        }
+
+        // Call the function to set the age when the page loads
+        window.onload = calculateAge;
+
+    </script>
+</body>
+</html>

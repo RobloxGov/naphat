@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="/public/assets/images/NAPHAT_DEV.png" type="image/png">
+    <link rel="stylesheet" href="/public/assets/fonts/Anuphan.css">
+    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@100..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header data-header>
+        <div data-logo>NAPHAT DEV</div>
+        <button id="logoutBtn">ออกระบบ</button>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <ul>
+                <li data-home><i class="fas fa-tachometer-alt"></i> Dashboard</li>
+                <li data-meeting><i class="fas fa-bell"></i> Meeting</li>
+                <li data-document active><i class="fas fa-file-alt"></i>Document</li>
+                <li data-info><i class="fas fa-users"></i> Info</li>
+            </ul>
+        </aside>
+        <main data-main-info="" data-ml="">
+            <section info-content="">
+                <img src="/public/assets/images/dash.png" width="100%">
+                <h2>เอกสาร</h2>
+                <div box-document="">
+                    <div box-sub-document="">
+                        <img src="img/Google_Docs.png">
+                    </div>
+                    <div box-sub-document="">
+                        <img src="img/Google_Sheets.png">
+                    </div>
+                    <div box-sub-document="">
+                        <img src="img/Google_Slides.png">
+                    </div><div box-sub-document="">
+                        <img src="img/Google_Analytics.png">
+                    </div><div box-sub-document="">
+                        <img src="img/Google_Finance.png">
+                    </div>
+                    <div box-sub-document="">
+                        <img src="img/Canva.png">
+                    </div><div box-sub-document="">
+                        <img src="img/Naphat_Vote.png">
+                    </div><div box-sub-document="">
+                        <img src="img/Gmail.png">
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="dashboard.js"></script>
+    <script src="list.js"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="icon" href="/public/assets/images/NAPHAT_DEV.png" type="image/png">
+    <link rel="stylesheet" href="/public/assets/fonts/Anuphan.css">
+    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@100..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/public/assets/css/login.css">
+</head>
+<body>
+    <div data-login-container>
+        <h2>เข้าสู่ระบบ ผู้ดูแลระบบ<br></h2>
+        <form id="loginForm" onsubmit="return login(event)">
+            <div data-input-group>
+                <label for="username">รหัสผู้ใช้:</label>
+                <input type="text" id="username" name="username" required="">
+            </div>
+            <div data-input-group>
+                <label for="password">รหัสผ่าน:</label>
+                <input type="password" id="password" name="password" required="">
+            </div>
+            <button type="submit">เข้าสู่ระบบ</button>
+            <p id="error" data-error-message></p>
+        </form>
+    </div>
+
+
+    <script src="/public/assets/js/login.js"></script>
+</body>
+</html>

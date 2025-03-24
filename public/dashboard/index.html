@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="/public/assets/images/NAPHAT_DEV.png" type="image/png">
+    <link rel="stylesheet" href="/public/assets/fonts/Anuphan.css">
+    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@100..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header data-header>
+        <div data-logo>NAPHAT DEV</div>
+        <button id="logoutBtn">ออกระบบ</button>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <ul>
+                <li data-home><i class="fas fa-tachometer-alt"></i> Dashboard</li>
+                <li data-meeting><i class="fas fa-bell"></i> Meeting</li>
+                <li data-document><i class="fas fa-file-alt"></i>Document</li>
+                <li data-info active><i class="fas fa-users"></i> Info</li>
+            </ul>
+        </aside>
+        <main data-main-info="" data-ml="">
+            <section info-content="">
+                <img src="/public/assets/images/dash.png" width="100%">
+                <h2>ข้อมูลสมาชิก</h2>
+                <div data-flex-gap-width="">
+                    <div id="userInfo">
+                        <img src="/public/assets/images/NAPHAT_DEV.png" alt="Profile Picture">
+                        <div class="user-details">
+                            <h3>นายณภัทร ปัญโญ</h3>
+                            <p>ตำแหน่ง: ประธานบริหารบริษัท</p>
+                            <p>มหาวิทยาลัย: วิศวกรรมขนส่งทางราง, KMITL</p>
+                        </div>
+                    </div>
+                    <!-- นับถอยหลังเหตุการณ์สำคัญ -->
+                    <div data-countdown="">
+                        <div data-sub-countdown="">
+                            <h3>นับถอยหลัง</h3>
+                            <p data-flex-1="">วันรายงานตัว
+                                <span id="kmitl1-countdown">39 วัน 12 ชม. 18 นาที 19 วินาที</span>
+                            </p>
+                            <p data-flex-1="">วันเปิดภาคเรียน
+                                <span id="kmitl-open-countdown">101 วัน 3 ชม. 48 นาที 19 วินาที</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="dashboard.js"></script>
+    <script src="list.js"></script>
+</body>
+</html>
