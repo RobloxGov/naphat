@@ -22,17 +22,17 @@
             <p><strong>วันที่:</strong> 4 พฤษภาคม 2568 เวลา 13.00 น.</p>
             <p><strong>ปิดรับลงทะเบียน:</strong> 30 เมษายน 2568</p>
         </section>
-        <form class="registration-form" method="post" autocomplete="off" name="hello-sheet">
+        <form method="post" autocomplete="off" name="hello-sheet" class="registration-form">
             <div class="d-flex">
                 <label for="id-number">เลขบัตรประชาชน</label>
                 <div id="success"></div>
             </div>
             <input type="text" id="id-number" name="id-number" oninput="formatInput(event)" placeholder="1-2345-67890-12-3">
             
-            <label for="name">ชื่อหน่วยงาน/แผนก</label>
-            <input type="text" id="name" name="name" placeholder="กรุณากรอก">
+            <label for="depart">ชื่อหน่วยงาน/แผนก</label>
+            <input type="text" id="depart" name="depart" placeholder="กรุณากรอก">
             
-            <button type="submit" name="submit" value="Send message" >ลงทะเบียนเข้าร่วมกิจกรรม</button>
+            <button type="submit" name="submit" value="Send message" class="btn btn-primary">ลงทะเบียนเข้าร่วมกิจกรรม</button>
           </form>
         <footer>
             <p style="display: none;">วัตถุประสงค์เพื่อลงทะเบียนรับหน่วย CPD ที่เกี่ยวข้องกับกิจกรรม</p>
