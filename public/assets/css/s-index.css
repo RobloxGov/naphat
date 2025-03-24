@@ -616,3 +616,7 @@ img {
 i {
     font-style: italic;
 }
+
+[data-black] {
+    color: #000;
+}
