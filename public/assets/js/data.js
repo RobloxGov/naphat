@@ -34,9 +34,13 @@ document.addEventListener('DOMContentLoaded', function() {
             // ตรวจสอบเวลาปัจจุบันว่าอยู่ในช่วงที่ต้องการหรือไม่
             if (currentDate >= targetDateReg) {
                 buttonReg.style.display = 'none'; // ซ่อน button[data-reg="2568"] หลังจากวันที่ 30 เมษายน 2568 เวลา 12.00 น.
+            } else {
+                buttonReg.style.display = 'block'; // แสดง button[data-reg="2568"] ถ้ายังไม่ถึงเวลา
             }
 
             if (currentDate >= targetDateMeet) {
                 buttonMeet.style.display = 'block'; // แสดง button[data-meet="2568"] หลังจากวันที่ 30 เมษายน 2568 เวลา 06.00 น.
+            } else {
+                buttonMeet.style.display = 'none'; // ซ่อน button[data-meet="2568"] ถ้ายังไม่ถึงเวลา
             }
         });
