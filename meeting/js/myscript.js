@@ -1,5 +1,6 @@
-function formatInput(event) {
+    function formatInput(event) {
       let input = event.target.value;
+      let successElement = document.getElementById("success");
       
       // ลบอักขระที่ไม่ใช่ตัวเลข
       input = input.replace(/\D/g, "");
@@ -26,4 +27,13 @@ function formatInput(event) {
 
       // อัพเดตค่าใน input
       event.target.value = formattedInput;
+
+      // ตรวจสอบจำนวนหลัก และแสดงข้อความใน success div
+      if (input.length === 13) {
+        successElement.textContent = "(ถูกต้อง)";
+        successElement.style.color = "#0b9c23";  // สีเขียว
+      } else {
+        successElement.textContent = "(ไม่ถูกต้อง)";
+        successElement.style.color = "#ea0c42";  // สีแดง
+      }
     }
