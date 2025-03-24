@@ -6,6 +6,7 @@
     <title>ลงทะเบียนเข้าร่วมกิจกรรม</title>
     <link rel="stylesheet" href="css/style.css">
     <style>input, button { font-family: inherit; }</style>
+    <script src="js/myscript.js"></script>
     <link rel="icon" href="/public/assets/images/NAPHAT_DEV.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
@@ -22,7 +23,7 @@
         </section>
         <form class="registration-form">
             <label for="id-number">เลขบัตรประชาชน</label>
-            <input type="text" id="id-number" placeholder="1-2345-67890-12-3">
+            <input type="text" id="id-number" oninput="formatInput(event)" placeholder="1-2345-67890-12-3">
             
             <label for="name">ชื่อหน่วยงาน/แผนก</label>
             <input type="text" id="name" placeholder="กรุณากรอก">
@@ -33,6 +34,7 @@
             <p style="display: none;">วัตถุประสงค์เพื่อลงทะเบียนรับหน่วย CPD ที่เกี่ยวข้องกับกิจกรรม</p>
         </footer>
     </div>
+    
 </body>
 </html>
 
