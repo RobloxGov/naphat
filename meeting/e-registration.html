@@ -22,7 +22,10 @@
             <p><strong>ปิดรับลงทะเบียน:</strong> 30 เมษายน 2568</p>
         </section>
         <form class="registration-form">
-            <label for="id-number">เลขบัตรประชาชน</label>
+            <div class="d-flex">
+                <label for="id-number">เลขบัตรประชาชน</label>
+                <div id="success"></div>
+            </div>
             <input type="text" id="id-number" oninput="formatInput(event)" placeholder="1-2345-67890-12-3">
             
             <label for="name">ชื่อหน่วยงาน/แผนก</label>
