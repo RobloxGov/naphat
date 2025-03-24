@@ -1,10 +1,29 @@
-
-    function formatInput(event) {
+function formatInput(event) {
       let input = event.target.value;
       
+      // ลบอักขระที่ไม่ใช่ตัวเลข
       input = input.replace(/\D/g, "");
 
-      let formattedInput = input.replace(/^(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})$/, "$1-$2-$3-$4-$5");
+      // ฟอร์แมตตัวเลขตามที่ต้องการ
+      let formattedInput = "";
+      
+      // แบ่งตัวเลขเป็นกลุ่มแล้วแทรก - ตามตำแหน่งที่ต้องการ
+      if (input.length > 0) {
+        formattedInput += input.slice(0, 1); // ตัวแรก
+      }
+      if (input.length > 1) {
+        formattedInput += "-" + input.slice(1, 5); // หลักที่ 2 ถึง 5
+      }
+      if (input.length > 5) {
+        formattedInput += "-" + input.slice(5, 10); // หลักที่ 6 ถึง 10
+      }
+      if (input.length > 10) {
+        formattedInput += "-" + input.slice(10, 12); // หลักที่ 11 ถึง 12
+      }
+      if (input.length > 12) {
+        formattedInput += "-" + input.slice(12, 13); // หลักที่ 13
+      }
 
+      // อัพเดตค่าใน input
       event.target.value = formattedInput;
     }
