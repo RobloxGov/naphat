@@ -74,7 +74,7 @@ h1[data-h1], h2[data-h2] {
             background: #ff7d41;
             padding: 0;
             margin-top: 21px;
-            width: 145px;
+            width: 160px;
             overflow: hidden;
             max-height: 0;
             transition: max-height 0.3s ease-in-out;
