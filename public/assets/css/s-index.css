@@ -628,3 +628,27 @@ i {
 [data-jcc] {
     justify-content: center;
 }
+
+[data-padding] {
+    padding-right: 16px;
+    padding-left: 16px;
+    margin-right: auto;
+    margin-left: auto;
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+}
+
+h1[data-title] {
+    font-size: 4.0625rem;
+    /*font-weight: 400;*/
+    line-height: 1.35;
+    color: #000;
+    margin-bottom: 0;
+}
