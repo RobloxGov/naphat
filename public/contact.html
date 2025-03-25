@@ -93,5 +93,24 @@
             &copy; 2023 NaphatDev. All rights reserved.
         </div>
     </footer>
+    <style>
+        // หาอิลิเมนต์ที่ต้องการ
+        const icon = document.querySelector('i.fa-phone');
+        const popup = document.querySelector('[data-popup]');
+        
+        // คลิกที่ icon
+        icon.addEventListener('click', function(event) {
+            event.stopPropagation(); // ป้องกันไม่ให้คลิกที่ icon ส่งผลให้ปิด popup
+            popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+        });
+        
+        // คลิกที่อื่นๆ บนหน้าจอ
+        document.addEventListener('click', function(event) {
+            if (!icon.contains(event.target) && !popup.contains(event.target)) {
+                popup.style.display = 'none';
+            }
+        });
+
+    </style>
 </body>
 </html>
