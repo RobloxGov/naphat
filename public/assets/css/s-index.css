@@ -654,3 +654,41 @@ h1[data-title] {
 [data-popup] {
     display: none;
 }
+
+[data-text] {
+    display: flex;
+    gap: 20px;
+}
+
+[data-popup] a {
+    max-width: 200px;
+    padding: 2px 4px;
+    color: #fff;
+    text-align: center;
+    background-color: #000;
+    border-radius: .25rem;
+}
+ .bs-tooltip-right .arrow::before {
+    right: 0;
+    border-width: .4rem .4rem .4rem 0;
+    border-right-color: #000;
+}
+.tooltip .arrow::before {
+    position: absolute;
+    content: "";
+    border-color: transparent;
+    border-style: solid;
+}
+.bs-tooltip-right .arrow {
+    left: 0;
+    width: .4rem;
+    height: .8rem;
+}
+.tooltip .arrow {
+    width: .8rem;
+    height: .4rem;
+}
+.tooltip, .tooltip .arrow {
+    position: absolute;
+    display: block;
+}
