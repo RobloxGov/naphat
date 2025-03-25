@@ -94,7 +94,6 @@
         </div>
     </footer>
     <script>
-        
         // เลือกทุกๆ ไอคอนที่เป็นส่วนหนึ่งของ h3
         const icons = document.querySelectorAll('h3 i');
         
@@ -105,8 +104,16 @@
             // เมื่อคลิกที่ไอคอน
             icon.addEventListener('click', function(event) {
                 event.stopPropagation(); // หยุดการคลิกจากการส่งผลที่อื่น
-                const isVisible = popup.style.display === 'block'; // เช็คว่ามันแสดงอยู่แล้วหรือไม่
-                popup.style.display = isVisible ? 'none' : 'block'; // toggle การแสดงผล
+        
+                // ซ่อนทุก popup ก่อนที่จะแสดงอันใหม่
+                document.querySelectorAll('[data-popup]').forEach(p => {
+                    if (p !== popup) {
+                        p.style.display = 'none';
+                    }
+                });
+        
+                // toggle การแสดงผลของ popup ที่คลิก
+                popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
             });
         
             // เมื่อคลิกที่ลิงก์ใน data-popup
@@ -126,6 +133,7 @@
                 });
             }
         });
+
     </script>
 </body>
 </html>
