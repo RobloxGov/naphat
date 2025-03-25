@@ -668,27 +668,27 @@ h1[data-title] {
     background-color: #000;
     border-radius: .25rem;
 }
- .bs-tooltip-right .arrow::before {
+.arrow::before {
     right: 0;
     border-width: .4rem .4rem .4rem 0;
     border-right-color: #000;
 }
-.tooltip .arrow::before {
+.arrow::before {
     position: absolute;
     content: "";
     border-color: transparent;
     border-style: solid;
 }
-.bs-tooltip-right .arrow {
+.arrow {
     left: 0;
     width: .4rem;
     height: .8rem;
 }
-.tooltip .arrow {
+.arrow {
     width: .8rem;
     height: .4rem;
 }
-.tooltip, .tooltip .arrow {
+.arrow {
     position: absolute;
     display: block;
 }
