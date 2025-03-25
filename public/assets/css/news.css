@@ -1,6 +1,6 @@
 
 .news {
-    max-width: 100% !important;
+    width: 100% !important;
     display: flex;
     flex-wrap: wrap;
 }
