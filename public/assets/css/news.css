@@ -98,3 +98,18 @@ h5 a {
 /* .mb-5, .my-5 {
     margin-bottom: 3rem !important;
 } */
+/* สำหรับหน้าจอที่มีขนาดน้อยกว่า 820px */
+@media (max-width: 820px) {
+    .col-4 {
+        max-width: 50%;
+        flex: 0 0 50%;
+    }
+}
+
+/* สำหรับหน้าจอที่มีขนาดน้อยกว่า 600px */
+@media (max-width: 600px) {
+    .col-4 {
+        max-width: 100%;
+        flex: 0 0 100%;
+    }
+}
