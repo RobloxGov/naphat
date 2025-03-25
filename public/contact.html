@@ -93,24 +93,32 @@
             &copy; 2023 NaphatDev. All rights reserved.
         </div>
     </footer>
-    <style>
-        // หาอิลิเมนต์ที่ต้องการ
-        const icon = document.querySelector('i.fa-phone');
-        const popup = document.querySelector('[data-popup]');
+    <script>
         
-        // คลิกที่ icon
-        icon.addEventListener('click', function(event) {
-            event.stopPropagation(); // ป้องกันไม่ให้คลิกที่ icon ส่งผลให้ปิด popup
-            popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+        const icons = document.querySelectorAll('h3 i');
+        
+        // loop ผ่านแต่ละไอคอนเพื่อเพิ่ม event listener
+        icons.forEach(icon => {
+            const popup = icon.parentElement.querySelector('[data-popup]');
+        
+            // เมื่อคลิกที่ไอคอน
+            icon.addEventListener('click', function(event) {
+                event.stopPropagation(); // หยุดการคลิกจากการส่งผลที่อื่น
+                const isVisible = popup.style.display === 'block'; // เช็คว่ามันแสดงอยู่แล้วหรือไม่
+                popup.style.display = isVisible ? 'none' : 'block'; // toggle การแสดงผล
+            });
         });
         
-        // คลิกที่อื่นๆ บนหน้าจอ
+        // คลิกที่ส่วนอื่นๆ ให้ซ่อนทุก popup
         document.addEventListener('click', function(event) {
-            if (!icon.contains(event.target) && !popup.contains(event.target)) {
-                popup.style.display = 'none';
+            if (!event.target.closest('h3')) {
+                document.querySelectorAll('[data-popup]').forEach(popup => {
+                    popup.style.display = 'none';
+                });
             }
         });
 
-    </style>
+
+    </script>
 </body>
 </html>
