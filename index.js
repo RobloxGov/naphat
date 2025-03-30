@@ -1,6 +1,6 @@
 
     document.addEventListener("DOMContentLoaded", function () {
-        const targetDate = new Date("March 31, 2025 12:00:00").getTime();
+        const targetDate = new Date("March 30, 2025 18:40:00").getTime();
         const now = new Date().getTime();
 
         if (now >= targetDate) {
