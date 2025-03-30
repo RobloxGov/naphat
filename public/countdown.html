@@ -40,10 +40,11 @@
             font-size: 24px;
             color: #d10000;
             display: flex;
-            justify-content: center;
+            justify-content: left;
             align-items: baseline;
             gap: 15px;
         }
+        b{color: #ff7d41;}
     </style>
 </head>
 <body>
@@ -86,89 +87,81 @@
     <!-- Countdown Banner -->
     <section class="countdown-banner">
         <h2 style="color: unset;background: unset;padding: unset;display: flex;justify-content: center;">นับถอยหลังสู่เหตุการณ์สำคัญ</h2>
-        <div class="countdown-wrapper">
-            <div class="countdown-group">
-                <div class="countdown-item">
-                    <b>ประกาศเคลียริงเฮาส์ KMITL (พฤ. 24 มกราคม 2568)</b>
-                    <div class="countdown" id="Clearing-House-countdown">
-                        <div><span id="Clearing-House-days">0</span>วัน</div>
-                        <div><span id="Clearing-House-hours">0</span>ชั่วโมง</div>
-                        <div><span id="Clearing-House-minutes">0</span>นาที</div>
-                        <div><span id="Clearing-House-seconds">0</span>วินาที</div>
-                    </div>
-                </div>
-                
-            </div>
-            <div class="countdown-group">
-                <div class="countdown-item">
-                    <b>วันพิธีจบหลักสูตร ม.6 รุ่น 138 (ส. 15 กุมภาพันธ์ 2568)</b>
-                    <div class="countdown" id="graduation-countdown">
-                        <div><span id="graduation-days">26</span>วัน</div>
-                        <div><span id="graduation-hours">4</span>ชั่วโมง</div>
-                        <div><span id="graduation-minutes">10</span>นาที</div>
-                        <div><span id="graduation-seconds">0</span>วินาที</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        <div id="countdowns"  class="countdown-wrapper"></div>
+    </section>section>
     
-    <script>
-        function countdown(targetDate, timerPrefix) {
-            var countDownDate = new Date(targetDate).getTime();
+<script>
+const sheetURL = "https://script.google.com/macros/s/AKfycbyrcc3Pfuf6iX9Re87D_1bTz58Hh6aPnOfucCJ3eC6O-AzniK0E_HcJAj8wf-m4XJ8t/exec";
 
-            var x = setInterval(function() {
-                var now = new Date().getTime();
-                var distance = countDownDate - now;
+async function fetchCountdowns() {
+    try {
+        const response = await fetch(sheetURL);
+        const data = await response.json();
 
-                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        let countdownHTML = "";
+        
+        data.forEach((item, index) => {
+            const countdownId = `countdown-${index}`;
+            countdownHTML += `
+                <div class="countdown-group">
+                    <div class="countdown-item">
+                        <b>${item.countdown_detail} (${item.countdown_date})</b>
+                        <div class="countdown" id="${countdownId}"> 
+                            <div><span id="countdown-days-${index}">0</span> วัน</div> 
+                            <div><span id="countdown-hours-${index}">0</span> ชั่วโมง</div> 
+                            <div><span id="countdown-minutes-${index}">0</span> นาที</div> 
+                            <div><span id="countdown-seconds-${index}">0</span> วินาที</div> 
+                        </div>
+                    </div>
+                </div>`;
+        });
 
-                document.getElementById(timerPrefix + '-days').innerHTML = days;
-                document.getElementById(timerPrefix + '-hours').innerHTML = hours;
-                document.getElementById(timerPrefix + '-minutes').innerHTML = minutes;
-                document.getElementById(timerPrefix + '-seconds').innerHTML = seconds;
+        document.getElementById("countdowns").innerHTML = countdownHTML;
 
-                if (distance < 0) {
-                    clearInterval(x);
-                    document.getElementById(timerPrefix + '-days').innerHTML = "0";
-                    document.getElementById(timerPrefix + '-hours').innerHTML = "0";
-                    document.getElementById(timerPrefix + '-minutes').innerHTML = "0";
-                    document.getElementById(timerPrefix + '-seconds').innerHTML = "0";
-                }
-            }, 1000);
+        // เริ่มนับถอยหลัง
+        data.forEach((item, index) => {
+            startCountdown(index, item.countdown_day, item.countdown_time);
+        });
+
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+}
+
+function startCountdown(index, days, time) {
+    const targetDate = new Date();
+    targetDate.setDate(targetDate.getDate() + parseInt(days));
+    if (time) {
+        const [hours, minutes, seconds] = time.split(":").map(Number);
+        targetDate.setHours(hours, minutes, seconds);
+    }
+
+    function updateCountdown() {
+        const now = new Date();
+        const diff = targetDate - now;
+
+        if (diff <= 0) {
+            document.getElementById(`countdown-${index}`).innerHTML = "<b>หมดเวลา!</b>";
+            return;
         }
 
-        // เรียกใช้งานฟังก์ชัน countdown สำหรับแต่ละเหตุการณ์
-        countdown("Sep 25, 2024 00:00:00", "exam1");
-        countdown("Oct 28, 2024 09:00:00", "tcas");
-        countdown("Jan 13, 2025 00:00:00", "exam2");
-        countdown("Jan 24, 2025 12:35:00", "Clearing-House");
-        countdown("Feb 15, 2025 00:00:00", "graduation");
-        countdown("Nov 16, 2024 00:00:00", "nationalacademictest");
+        const daysLeft = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hoursLeft = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutesLeft = Math.floor((diff / (1000 * 60)) % 60);
+        const secondsLeft = Math.floor((diff / 1000) % 60);
 
-        function toggleMenu() {
-            const fullMenu = document.getElementById('fullMenu');
-            fullMenu.classList.toggle('show');
-        }
+        document.getElementById(`countdown-days-${index}`).textContent = daysLeft;
+        document.getElementById(`countdown-hours-${index}`).textContent = hoursLeft;
+        document.getElementById(`countdown-minutes-${index}`).textContent = minutesLeft;
+        document.getElementById(`countdown-seconds-${index}`).textContent = secondsLeft;
+    }
 
-        // Calculate age dynamically based on the birthdate
-        function calculateAge() {
-            const birthdate = new Date('2007-04-30'); // Set birthdate here
-            const today = new Date();
-            let age = today.getFullYear() - birthdate.getFullYear();
-            const monthDifference = today.getMonth() - birthdate.getMonth();
-            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthdate.getDate())) {
-                age--;
-            }
-            document.getElementById('age').textContent = `${age} ปี`;
-        }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+}
 
-        // Call the function to set the age when the page loads
-        window.onload = calculateAge;
-
-    </script>
+// โหลดข้อมูลและเริ่มนับถอยหลัง
+fetchCountdowns();
+</script>
 </body>
 </html>
