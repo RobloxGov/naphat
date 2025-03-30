@@ -92,7 +92,6 @@
         </h2>
         <div id="countdowns" class="countdown-wrapper"></div>
     </section>
-    
     <script>
     const sheetURL = "https://script.google.com/macros/s/AKfycbyrcc3Pfuf6iX9Re87D_1bTz58Hh6aPnOfucCJ3eC6O-AzniK0E_HcJAj8wf-m4XJ8t/exec";
     
@@ -132,12 +131,13 @@
     }
     
     function startCountdown(index, countdownDay, countdownTime) {
-        let targetDate = new Date(countdownDay.split("/").reverse().join("-")); // แปลงจาก DD/MM/YYYY เป็น YYYY-MM-DD
+        let [day, month, year] = countdownDay.split("/").map(Number);
+        let targetDate = new Date(Date.UTC(year, month - 1, day)); // ใช้ Date.UTC เพื่อรองรับ iOS
     
         // ถ้ามีเวลาระบุ ให้ตั้งค่าเวลา
         if (countdownTime) {
             const [hours, minutes] = countdownTime.split(":").map(Number);
-            targetDate.setHours(hours || 0, minutes || 0, 0);
+            targetDate.setUTCHours(hours || 0, minutes || 0, 0);
         }
     
         function updateCountdown() {
