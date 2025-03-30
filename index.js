@@ -1,0 +1,33 @@
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const targetDate = new Date("March 31, 2025 12:00:00").getTime();
+        const now = new Date().getTime();
+
+        if (now >= targetDate) {
+            document.documentElement.innerHTML = `
+            <html lang="th">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Naphat Dev - กำลังปรับปรุง</title>
+                <link rel="icon" href="/public/assets/images/NAPHAT_DEV.png">
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+                <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+                <link rel="stylesheet" href="style.css">
+            </head>
+            <body>
+                <div class="container">
+                    <img src="/public/assets/images/logo.png" height="200px">
+                    <h1></h1>
+                    <div class="language-buttons">
+                        <button onclick="setLanguage('th')">เข้าสู่เว็บไซต์</button>
+                        <button onclick="setLanguage('en')">Enter Site</button>
+                        <button onclick="setLanguage('cn')">进入网站</button>
+                    </div>
+                </div>
+                <script src="script.js"></script>
+            </body>
+            </html>
+            `;
+        }
+    });
