@@ -33,12 +33,13 @@ h1 {
     font-size: 1rem;
     cursor: pointer;
     border-radius: 5px;
-    transition: background 0.3s;
+    transition: background 0.3s, transform 0.3s;
 }
 
 .language-buttons button:hover {
     background: #ff8a50;
     color: #fff;
+    transform: scale(1.05);
 }
 
 .enter-button {
