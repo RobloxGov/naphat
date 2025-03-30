@@ -107,7 +107,7 @@
                 countdownHTML += `
                     <div class="countdown-group">
                         <div class="countdown-item">
-                            <b>${item.countdown_detail} (${item.countdown_date})</b>
+                            <b>${item.detail} (${item.date})</b>
                             <div class="countdown" id="${countdownId}"> 
                                 <div><span id="countdown-days-${index}">0</span> วัน</div> 
                                 <div><span id="countdown-hours-${index}">0</span> ชั่วโมง</div> 
@@ -122,7 +122,7 @@
     
             // เริ่มนับถอยหลัง
             data.forEach((item, index) => {
-                startCountdown(index, item.countdown_day, item.countdown_time);
+                startCountdown(index, item.day, item.time);
             });
     
         } catch (error) {
@@ -131,22 +131,12 @@
     }
     
     function startCountdown(index, countdownDay, countdownTime) {
-        let targetDate;
-    
-        // ตรวจสอบว่า countdownDay เป็นรูปแบบ YYYY-MM-DD หรือจำนวนวัน
-        if (countdownDay.includes("-")) {
-            // ถ้าเป็น YYYY-MM-DD
-            targetDate = new Date(countdownDay);
-        } else {
-            // ถ้าเป็นจำนวนวัน
-            targetDate = new Date();
-            targetDate.setDate(targetDate.getDate() + parseInt(countdownDay));
-        }
+        let targetDate = new Date(countdownDay.split("/").reverse().join("-")); // แปลงจาก DD/MM/YYYY เป็น YYYY-MM-DD
     
         // ถ้ามีเวลาระบุ ให้ตั้งค่าเวลา
         if (countdownTime) {
-            const [hours, minutes, seconds] = countdownTime.split(":").map(Number);
-            targetDate.setHours(hours || 0, minutes || 0, seconds || 0);
+            const [hours, minutes] = countdownTime.split(":").map(Number);
+            targetDate.setHours(hours || 0, minutes || 0, 0);
         }
     
         function updateCountdown() {
