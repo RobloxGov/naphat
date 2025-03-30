@@ -38,6 +38,7 @@ h1 {
 
 .language-buttons button:hover {
     background: #ff8a50;
+    color: #fff;
 }
 
 .enter-button {
