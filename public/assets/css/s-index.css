@@ -674,5 +674,7 @@ h1[data-title] {
 
 [data-content] {
     display: flex;
+    flex-direction: column;
+
     gap: 20px;
 }
