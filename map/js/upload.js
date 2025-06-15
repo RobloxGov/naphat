@@ -38,6 +38,7 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
       description: placeDescription,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       imageCount: images.length
+      userId: auth.currentUser.uid // เพิ่ม field userId สำหรับตรวจสอบสิทธิ์ใน Rules
     });
     
     // 3. อัพโหลดรูปภาพไปยัง Storage
