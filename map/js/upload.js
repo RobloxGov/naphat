@@ -1,3 +1,14 @@
+// เพิ่มโค้ดนี้ก่อนดำเนินการอัพโหลด
+auth.onAuthStateChanged(user => {
+  if (!user) {
+    alert('กรุณาล็อกอินก่อนอัพโหลดข้อมูล');
+    window.location.href = 'login.html'; // เปลี่ยนเส้นทางไปหน้าล็อกอิน
+    return;
+  }
+  
+  // ดำเนินการอัพโหลดต่อเมื่อล็อกอินแล้ว
+});
+
 document.getElementById('uploadForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   
