@@ -17,3 +17,10 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const storage = firebase.storage();
 const auth = firebase.auth();
+
+// ตั้งค่า Providers สำหรับการล็อกอิน
+const googleProvider = new firebase.auth.GoogleAuthProvider();
+const facebookProvider = new firebase.auth.FacebookAuthProvider();
+
+// ส่งออก Providers
+export { auth, db, storage, googleProvider, facebookProvider };
