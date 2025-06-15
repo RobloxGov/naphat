@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>อัพโหลดรูปภาพสถานที่</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="upload-container">
+    <h1>อัพโหลดรูปภาพสถานที่</h1>
+    <form id="uploadForm">
+      <div class="form-group">
+        <label for="placeName">ชื่อสถานที่:</label>
+        <input type="text" id="placeName" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="placeAddress">ที่อยู่:</label>
+        <input type="text" id="placeAddress">
+      </div>
+      
+      <div class="form-group">
+        <label for="placeDate">วันที่:</label>
+        <input type="date" id="placeDate" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="placeTime">เวลา:</label>
+        <input type="time" id="placeTime" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="placeDescription">คำอธิบาย:</label>
+        <textarea id="placeDescription" rows="3"></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label for="placeImages">รูปภาพ:</label>
+        <input type="file" id="placeImages" multiple accept="image/*" required>
+        <div id="imagePreview"></div>
+      </div>
+      
+      <button type="submit">อัพโหลด</button>
+    </form>
+  </div>
+  
+  <script src="js/firebase.js"></script>
+  <script src="js/upload.js"></script>
+</body>
+</html>
