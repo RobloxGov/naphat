@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เข้าสู่ระบบ | แอปแผนที่สถานที่</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .login-container {
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 30px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .login-title {
+      text-align: center;
+      color: #4285F4;
+      margin-bottom: 30px;
+    }
+    
+    .login-form .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .login-form label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    
+    .login-form input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background-color: #4285F4;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    
+    .login-btn:hover {
+      background-color: #3367D6;
+    }
+    
+    .signup-link {
+      text-align: center;
+      margin-top: 20px;
+    }
+    
+    .signup-link a {
+      color: #4285F4;
+      text-decoration: none;
+    }
+    
+    .error-message {
+      color: #d32f2f;
+      margin-top: 10px;
+      text-align: center;
+    }
+    
+    .provider-login {
+      margin-top: 20px;
+      text-align: center;
+    }
+    
+    .provider-btn {
+      padding: 10px 15px;
+      margin: 5px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    
+    .google-btn {
+      background-color: #DB4437;
+      color: white;
+    }
+    
+    .facebook-btn {
+      background-color: #4267B2;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h1 class="login-title">เข้าสู่ระบบ</h1>
+    
+    <form class="login-form" id="loginForm">
+      <div class="form-group">
+        <label for="email">อีเมล</label>
+        <input type="email" id="email" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="password">รหัสผ่าน</label>
+        <input type="password" id="password" required>
+      </div>
+      
+      <button type="submit" class="login-btn">เข้าสู่ระบบ</button>
+      
+      <div id="errorMessage" class="error-message"></div>
+    </form>
+    
+    <div class="provider-login">
+      <p>หรือเข้าสู่ระบบด้วย</p>
+      <button id="googleLogin" class="provider-btn google-btn">Google</button>
+      <button id="facebookLogin" class="provider-btn facebook-btn">Facebook</button>
+    </div>
+    
+    <div class="signup-link">
+      ยังไม่มีบัญชี? <a href="signup.html">สมัครสมาชิก</a>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+  
+  <!-- Firebase Configuration -->
+  <script src="js/firebase.js"></script>
+  
+  <!-- Login Script -->
+  <script src="js/login.js"></script>
+</body>
+</html>
