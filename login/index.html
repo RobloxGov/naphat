@@ -10,27 +10,23 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 </head>
 <body>
-    <div class="body">
-        <div class="container">
-            <!-- ฟอร์มเข้าสู่ระบบ -->
-            <form id="login-form" class="form-container" onsubmit="event.preventDefault(); login();">
-                <h2>เข้าสู่ระบบ</h2>
-                <input type="email" id="login-email" placeholder="อีเมล" required>
-                <input type="password" id="login-password" placeholder="รหัสผ่าน" required>
-                <button type="submit">เข้าสู่ระบบ</button>
-                <button type="button" onclick="loginWithGoogle()" class="google-btn">เข้าสู่ระบบด้วย Google</button>
-                <p>ยังไม่มีบัญชี? <a href="#" onclick="showRegister()">สมัครสมาชิก</a></p>
-            </form>
-        
-            <!-- ฟอร์มสมัครสมาชิก -->
-            <form id="register-form" class="form-container" style="display:none;" onsubmit="event.preventDefault(); register();">
-                <h2>สมัครสมาชิก</h2>
-                <input type="text" id="register-name" placeholder="ชื่อ" required>
-                <input type="email" id="register-email" placeholder="อีเมล" required>
-                <input type="password" id="register-password" placeholder="รหัสผ่าน" required>
-                <button type="submit">สมัครสมาชิก</button>
-                <p>มีบัญชีอยู่แล้ว? <a href="#" onclick="showLogin()">เข้าสู่ระบบ</a></p>
-            </form>
+    <div class="container">
+        <div id="login-form" class="form-container">
+            <h2>เข้าสู่ระบบ</h2>
+            <input type="email" id="login-email" placeholder="อีเมล" autocomplete="username" required>
+            <input type="password" id="login-password" placeholder="รหัสผ่าน" autocomplete="current-password" required>
+            <button onclick="login()">เข้าสู่ระบบ</button>
+            <button onclick="loginWithGoogle()" class="google-btn">เข้าสู่ระบบด้วย Google</button>
+            <p>ยังไม่มีบัญชี? <a href="#" onclick="showRegister()">สมัครสมาชิก</a></p>
+        </div>
+
+        <div id="register-form" class="form-container" style="display:none;">
+            <h2>สมัครสมาชิก</h2>
+            <input type="text" id="register-name" placeholder="ชื่อ" autocomplete="name" required>
+            <input type="email" id="register-email" placeholder="อีเมล" autocomplete="username" required>
+            <input type="password" id="register-password" placeholder="รหัสผ่าน" autocomplete="new-password" required>
+            <button onclick="register()">สมัครสมาชิก</button>
+            <p>มีบัญชีอยู่แล้ว? <a href="#" onclick="showLogin()">เข้าสู่ระบบ</a></p>
         </div>
     </div>
 
