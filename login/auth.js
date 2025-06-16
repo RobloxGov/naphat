@@ -41,12 +41,18 @@ function showLogin() {
     document.getElementById('login-form').style.display = 'block';
 }
 
-// ฟังก์ชันสมัครสมาชิก
+// ฟังก์ชันสมัครสมาชิก (ปรับปรุงแล้ว)
 function register() {
     const name = document.getElementById('register-name').value;
     const email = document.getElementById('register-email').value;
     const password = document.getElementById('register-password').value;
     
+    // ตรวจสอบว่ามีการกรอกข้อมูลครบถ้วน
+    if (!name || !email || !password) {
+        alert('กรุณากรอกข้อมูลให้ครบทุกช่อง');
+        return;
+    }
+
     auth.createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
             // อัปเดตชื่อผู้ใช้
@@ -59,21 +65,43 @@ function register() {
             // หลังจากสมัครสำเร็จจะถูก redirect โดยอัตโนมัติจาก onAuthStateChanged
         })
         .catch((error) => {
-            alert('เกิดข้อผิดพลาด: ' + error.message);
+            // จัดการข้อผิดพลาดเฉพาะกรณี
+            if (error.code === 'auth/email-already-in-use') {
+                alert('อีเมลนี้ถูกใช้งานโดยบัญชีอื่นแล้ว\nกรุณาใช้อีเมลอื่นหรือเข้าสู่ระบบด้วยอีเมลนี้');
+            } else if (error.code === 'auth/invalid-email') {
+                alert('รูปแบบอีเมลไม่ถูกต้อง');
+            } else if (error.code === 'auth/weak-password') {
+                alert('รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร');
+            } else {
+                alert('เกิดข้อผิดพลาด: ' + error.message);
+            }
         });
 }
 
-// ฟังก์ชันเข้าสู่ระบบ
+// ฟังก์ชันเข้าสู่ระบบ (ปรับปรุงแล้ว)
 function login() {
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
     
+    if (!email || !password) {
+        alert('กรุณากรอกอีเมลและรหัสผ่าน');
+        return;
+    }
+
     auth.signInWithEmailAndPassword(email, password)
         .then(() => {
             // หลังจากล็อกอินสำเร็จจะถูก redirect โดยอัตโนมัติจาก onAuthStateChanged
         })
         .catch((error) => {
-            alert('เกิดข้อผิดพลาด: ' + error.message);
+            if (error.code === 'auth/user-not-found') {
+                alert('ไม่พบผู้ใช้งานนี้\nกรุณาตรวจสอบอีเมลหรือสมัครสมาชิกใหม่');
+            } else if (error.code === 'auth/wrong-password') {
+                alert('รหัสผ่านไม่ถูกต้อง');
+            } else if (error.code === 'auth/invalid-email') {
+                alert('รูปแบบอีเมลไม่ถูกต้อง');
+            } else {
+                alert('เกิดข้อผิดพลาด: ' + error.message);
+            }
         });
 }
 
