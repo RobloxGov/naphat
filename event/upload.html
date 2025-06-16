@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>อัปโหลดรูปภาพ</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>อัปโหลดรูปภาพ</h1>
+    <nav>
+      <a href="index.html">หน้าหลัก</a>
+      <a href="#" id="logoutBtn">ออกจากระบบ</a>
+    </nav>
+  </header>
+
+  <main>
+    <form id="uploadForm">
+      <div class="form-group">
+        <label for="imageTitle">ชื่อภาพ</label>
+        <input type="text" id="imageTitle" required>
+      </div>
+
+      <div class="form-group">
+        <label for="imageDescription">รายละเอียดภาพ</label>
+        <textarea id="imageDescription" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="imageLocation">สถานที่ (หมวดหมู่)</label>
+        <input type="text" id="imageLocation" list="locations" required>
+        <datalist id="locations">
+          <!-- Existing locations will be populated here -->
+        </datalist>
+      </div>
+
+      <div class="form-group">
+        <label for="imageFile">เลือกรูปภาพ</label>
+        <input type="file" id="imageFile" accept="image/*" required>
+      </div>
+
+      <button type="submit">บันทึก</button>
+    </form>
+  </main>
+
+  <script src="js/auth.js"></script>
+  <script src="js/gsheet.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

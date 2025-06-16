@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>แกลเลอรี่รูปภาพสถานที่</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>แกลเลอรี่รูปภาพสถานที่</h1>
+    <nav>
+      <a href="index.html">หน้าหลัก</a>
+      <a href="upload.html">อัปโหลดรูป</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="filter-section">
+      <select id="categoryFilter">
+        <option value="">ทั้งหมด</option>
+        <!-- Categories will be populated by JavaScript -->
+      </select>
+    </div>
+
+    <div class="gallery" id="imageGallery">
+      <!-- Images will be loaded here -->
+    </div>
+  </main>
+
+  <script src="js/gsheet.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
