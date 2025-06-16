@@ -13,21 +13,19 @@
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
-// ตรวจสอบสถานะการล็อกอิน
+// ตรวจสอบสถานะการล็อกอินและ redirect
 auth.onAuthStateChanged(user => {
     if (user) {
-        // ผู้ใช้ล็อกอินแล้ว
-        document.getElementById('login-form').style.display = 'none';
-        document.getElementById('register-form').style.display = 'none';
-        document.getElementById('user-info').style.display = 'block';
-        
-        document.getElementById('user-name').textContent = user.displayName || user.email;
-        document.getElementById('user-email').textContent = user.email;
+        // ถ้าอยู่ในหน้า login และล็อกอินแล้ว ให้ไป dashboard
+        if (window.location.pathname.includes('index.html') || 
+            window.location.pathname === '/') {
+            window.location.href = 'dashboard.html';
+        }
     } else {
-        // ไม่มีผู้ใช้ล็อกอิน
-        document.getElementById('login-form').style.display = 'block';
-        document.getElementById('register-form').style.display = 'none';
-        document.getElementById('user-info').style.display = 'none';
+        // ถ้าอยู่ในหน้า dashboard และยังไม่ล็อกอิน ให้ไปหน้า login
+        if (window.location.pathname.includes('dashboard.html')) {
+            window.location.href = 'index.html';
+        }
     }
 });
 
@@ -58,6 +56,7 @@ function register() {
         })
         .then(() => {
             alert('สมัครสมาชิกสำเร็จ!');
+            // หลังจากสมัครสำเร็จจะถูก redirect โดยอัตโนมัติจาก onAuthStateChanged
         })
         .catch((error) => {
             alert('เกิดข้อผิดพลาด: ' + error.message);
@@ -71,18 +70,19 @@ function login() {
     
     auth.signInWithEmailAndPassword(email, password)
         .then(() => {
-            alert('เข้าสู่ระบบสำเร็จ!');
+            // หลังจากล็อกอินสำเร็จจะถูก redirect โดยอัตโนมัติจาก onAuthStateChanged
         })
         .catch((error) => {
             alert('เกิดข้อผิดพลาด: ' + error.message);
         });
 }
-// Google
+
+// ฟังก์ชันเข้าสู่ระบบด้วย Google
 function loginWithGoogle() {
     const provider = new firebase.auth.GoogleAuthProvider();
     auth.signInWithPopup(provider)
         .then(() => {
-            alert('เข้าสู่ระบบด้วย Google สำเร็จ!');
+            // หลังจากล็อกอินสำเร็จจะถูก redirect โดยอัตโนมัติจาก onAuthStateChanged
         })
         .catch((error) => {
             alert('เกิดข้อผิดพลาด: ' + error.message);
@@ -93,7 +93,7 @@ function loginWithGoogle() {
 function logout() {
     auth.signOut()
         .then(() => {
-            alert('ออกจากระบบสำเร็จ');
+            window.location.href = 'index.html';
         })
         .catch((error) => {
             alert('เกิดข้อผิดพลาด: ' + error.message);
