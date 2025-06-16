@@ -6,7 +6,6 @@
     <title>ระบบ Login/Register</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@100..700&amp;display=swap" rel="stylesheet">
-    <!-- เพิ่ม Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 </head>
@@ -18,6 +17,7 @@
             <input type="password" id="login-password" placeholder="รหัสผ่าน">
             <button onclick="login()">เข้าสู่ระบบ</button>
             <p>ยังไม่มีบัญชี? <a href="#" onclick="showRegister()">สมัครสมาชิก</a></p>
+            <button onclick="loginWithGoogle()" class="google-btn">เข้าสู่ระบบด้วย Google</button>
         </div>
 
         <div id="register-form" class="form-container" style="display:none;">
@@ -28,14 +28,8 @@
             <button onclick="register()">สมัครสมาชิก</button>
             <p>มีบัญชีอยู่แล้ว? <a href="#" onclick="showLogin()">เข้าสู่ระบบ</a></p>
         </div>
-
-        <div id="user-info" class="form-container" style="display:none;">
-            <h2>ยินดีต้อนรับ, <span id="user-name"></span></h2>
-            <p>อีเมล: <span id="user-email"></span></p>
-            <button onclick="logout()">ออกจากระบบ</button>
-        </div>
     </div>
 
-    <script src="app.js"></script>
+    <script src="auth.js"></script>
 </body>
 </html>
