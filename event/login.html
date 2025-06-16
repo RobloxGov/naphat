@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>เข้าสู่ระบบ</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <div class="login-container">
@@ -24,6 +24,29 @@
     </form>
   </div>
 
-  <script src="js/auth.js"></script>
+  <script>
+    // เพิ่ม event listener โดยตรงในหน้า login
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      
+      try {
+        const response = await fetch('/member.json');
+        const users = await response.json();
+        const user = users.find(u => u.username === username && u.password === password);
+        
+        if (user) {
+          localStorage.setItem('authenticated', 'true');
+          window.location.href = 'index.html';
+        } else {
+          alert('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        alert('เกิดข้อผิดพลาดในการเข้าสู่ระบบ');
+      }
+    });
+  </script>
 </body>
 </html>
