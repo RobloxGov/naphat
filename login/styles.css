@@ -1,5 +1,11 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: "Anuphan", sans-serif;
     background-color: #f4f4f9;
     margin: 0;
     padding: 0;
@@ -64,4 +70,9 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+input, button {
+    width: 100%;
+    font-family: inherit;
 }
