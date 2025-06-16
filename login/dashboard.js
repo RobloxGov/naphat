@@ -1,7 +1,24 @@
 // เมื่อหน้า Dashboard โหลด
 document.addEventListener('DOMContentLoaded', function() {
-  // วิธีที่ 1: ใช้ข้อมูลจาก localStorage
-  const userData = JSON.parse(localStorage.getItem('user'));
+  console.log("กำลังตรวจสอบการล็อกอิน...");
+  
+  // แสดง loading state
+  document.body.innerHTML = '<div class="loading">กำลังโหลด...</div>';
+  
+  const unsubscribe = firebase.auth().onAuthStateChanged(user => {
+    unsubscribe(); // ยกเลิกการ subscribe
+    
+    if (user) {
+      console.log("พบผู้ใช้ล็อกอิน:", user);
+      // แสดงข้อมูลผู้ใช้
+    } else {
+      console.log("ไม่พบผู้ใช้ล็อกอิน");
+      window.location.href = 'index.html';
+    }
+  });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
   
   // วิธีที่ 2: ใช้ Firebase Auth (แนะนำ)
   const user = firebase.auth().currentUser;
