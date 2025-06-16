@@ -108,7 +108,24 @@ header {
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
 input, button {
     width: 100%;
     font-family: inherit;
+}
+
+input {
+    margin-bottom: 10px;
+}
+
+.form-container h2 {
+    margin: 10px 0;
+}
+
+.form-container p {
+    margin-top: 10px;
+}
+
+.form-container p a {
+    color: #ff0000;
 }
