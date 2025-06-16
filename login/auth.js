@@ -80,29 +80,28 @@ function register() {
 
 // ฟังก์ชันเข้าสู่ระบบ (ปรับปรุงแล้ว)
 function login() {
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-password').value;
-    
-    if (!email || !password) {
-        alert('กรุณากรอกอีเมลและรหัสผ่าน');
-        return;
-    }
+  console.log("ฟังก์ชัน login ถูกเรียกใช้"); // ตรวจสอบว่าฟังก์ชันถูกเรียก
+  
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+  
+  console.log("อีเมล:", email, "รหัสผ่าน:", password); // ตรวจสอบค่าที่ได้รับ
+  
+  if (!email || !password) {
+    console.error("กรุณากรอกอีเมลและรหัสผ่าน");
+    alert('กรุณากรอกอีเมลและรหัสผ่าน');
+    return;
+  }
 
-    auth.signInWithEmailAndPassword(email, password)
-        .then(() => {
-            // หลังจากล็อกอินสำเร็จจะถูก redirect โดยอัตโนมัติจาก onAuthStateChanged
-        })
-        .catch((error) => {
-            if (error.code === 'auth/user-not-found') {
-                alert('ไม่พบผู้ใช้งานนี้\nกรุณาตรวจสอบอีเมลหรือสมัครสมาชิกใหม่');
-            } else if (error.code === 'auth/wrong-password') {
-                alert('รหัสผ่านไม่ถูกต้อง');
-            } else if (error.code === 'auth/invalid-email') {
-                alert('รูปแบบอีเมลไม่ถูกต้อง');
-            } else {
-                alert('เกิดข้อผิดพลาด: ' + error.message);
-            }
-        });
+  firebase.auth().signInWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      console.log("ล็อกอินสำเร็จ", userCredential.user);
+      window.location.href = 'dashboard.html'; // เปลี่ยนหน้าโดยตรง
+    })
+    .catch((error) => {
+      console.error("เกิดข้อผิดพลาด:", error.code, error.message);
+      alert('ล็อกอินไม่สำเร็จ: ' + error.message);
+    });
 }
 
 // ฟังก์ชันเข้าสู่ระบบด้วย Google
