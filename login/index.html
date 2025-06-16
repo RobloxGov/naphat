@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบ Login/Register</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- เพิ่ม Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div id="login-form" class="form-container">
+            <h2>เข้าสู่ระบบ</h2>
+            <input type="email" id="login-email" placeholder="อีเมล">
+            <input type="password" id="login-password" placeholder="รหัสผ่าน">
+            <button onclick="login()">เข้าสู่ระบบ</button>
+            <p>ยังไม่มีบัญชี? <a href="#" onclick="showRegister()">สมัครสมาชิก</a></p>
+        </div>
+
+        <div id="register-form" class="form-container" style="display:none;">
+            <h2>สมัครสมาชิก</h2>
+            <input type="text" id="register-name" placeholder="ชื่อ">
+            <input type="email" id="register-email" placeholder="อีเมล">
+            <input type="password" id="register-password" placeholder="รหัสผ่าน">
+            <button onclick="register()">สมัครสมาชิก</button>
+            <p>มีบัญชีอยู่แล้ว? <a href="#" onclick="showLogin()">เข้าสู่ระบบ</a></p>
+        </div>
+
+        <div id="user-info" class="form-container" style="display:none;">
+            <h2>ยินดีต้อนรับ, <span id="user-name"></span></h2>
+            <p>อีเมล: <span id="user-email"></span></p>
+            <button onclick="logout()">ออกจากระบบ</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
