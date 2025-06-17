@@ -61,7 +61,7 @@ function displayImages(images) {
       <div class="image-info">
         <h3>${image.title}</h3>
         <p>${image.description}</p>
-        <div class="image-meta">
+        <div class="image-meta d-flex flex-col">
           <span>สถานที่: ${image.location}</span>
           <span>วันที่: ${new Date(image.uploadDate).toLocaleDateString()}</span>
         </div>
@@ -104,4 +104,72 @@ function filterImagesByCategory(category, allImages) {
     allImages.filter(img => img.location === category) : 
     allImages;
   displayImages(filtered);
+}
+
+// Function to display image in popup
+function showImagePopup(imageData) {
+  const popup = document.getElementById('imagePopup');
+  const popupImg = document.getElementById('popupImage');
+  const popupTitle = document.getElementById('popupTitle');
+  const popupDesc = document.getElementById('popupDescription');
+  const popupLoc = document.getElementById('popupLocation');
+  const popupDate = document.getElementById('popupDate');
+  
+  // Set popup content
+  popupImg.src = imageData.image;
+  popupImg.alt = imageData.title;
+  popupTitle.textContent = imageData.title;
+  popupDesc.textContent = imageData.description;
+  popupLoc.textContent = `สถานที่: ${imageData.location}`;
+  popupDate.textContent = `วันที่: ${new Date(imageData.uploadDate).toLocaleDateString()}`;
+  
+  // Show popup
+  popup.style.display = 'block';
+  
+  // Close popup when clicking X
+  document.querySelector('.close-btn').onclick = function() {
+    popup.style.display = 'none';
+  };
+  
+  // Close popup when clicking outside
+  popup.onclick = function(event) {
+    if (event.target === popup) {
+      popup.style.display = 'none';
+    }
+  };
+}
+
+// Modify displayImages function to add click event
+function displayImages(images) {
+  const gallery = document.getElementById('imageGallery');
+  gallery.innerHTML = '';
+  
+  images.forEach(image => {
+    const card = document.createElement('div');
+    card.className = 'image-card';
+    
+    card.innerHTML = `
+      <img src="${image.image}" alt="${image.title}">
+      <div class="image-info">
+        <h3>${image.title}</h3>
+        <p>${image.description}</p>
+        <div class="image-meta">
+          <span>สถานที่: ${image.location}</span>
+          <span>วันที่: ${new Date(image.uploadDate).toLocaleDateString()}</span>
+        </div>
+        ${window.location.pathname.includes('index.html') ? 
+          `<a href="edit.html?id=${image.id}">แก้ไข</a>` : ''}
+      </div>
+    `;
+    
+    // Add click event to show popup
+    card.addEventListener('click', (e) => {
+      // Prevent triggering when clicking on edit link
+      if (!e.target.closest('a')) {
+        showImagePopup(image);
+      }
+    });
+    
+    gallery.appendChild(card);
+  });
 }
