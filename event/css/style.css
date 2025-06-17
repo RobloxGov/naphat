@@ -316,9 +316,22 @@ input, button, select {
 /* ------------------------ */
 
 .bg-primary {
-    background-color: #4387f4;
+    background-color: #fff;
+    color: #f16622;
 }
 
 .bg-primary:hover {
-    background-color: rgb(67 135 244 / 90%);
+    background-color: #bebebe;
+}
+
+.bg-accent {
+    background-color: #ffa200;
+    border: 1px solid #fff;
+    color: #fff;
+}
+
+.bg-accent:hover {
+    background-color: #fff;
+    border: 1px solid #ffa200;
+    color: #000;
 }
