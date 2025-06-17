@@ -153,7 +153,7 @@ function displayImages(images) {
       <div class="image-info">
         <h3>${image.title}</h3>
         <p>${image.description}</p>
-        <div class="image-meta">
+        <div class="image-meta d-flex flex-col">
           <span>สถานที่: ${image.location}</span>
           <span>วันที่: ${new Date(image.uploadDate).toLocaleDateString()}</span>
         </div>
