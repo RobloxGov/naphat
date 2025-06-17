@@ -199,3 +199,35 @@ async function uploadImage(imageData) {
     return { success: false, error: error.message };
   }
 }
+
+function showImagePopup(imageData) {
+  const popup = document.getElementById('imagePopup');
+  const popupImg = document.getElementById('popupImage');
+  const popupTitle = document.getElementById('popupTitle');
+  const popupDesc = document.getElementById('popupDescription');
+  const popupLoc = document.getElementById('popupLocation');
+  const popupDate = document.getElementById('popupDate');
+  
+  // Set popup content
+  popupImg.src = imageData.image;
+  popupImg.alt = imageData.title;
+  popupTitle.textContent = imageData.title;
+  popupDesc.textContent = imageData.description;
+  popupLoc.textContent = `สถานที่: ${imageData.location}`;
+  popupDate.textContent = `วันที่: ${new Date(imageData.uploadDate).toLocaleDateString()}`;
+  
+  // Show popup
+  popup.style.display = 'block';
+  
+  // Close popup when clicking X
+  document.querySelector('.close-btn').onclick = function() {
+    popup.style.display = 'none';
+  };
+  
+  // Close popup when clicking outside
+  popup.onclick = function(event) {
+    if (event.target === popup) {
+      popup.style.display = 'none';
+    }
+  };
+}
