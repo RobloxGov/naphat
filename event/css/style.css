@@ -227,7 +227,7 @@ input, button, select {
   left: 0;
   top: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-color: rgba(0, 0, 0, 0.9);
   overflow: auto;
   animation: fadeIn 0.3s;
@@ -279,6 +279,7 @@ input, button, select {
     flex-direction: column;
     margin: 10% auto;
     width: 90%;
+    margin-top: 20%;
   }
   
   .popup-content img {
