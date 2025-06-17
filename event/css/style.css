@@ -209,3 +209,7 @@ button:hover {
 .align-items-center {
     align-items: center;
 }
+
+input, button, select {
+    font-family: inherit;
+}
