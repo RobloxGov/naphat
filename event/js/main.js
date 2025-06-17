@@ -147,3 +147,33 @@ function displayImages(images) {
     gallery.appendChild(card);
   });
 }
+
+async function fetchImages() {
+  try {
+    const response = await fetch(`${SCRIPT_URL}?action=getImages`);
+    
+    // ตรวจสอบว่าการร้องขอสำเร็จ
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    // ตรวจสอบว่าเป็น JSON
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error("Response is not JSON");
+    }
+    
+    const data = await response.json();
+    
+    // ตรวจสอบว่า data เป็น Array
+    if (!Array.isArray(data)) {
+      console.error('Expected array but got:', data);
+      return []; // ส่งคืน array ว่างหากข้อมูลไม่ถูกต้อง
+    }
+    
+    return data;
+  } catch (error) {
+    console.error('Error fetching images:', error);
+    return []; // ส่งคืน array ว่างหากเกิด error
+  }
+}
