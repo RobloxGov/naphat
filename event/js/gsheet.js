@@ -1,4 +1,4 @@
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxwnDU8HV7D4JtZF3Fee-laSwZ6leY3MUnuLbmUsgp0hpnWSwbuhNa24_7boioxlqev/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxyqZ1SuTMNddVFLom6B-jXxDV-WQOOKl_8XolTQkDYv6z0bzDFL9QMoikWl1kjWGFW/exec';
 
 async function fetchImages() {
   try {
