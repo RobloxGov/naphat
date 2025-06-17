@@ -195,21 +195,34 @@ button:hover {
 }
 
 .filter-section select {
-    width: 200px;
-    padding: 0.5rem;
-    border: 2px solid #ddd;
-    background: #eee;
-    transition: 0.4s;
-    outline: none;
+  width: 200px;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  background-color: #eee;
+  color: #333;
+  transition: border-color 0.3s, background-color 0.3s;
+  outline: none;
+  appearance: none; /* เอา style ของ browser ออก (บาง browser) */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
 }
 
-.filter-section select:hover,
-.filter-section select:focus {
-  background: #ddd;
+select:hover {
+  background-color: #e0e0e0;
 }
 
-select:not(:-internal-list-box):not([multiple]) option::checkmark {
-    content: "*";
+/* เมื่อ focus (คลิกเลือก) */
+select:focus {
+  border-color: #888;
+  background-color: #fff;
+}
+
+option {
+  background-color: #f8f8f8;
+  color: #333;
 }
 
 .d-flex {
