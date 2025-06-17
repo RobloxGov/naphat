@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>แก้ไขรูปภาพ</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>แก้ไขรูปภาพ</h1>
+    <nav>
+        <button class="bg-primary">
+          <a href="index.html">หน้าหลัก</a>
+        </button>
+        <button class="bg-primary">
+          <a href="#" id="logoutBtn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-in mr-2 h-4 w-4"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" x2="3" y1="12" y2="12"></line></svg>ออกจากระบบ</a>
+        </button>
+    </nav>
+  </header>
+
+  <main>
+    <form id="editForm">
+      <input type="hidden" id="imageId">
+
+      <div class="form-group">
+        <label for="editImageTitle">ชื่อภาพ</label>
+        <input type="text" id="editImageTitle" required>
+      </div>
+
+      <div class="form-group">
+        <label for="editImageDescription">รายละเอียดภาพ</label>
+        <textarea id="editImageDescription" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="editImageLocation">สถานที่ (หมวดหมู่)</label>
+        <input type="text" id="editImageLocation" list="editLocations" required>
+        <datalist id="editLocations">
+          <!-- Existing locations will be populated here -->
+        </datalist>
+      </div>
+
+      <div class="form-group">
+        <label>รูปภาพปัจจุบัน</label>
+        <img id="currentImage" src="" alt="Current Image" style="max-width: 300px; display: block;">
+      </div>
+
+      <div class="form-group">
+        <label for="newImageFile">เลือกรูปภาพใหม่ (หากต้องการเปลี่ยน)</label>
+        <input type="file" id="newImageFile" accept="image/*">
+      </div>
+
+      <div class="button-group">
+        <button type="submit">บันทึกการเปลี่ยนแปลง</button>
+        <button type="button" id="deleteBtn">ลบรูปภาพ</button>
+      </div>
+    </form>
+  </main>
+
+  <script src="js/auth.js"></script>
+  <script src="js/gsheet.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
