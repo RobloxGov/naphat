@@ -321,6 +321,10 @@ input, button, select {
     padding: .5em 1em;
 }
 
+.bg-primary a {
+    color: #f16622;
+}
+
 .bg-primary:hover {
     background-color: #bebebe;
 }
@@ -328,12 +332,22 @@ input, button, select {
 .bg-accent {
     background-color: #ffa200;
     border: 1px solid #fff;
-    color: #fff;
     padding: .5em 1em;
 }
 
+.bg-accent a {
+    color: #fff;
+}
 .bg-accent:hover {
     background-color: #fff;
     border: 1px solid #ffa200;
     color: #000;
+}
+
+button a {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    justify-content: center;
+    margin: 0;
 }
