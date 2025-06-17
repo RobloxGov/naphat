@@ -26,16 +26,24 @@
   </div>
 
   <script>
-    // เพิ่ม event listener โดยตรงในหน้า login
+    async function sha256(text) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(text);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+  
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
-      
+      const passwordHash = await sha256(password);
+  
       try {
         const response = await fetch('member.json');
         const users = await response.json();
-        const user = users.find(u => u.username === username && u.password === password);
+        const user = users.find(u => u.username === username && u.password === passwordHash);
         
         if (user) {
           localStorage.setItem('authenticated', 'true');
