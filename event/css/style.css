@@ -197,3 +197,15 @@ button:hover {
   width: 200px;
   padding: 0.5rem;
 }
+
+.d-flex {
+    display: flex;
+}
+
+.justify-content-between {
+    justify-content: space-between;
+}
+
+.align-items-center {
+    align-items: center;
+}
