@@ -56,19 +56,29 @@ function displayImages(images) {
     const card = document.createElement('div');
     card.className = 'image-card';
     
+    // ตรวจสอบและตั้งค่า ID หากไม่มี
+    const imageId = image.id || 'no-id';
+    
     card.innerHTML = `
       <img src="${image.image}" alt="${image.title}">
       <div class="image-info">
         <h3>${image.title}</h3>
         <p>${image.description}</p>
-        <div class="image-meta d-flex flex-col">
+        <div class="image-meta">
           <span>สถานที่: ${image.location}</span>
           <span>วันที่: ${new Date(image.uploadDate).toLocaleDateString()}</span>
         </div>
-        ${window.location.pathname.includes('index.html') ? 
-          `<a href="edit.html?id=${image.id}">แก้ไข</a>` : ''}
+        <a href="edit.html?id=${imageId}" class="edit-link">แก้ไข</a>
       </div>
     `;
+    
+    // Add click event to show popup
+    card.addEventListener('click', (e) => {
+      // ไม่ทำอะไรถ้าคลิกที่ลิงก์แก้ไข
+      if (e.target.closest('a.edit-link')) return;
+      
+      showImagePopup(image);
+    });
     
     gallery.appendChild(card);
   });
