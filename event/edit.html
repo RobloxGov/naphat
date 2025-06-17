@@ -106,7 +106,19 @@
     // ฟังก์ชันโหลดหมวดหมู่
     async function populateCategories() {
       try {
-        const response = await fetch('YOUR_SCRIPT_URL?action=getCategories');
+        const response = await fetch(`${SCRIPT_URL}?action=getCategories`);
+        
+        // ตรวจสอบสถานะการตอบกลับ
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        // ตรวจสอบ Content-Type
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          throw new Error("Response is not JSON");
+        }
+        
         const categories = await response.json();
         const datalist = document.getElementById('editLocations');
         
@@ -118,6 +130,8 @@
         });
       } catch (error) {
         console.error('Error loading categories:', error);
+        // แสดงข้อความ error ที่เป็นมิตรกับผู้ใช้
+        alert('ไม่สามารถโหลดรายการหมวดหมู่ได้ กรุณาลองใหม่ภายหลัง');
       }
     }
 
