@@ -326,11 +326,11 @@ input, button, select {
 }
 
 .bg-primary:hover {
-    background-color: #f16622;
+    background-color: #ffffff30;
 }
 
 .bg-primary:hover a {
-    color: #ffffff30;
+    color: #fff;
 }
 
 .bg-accent {
