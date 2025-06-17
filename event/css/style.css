@@ -330,7 +330,7 @@ input, button, select {
 }
 
 .bg-primary:hover a {
-    color: #fff;
+    color: #ffffff30;
 }
 
 .bg-accent {
@@ -349,10 +349,19 @@ input, button, select {
     color: #000;
 }
 
+.bg-accent:hover a {
+    color: #ffa200;
+}
+
 button a {
     display: flex;
     align-items: center;
     gap: .5rem;
     justify-content: center;
     margin: 0;
+}
+
+nav {
+    display: flex;
+    gap: .5rem;
 }
