@@ -116,25 +116,42 @@ function showImagePopup(imageData) {
 // Modify displayImages function to add click event
 function displayImages(images) {
   const gallery = document.getElementById('imageGallery');
-  gallery.innerHTML = '';
   
-  // ตรวจสอบสถานะการล็อกอิน
-  const isLoggedIn = localStorage.getItem('authenticated') === 'true';
+  // ตรวจสอบว่า images เป็น Array
+  if (!Array.isArray(images)) {
+    console.error('displayImages: images is not an array', images);
+    gallery.innerHTML = '<p>ไม่สามารถโหลดรูปภาพได้</p>';
+    return;
+  }
+  
+  // ถ้าไม่มีรูปภาพ
+  if (images.length === 0) {
+    gallery.innerHTML = '<p>ไม่พบรูปภาพ</p>';
+    return;
+  }
+  
+  gallery.innerHTML = '';
   
   images.forEach(image => {
     const card = document.createElement('div');
     card.className = 'image-card';
     
+    // ตรวจสอบว่ามีข้อมูลครบถ้วน
+    if (!image.image || !image.title) {
+      console.warn('Invalid image data:', image);
+      return; // ข้ามรูปภาพที่ไม่สมบูรณ์
+    }
+    
     card.innerHTML = `
       <img src="${image.image}" alt="${image.title}">
       <div class="image-info">
         <h3>${image.title}</h3>
-        <p>${image.description}</p>
+        <p>${image.description || ''}</p>
         <div class="image-meta">
-          <span>สถานที่: ${image.location}</span>
-          <span>วันที่: ${new Date(image.uploadDate).toLocaleDateString()}</span>
+          <span>สถานที่: ${image.location || 'ไม่ระบุ'}</span>
+          <span>วันที่: ${image.uploadDate ? new Date(image.uploadDate).toLocaleDateString() : 'ไม่ระบุ'}</span>
         </div>
-        ${isLoggedIn ? `<a href="edit.html?id=${image.id}" class="edit-link">แก้ไข</a>` : ''}
+        ${isLoggedIn() ? `<a href="edit.html?id=${image.id || ''}" class="edit-link">แก้ไข</a>` : ''}
       </div>
     `;
     
@@ -177,3 +194,4 @@ async function fetchImages() {
     return []; // ส่งคืน array ว่างหากเกิด error
   }
 }
+
