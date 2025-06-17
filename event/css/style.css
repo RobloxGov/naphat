@@ -365,3 +365,18 @@ nav {
     display: flex;
     gap: .5rem;
 }
+.edit-link {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 5px 10px;
+  background-color: #3498db;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 0.9em;
+  transition: background-color 0.3s;
+}
+
+.edit-link:hover {
+  background-color: #2980b9;
+}
