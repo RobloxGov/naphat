@@ -1,151 +1,122 @@
+// ตั้งค่า URL ของ Google Apps Script
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxwnDU8HV7D4JtZF3Fee-laSwZ6leY3MUnuLbmUsgp0hpnWSwbuhNa24_7boioxlqev/exec';
+
+// ฟังก์ชันตรวจสอบการล็อกอิน
+function isLoggedIn() {
+  return localStorage.getItem('authenticated') === 'true';
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
-  // Load images for gallery page
-  if (document.getElementById('imageGallery')) {
-    const images = await fetchImages();
-    displayImages(images);
-    populateCategories(images);
+  try {
+    // Load images for gallery page
+    if (document.getElementById('imageGallery')) {
+      const images = await fetchImages();
+      console.log('Fetched images:', images); // Debug log
+      
+      displayImages(images);
+      populateCategories(images);
+      
+      // Filter by category
+      document.getElementById('categoryFilter').addEventListener('change', (e) => {
+        const category = e.target.value;
+        filterImagesByCategory(category, images);
+      });
+    }
     
-    // Filter by category
-    document.getElementById('categoryFilter').addEventListener('change', (e) => {
-      const category = e.target.value;
-      filterImagesByCategory(category, images);
-    });
-  }
-  
-  // Handle image upload
-  if (document.getElementById('uploadForm')) {
-    document.getElementById('uploadForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const fileInput = document.getElementById('imageFile');
-      const file = fileInput.files[0];
-      
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = async (event) => {
-          const imageData = {
-            title: document.getElementById('imageTitle').value,
-            description: document.getElementById('imageDescription').value,
-            location: document.getElementById('imageLocation').value,
-            image: event.target.result,
-            uploadDate: new Date().toISOString()
+    // Handle image upload
+    if (document.getElementById('uploadForm')) {
+      document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const fileInput = document.getElementById('imageFile');
+        const file = fileInput.files[0];
+        
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = async (event) => {
+            const imageData = {
+              title: document.getElementById('imageTitle').value,
+              description: document.getElementById('imageDescription').value,
+              location: document.getElementById('imageLocation').value,
+              image: event.target.result,
+              uploadDate: new Date().toISOString(),
+              uploadBy: localStorage.getItem('username') || 'anonymous'
+            };
+            
+            const result = await uploadImage(imageData);
+            
+            if (result.success) {
+              alert('อัปโหลดรูปภาพสำเร็จ');
+              document.getElementById('uploadForm').reset();
+              // รีเฟรชรายการรูปภาพ
+              const images = await fetchImages();
+              displayImages(images);
+              populateCategories(images);
+            } else {
+              alert('เกิดข้อผิดพลาดในการอัปโหลด: ' + (result.error || ''));
+            }
           };
-          
-          const result = await uploadImage(imageData);
-          
-          if (result.success) {
-            alert('อัปโหลดรูปภาพสำเร็จ');
-            document.getElementById('uploadForm').reset();
-          } else {
-            alert('เกิดข้อผิดพลาดในการอัปโหลด');
-          }
-        };
-        reader.readAsDataURL(file);
-      }
-    });
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+  } catch (error) {
+    console.error('Initialization error:', error);
+    alert('เกิดข้อผิดพลาดในการโหลดหน้า: ' + error.message);
   }
-  
-  // Similar handlers for edit page
 });
 
-function populateCategories(images) {
-  const categories = [...new Set(images.map(img => img.location))];
-  const filterSelect = document.getElementById('categoryFilter') || 
-                      document.getElementById('editImageLocation').previousElementSibling;
-  
-  categories.forEach(category => {
-    const option = document.createElement('option');
-    option.value = category;
-    option.textContent = category;
-    filterSelect.appendChild(option);
-  });
-  
-  // For datalist in upload/edit forms
-  const datalist = document.getElementById('locations') || 
-                   document.getElementById('editLocations');
-  if (datalist) {
-    datalist.innerHTML = '';
-    categories.forEach(category => {
-      const option = document.createElement('option');
-      option.value = category;
-      datalist.appendChild(option);
-    });
+async function fetchImages() {
+  try {
+    const response = await fetch(`${SCRIPT_URL}?action=getImages`);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error("Response is not JSON");
+    }
+    
+    const data = await response.json();
+    
+    // ตรวจสอบและแปลงข้อมูลให้เป็น Array
+    if (!data) return [];
+    if (Array.isArray(data)) return data;
+    if (typeof data === 'object') return [data]; // ถ้าได้ object เดียวให้แปลงเป็น Array
+    return []; // กรณีอื่นๆ
+  } catch (error) {
+    console.error('Error fetching images:', error);
+    return [];
   }
 }
 
-function filterImagesByCategory(category, allImages) {
-  const filtered = category ? 
-    allImages.filter(img => img.location === category) : 
-    allImages;
-  displayImages(filtered);
-}
-
-// Function to display image in popup
-function showImagePopup(imageData) {
-  const popup = document.getElementById('imagePopup');
-  const popupImg = document.getElementById('popupImage');
-  const popupTitle = document.getElementById('popupTitle');
-  const popupDesc = document.getElementById('popupDescription');
-  const popupLoc = document.getElementById('popupLocation');
-  const popupDate = document.getElementById('popupDate');
-  
-  // Set popup content
-  popupImg.src = imageData.image;
-  popupImg.alt = imageData.title;
-  popupTitle.textContent = imageData.title;
-  popupDesc.textContent = imageData.description;
-  popupLoc.textContent = `สถานที่: ${imageData.location}`;
-  popupDate.textContent = `วันที่: ${new Date(imageData.uploadDate).toLocaleDateString()}`;
-  
-  // Show popup
-  popup.style.display = 'block';
-  
-  // Close popup when clicking X
-  document.querySelector('.close-btn').onclick = function() {
-    popup.style.display = 'none';
-  };
-  
-  // Close popup when clicking outside
-  popup.onclick = function(event) {
-    if (event.target === popup) {
-      popup.style.display = 'none';
-    }
-  };
-}
-
-// Modify displayImages function to add click event
 function displayImages(images) {
   const gallery = document.getElementById('imageGallery');
+  if (!gallery) return;
   
-  // ตรวจสอบว่า images เป็น Array
+  // ตรวจสอบและเตรียมข้อมูล images
+  if (!images) images = [];
   if (!Array.isArray(images)) {
-    console.error('displayImages: images is not an array', images);
-    gallery.innerHTML = '<p>ไม่สามารถโหลดรูปภาพได้</p>';
-    return;
+    console.warn('Expected array for images, got:', typeof images, images);
+    images = [];
   }
   
-  // ถ้าไม่มีรูปภาพ
-  if (images.length === 0) {
-    gallery.innerHTML = '<p>ไม่พบรูปภาพ</p>';
-    return;
-  }
-  
-  gallery.innerHTML = '';
+  gallery.innerHTML = images.length === 0 
+    ? '<p class="no-images">ไม่พบรูปภาพ</p>'
+    : '';
   
   images.forEach(image => {
+    if (!image) return;
+    
     const card = document.createElement('div');
     card.className = 'image-card';
     
-    // ตรวจสอบว่ามีข้อมูลครบถ้วน
-    if (!image.image || !image.title) {
-      console.warn('Invalid image data:', image);
-      return; // ข้ามรูปภาพที่ไม่สมบูรณ์
-    }
-    
     card.innerHTML = `
-      <img src="${image.image}" alt="${image.title}">
+      <img src="${image.image || ''}" alt="${image.title || 'ไม่มีชื่อ'}">
       <div class="image-info">
-        <h3>${image.title}</h3>
+        <h3>${image.title || 'ไม่มีชื่อ'}</h3>
         <p>${image.description || ''}</p>
         <div class="image-meta">
           <span>สถานที่: ${image.location || 'ไม่ระบุ'}</span>
@@ -165,33 +136,69 @@ function displayImages(images) {
   });
 }
 
-async function fetchImages() {
-  try {
-    const response = await fetch(`${SCRIPT_URL}?action=getImages`);
-    
-    // ตรวจสอบว่าการร้องขอสำเร็จ
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    
-    // ตรวจสอบว่าเป็น JSON
-    const contentType = response.headers.get('content-type');
-    if (!contentType || !contentType.includes('application/json')) {
-      throw new Error("Response is not JSON");
-    }
-    
-    const data = await response.json();
-    
-    // ตรวจสอบว่า data เป็น Array
-    if (!Array.isArray(data)) {
-      console.error('Expected array but got:', data);
-      return []; // ส่งคืน array ว่างหากข้อมูลไม่ถูกต้อง
-    }
-    
-    return data;
-  } catch (error) {
-    console.error('Error fetching images:', error);
-    return []; // ส่งคืน array ว่างหากเกิด error
+function populateCategories(images) {
+  if (!Array.isArray(images)) return;
+  
+  // สร้างรายการ category ที่ไม่ซ้ำกัน
+  const categories = [...new Set(images
+    .filter(img => img && img.location)
+    .map(img => img.location)
+  )];
+  
+  // สำหรับ dropdown กรอง
+  const filterSelect = document.getElementById('categoryFilter');
+  if (filterSelect) {
+    filterSelect.innerHTML = '<option value="">ทั้งหมด</option>';
+    categories.forEach(category => {
+      const option = document.createElement('option');
+      option.value = category;
+      option.textContent = category;
+      filterSelect.appendChild(option);
+    });
   }
+  
+  // สำหรับ datalist ในฟอร์ม
+  const datalists = [
+    document.getElementById('locations'),
+    document.getElementById('editLocations')
+  ].filter(Boolean);
+  
+  datalists.forEach(datalist => {
+    datalist.innerHTML = '';
+    categories.forEach(category => {
+      const option = document.createElement('option');
+      option.value = category;
+      datalist.appendChild(option);
+    });
+  });
 }
 
+function filterImagesByCategory(category, allImages) {
+  if (!Array.isArray(allImages)) return;
+  
+  const filtered = category 
+    ? allImages.filter(img => img && img.location === category)
+    : allImages;
+  
+  displayImages(filtered);
+}
+
+async function uploadImage(imageData) {
+  try {
+    const response = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        action: 'uploadImage',
+        ...imageData
+      })
+    });
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    return { success: false, error: error.message };
+  }
+}
