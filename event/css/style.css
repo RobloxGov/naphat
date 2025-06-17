@@ -7,14 +7,6 @@
     box-sizing: border-box;
 }
 
-.mt-1 {
-  margin-top: 0.25em !important;
-}
-
-.ml-1 {
-  margin-left: 0.25em !important;
-}
-
 body {
   font-family: "Kanit", sans-serif;
   line-height: 1.6;
