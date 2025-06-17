@@ -32,7 +32,7 @@ nav a {
 }
 
 nav a:hover {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .container {
@@ -311,4 +311,14 @@ input, button, select {
   .popup-content img {
     max-height: 50vh;
   }
+}
+
+/* ------------------------ */
+
+.bg-primary {
+    background-color: #4387f4;
+}
+
+.bg-primary:hover {
+    background-color: rgb(67 135 244 / 90%);
 }
