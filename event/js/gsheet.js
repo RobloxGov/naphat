@@ -31,3 +31,22 @@ async function uploadImage(imageData) {
 }
 
 // Similar functions for updateImage and deleteImage
+async function getImageById(id) {
+  try {
+    const response = await fetch(`${SCRIPT_URL}?action=getImage&id=${id}`);
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching image:', error);
+    return null;
+  }
+}
+
+async function getCategories() {
+  try {
+    const response = await fetch(`${SCRIPT_URL}?action=getCategories`);
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    return [];
+  }
+}
