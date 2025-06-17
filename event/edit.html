@@ -83,7 +83,7 @@
 
       try {
         // ดึงข้อมูลจาก Google Sheets
-        const response = await fetch(`${SCRIPT_URL}?action=getImage&id=${imageId}`);
+        const response = await fetch(`https://script.google.com/macros/s/AKfycbxwnDU8HV7D4JtZF3Fee-laSwZ6leY3MUnuLbmUsgp0hpnWSwbuhNa24_7boioxlqev/exec?action=getImage&id=${imageId}`);
         const imageData = await response.json();
 
         // แสดงข้อมูลในฟอร์ม
