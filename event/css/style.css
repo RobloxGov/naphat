@@ -318,6 +318,7 @@ input, button, select {
 .bg-primary {
     background-color: #fff;
     color: #f16622;
+    padding: .5em 1em;
 }
 
 .bg-primary:hover {
@@ -328,6 +329,7 @@ input, button, select {
     background-color: #ffa200;
     border: 1px solid #fff;
     color: #fff;
+    padding: .5em 1em;
 }
 
 .bg-accent:hover {
