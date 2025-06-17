@@ -195,8 +195,21 @@ button:hover {
 }
 
 .filter-section select {
-  width: 200px;
-  padding: 0.5rem;
+    width: 200px;
+    padding: 0.5rem;
+    border: 2px solid #ddd;
+    background: #eee;
+    transition: 0.4s;
+    outline: none;
+}
+
+.filter-section select:hover,
+.filter-section select:focus {
+  background: #ddd;
+}
+
+select:not(:-internal-list-box):not([multiple]) option::checkmark {
+    content: "*";
 }
 
 .d-flex {
