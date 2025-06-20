@@ -1,3 +1,13 @@
+// ตั้งค่า Cloudinary
+const cloudinaryConfig = {
+  cloudName: 'your_cloud_name', // เปลี่ยนเป็นค่าของคุณ
+  uploadPreset: 'your_upload_preset', // เปลี่ยนเป็นค่าของคุณ
+  apiKey: 'your_api_key' // เปลี่ยนเป็นค่าของคุณ
+};
+
+// URL ของ Google Apps Script
+const SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+
 // ฟังก์ชันตรวจสอบการล็อกอิน
 function isLoggedIn() {
   return localStorage.getItem('authenticated') === 'true';
