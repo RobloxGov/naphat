@@ -49,23 +49,10 @@ async function deleteFromCloudinary(publicId) {
 async function fetchImages() {
   try {
     const response = await fetch(`${SCRIPT_URL}?action=getImages`);
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    
-    const contentType = response.headers.get('content-type');
-    if (!contentType || !contentType.includes('application/json')) {
-      throw new Error("Response is not JSON");
-    }
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     
     const data = await response.json();
-    
-    // ตรวจสอบและแปลงข้อมูลให้เป็น Array
-    if (!data) return [];
-    if (Array.isArray(data)) return data;
-    if (typeof data === 'object') return [data]; // ถ้าได้ object เดียวให้แปลงเป็น Array
-    return []; // กรณีอื่นๆ
+    return Array.isArray(data) ? data : [];
   } catch (error) {
     console.error('Error fetching images:', error);
     return [];
