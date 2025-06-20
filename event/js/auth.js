@@ -1,26 +1,91 @@
-// ไม่ต้องแก้ไขหลัก แต่สามารถเพิ่มฟังก์ชันตรวจสอบ Cloudinary Upload Preset ได้
-async function checkCloudinaryConfig() {
-  if (!window.cloudinaryConfig) {
-    console.error('Cloudinary config is missing');
-    return false;
-  }
-  return true;
+// auth.js
+
+// ฟังก์ชันตรวจสอบการล็อกอิน
+function isLoggedIn() {
+  return localStorage.getItem('authenticated') === 'true';
 }
 
-// ตัวอย่างการเรียกใช้ในฟังก์ชัน login
+// ฟังก์ชันตรวจสอบ Cloudinary Config
+function checkCloudinaryConfig() {
+  return window.cloudinaryConfig && 
+         window.cloudinaryConfig.cloudName && 
+         window.cloudinaryConfig.uploadPreset;
+}
+
+// ฟังก์ชันล็อกอิน (แก้ไขเพิ่มการตรวจสอบ Cloudinary)
 async function login(username, password) {
-  // ...โค้ดเดิม...
-  
-  if (user) {
-    // ตรวจสอบการตั้งค่า Cloudinary ด้วย
-    const cloudinaryReady = await checkCloudinaryConfig();
-    if (!cloudinaryReady) {
-      alert('ระบบอัปโหลดรูปภาพยังไม่พร้อมใช้งาน');
-      return false;
-    }
+  try {
+    const response = await fetch('/event/member.json');
+    if (!response.ok) throw new Error('Failed to fetch user data');
     
-    localStorage.setItem('authenticated', 'true');
+    const users = await response.json();
+    const user = users.find(u => u.username === username && u.password === password);
+    
+    if (user) {
+      // ตรวจสอบการตั้งค่า Cloudinary
+      if (!checkCloudinaryConfig()) {
+        console.warn('Cloudinary config is not properly set');
+      }
+      
+      localStorage.setItem('authenticated', 'true');
+      localStorage.setItem('username', username);
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error('Login error:', error);
+    return false;
+  }
+}
+
+// ฟังก์ชันล็อกเอาท์
+function logout() {
+  localStorage.removeItem('authenticated');
+  localStorage.removeItem('username');
+  window.location.href = 'login.html';
+}
+
+// ตรวจสอบการล็อกอินเมื่อโหลดหน้า
+function checkAuth() {
+  const currentPage = window.location.pathname.split('/').pop();
+  const isLoginPage = currentPage === 'login.html';
+  const isAuthenticated = isLoggedIn();
+  
+  if (!isAuthenticated && !isLoginPage) {
+    window.location.href = 'login.html';
+    return false;
+  }
+  
+  if (isAuthenticated && isLoginPage) {
+    window.location.href = 'index.html';
     return true;
   }
-  // ...โค้ดเดิม...
+  
+  return isAuthenticated;
 }
+
+// Event Listeners
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.getElementById('loginForm')) {
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      
+      if (await login(username, password)) {
+        window.location.href = 'index.html';
+      } else {
+        alert('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+      }
+    });
+  }
+  
+  if (document.getElementById('logoutBtn')) {
+    document.getElementById('logoutBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      logout();
+    });
+  }
+  
+  checkAuth();
+});
