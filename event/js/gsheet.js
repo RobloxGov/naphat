@@ -85,7 +85,7 @@ async function uploadImage(imageData) {
       location: imageData.location,
       image_url: cloudinaryResult.secure_url,
       public_id: cloudinaryResult.public_id,
-      uploadDate: new Date().toISOString(),
+      uploadDate: imageData.uploadDate,
       uploadBy: localStorage.getItem('username') || 'anonymous'
     };
     
