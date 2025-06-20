@@ -19,32 +19,32 @@ function displayImages(images) {
     const imageUrl = image.image_url || 
       `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/upload/w_600,h_400,c_fill/${image.public_id}`;
     
-      card.innerHTML = `
-        <img src="${imageUrl}" alt="${image.title || 'ไม่มีชื่อ'}" loading="lazy">
-        <div class="image-info">
-          <h3>${image.title || 'ไม่มีชื่อ'}</h3>
-          <p>${image.description || ''}</p>
-          <div class="image-meta">
-            <span>สถานที่: ${image.location || 'ไม่ระบุ'}</span>
-            <span>วันที่: ${image.uploadDate || 'ไม่ระบุ'}</span>
-          </div>
-          ${isLoggedIn() ? `
-            <div class="image-actions">
-              <a href="edit.html?id=${image.id || ''}" class="edit-link">แก้ไข</a>
-              <button class="delete-btn" data-id="${image.id}" data-public-id="${image.public_id}">ลบ</button>
-            </div>
-          ` : ''}
+    card.innerHTML = `
+      <img src="${imageUrl}" alt="${image.title || 'ไม่มีชื่อ'}" loading="lazy">
+      <div class="image-info">
+        <h3>${image.title || 'ไม่มีชื่อ'}</h3>
+        <p>${image.description || ''}</p>
+        <div class="image-meta">
+          <span>สถานที่: ${image.location || 'ไม่ระบุ'}</span>
+          <span>วันที่: ${image.uploadDate ? new Date(image.uploadDate).toLocaleDateString() : 'ไม่ระบุ'}</span>
         </div>
-      `;
-      
-      // Event สำหรับแสดง Popup
-      card.addEventListener('click', (e) => {
-        if (!e.target.closest('a') && !e.target.closest('button')) {
-          showImagePopup(image);
-        }
-      });
-      
-      gallery.appendChild(card);
+        ${isLoggedIn() ? `
+          <div class="image-actions">
+            <a href="edit.html?id=${image.id || ''}" class="edit-link">แก้ไข</a>
+            <button class="delete-btn" data-id="${image.id}" data-public-id="${image.public_id}">ลบ</button>
+          </div>
+        ` : ''}
+      </div>
+    `;
+    
+    // Event สำหรับแสดง Popup
+    card.addEventListener('click', (e) => {
+      if (!e.target.closest('a') && !e.target.closest('button')) {
+        showImagePopup(image);
+      }
+    });
+    
+    gallery.appendChild(card);
   });
   
   // เพิ่ม Event สำหรับปุ่มลบ
@@ -86,7 +86,7 @@ function showImagePopup(imageData) {
   popupTitle.textContent = imageData.title || 'ไม่มีชื่อ';
   popupDesc.textContent = imageData.description || '';
   popupLoc.textContent = `สถานที่: ${imageData.location || 'ไม่ระบุ'}`;
-  popupDate.textContent = `วันที่: ${imageData.uploadDate || 'ไม่ระบุ'}`;
+  popupDate.textContent = `วันที่: ${imageData.uploadDate ? new Date(imageData.uploadDate).toLocaleDateString() : 'ไม่ระบุ'}`;
   
   popup.style.display = 'block';
   
