@@ -1,6 +1,6 @@
 // gsheet.js
 
-const SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyrvyVtSQZ5P3VGro_W5v34leeWdsFXLK1yVVjfeYlswFZjtrjT8I70JH2L0guXwjgD/exec';
 
 // อัปโหลดรูปภาพไปยัง Cloudinary
 async function uploadToCloudinary(file) {
