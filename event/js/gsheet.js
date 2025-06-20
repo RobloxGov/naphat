@@ -1,8 +1,13 @@
-// gsheet.js
+// ตั้งค่า Cloudinary
+const cloudinaryConfig = {
+  cloudName: 'dk01phng7', // เปลี่ยนเป็นค่าของคุณ
+  uploadPreset: 'uploadNaphatDev', // เปลี่ยนเป็นค่าของคุณ
+  apiKey: '386419728339566' // เปลี่ยนเป็นค่าของคุณ
+};
 
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyrvyVtSQZ5P3VGro_W5v34leeWdsFXLK1yVVjfeYlswFZjtrjT8I70JH2L0guXwjgD/exec';
 
-// อัปโหลดรูปภาพไปยัง Cloudinary
+// ฟังก์ชันใหม่สำหรับอัปโหลดไปยัง Cloudinary
 async function uploadToCloudinary(file) {
   const formData = new FormData();
   formData.append('file', file);
@@ -11,7 +16,10 @@ async function uploadToCloudinary(file) {
   try {
     const response = await fetch(
       `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`,
-      { method: 'POST', body: formData }
+      {
+        method: 'POST',
+        body: formData
+      }
     );
     return await response.json();
   } catch (error) {
@@ -20,116 +28,56 @@ async function uploadToCloudinary(file) {
   }
 }
 
-// ลบรูปภาพจาก Cloudinary
+// ฟังก์ชันใหม่สำหรับลบรูปจาก Cloudinary
 async function deleteFromCloudinary(publicId) {
   try {
+    // ควรเรียกเซิร์ฟเวอร์เพื่อสร้าง signature
     const response = await fetch(
-      `${SCRIPT_URL}?action=generateSignature&publicId=${publicId}`
+      `${SCRIPT_URL}?action=deleteImage&publicId=${publicId}`
     );
-    const { signature, timestamp } = await response.json();
-    
-    const deleteResponse = await fetch(
-      `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/destroy`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          public_id: publicId,
-          signature,
-          timestamp,
-          api_key: cloudinaryConfig.apiKey
-        })
-      }
-    );
-    return await deleteResponse.json();
+    return await response.json();
   } catch (error) {
     console.error('Cloudinary delete error:', error);
     throw error;
   }
 }
 
-// ดึงข้อมูลรูปภาพทั้งหมด
-async function fetchImages() {
+// ปรับปรุงฟังก์ชัน uploadImage เดิม
+async function uploadImage(imageData) {
   try {
-    const response = await fetch(`${SCRIPT_URL}?action=getImages`);
-    const data = await response.json();
-    return Array.isArray(data) ? data : [];
-  } catch (error) {
-    console.error('Error fetching images:', error);
-    return [];
-  }
-}
-
-// บันทึกข้อมูลรูปภาพ
-async function saveImageData(imageData) {
-  try {
+    // อัปโหลดไฟล์ไปยัง Cloudinary ก่อน
+    const cloudinaryResponse = await uploadToCloudinary(imageData.file);
+    
+    // เตรียมข้อมูลสำหรับ Google Sheets
+    const sheetData = {
+      title: imageData.title,
+      description: imageData.description,
+      location: imageData.location,
+      image_url: cloudinaryResponse.secure_url,
+      public_id: cloudinaryResponse.public_id,
+      uploadDate: new Date().toISOString()
+    };
+    
+    // บันทึกข้อมูลลง Google Sheets
     const response = await fetch(SCRIPT_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
       body: new URLSearchParams({
         action: 'uploadImage',
-        ...imageData
+        ...sheetData
       })
     });
+    
     return await response.json();
   } catch (error) {
-    console.error('Save error:', error);
+    console.error('Upload failed:', error);
     return { success: false, error: error.message };
   }
 }
 
-// ลบรูปภาพ
-async function deleteImage(imageId, publicId) {
-  try {
-    await deleteFromCloudinary(publicId);
-    
-    const response = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        action: 'deleteImage',
-        id: imageId
-      })
-    });
-    return await response.json();
-  } catch (error) {
-    console.error('Delete error:', error);
-    return { success: false, error: error.message };
-  }
-}
-
-// อัปเดตรูปภาพ
-async function updateImage(imageData) {
-  try {
-    let imageUrl = imageData.currentImageUrl;
-    let publicId = imageData.currentPublicId;
-    
-    if (imageData.newFile) {
-      const cloudinaryResult = await uploadToCloudinary(imageData.newFile);
-      imageUrl = cloudinaryResult.secure_url;
-      publicId = cloudinaryResult.public_id;
-      
-      if (imageData.currentPublicId) {
-        await deleteFromCloudinary(imageData.currentPublicId);
-      }
-    }
-    
-    const response = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        action: 'updateImage',
-        id: imageData.id,
-        title: imageData.title,
-        description: imageData.description,
-        location: imageData.location,
-        image_url: imageUrl,
-        public_id: publicId
-      })
-    });
-    return await response.json();
-  } catch (error) {
-    console.error('Update error:', error);
-    return { success: false, error: error.message };
-  }
+// ฟังก์ชันดึงข้อมูลรูปภาพ (ไม่ต้องแก้ไขมาก)
+async function fetchImages() {
+  // ...โค้ดเดิม...
 }
