@@ -4,30 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>แก้ไขรูปภาพ</title>
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-  <header>
-    <div class="container d-flex justify-content-between align-items-center">
-      <h1>แก้ไขรูปภาพ</h1>
-      <nav>
-          <button class="bg-primary">
-            <a href="index.html">หน้าหลัก</a>
-          </button>
-          <button class="bg-primary">
-            <a href="#" id="logoutBtn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-in mr-2 h-4 w-4"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" x2="3" y1="12" y2="12"></line></svg>ออกจากระบบ</a>
-          </button>
-      </nav>
-    </div>
-  </header>
-
-  <main>
-    <iframe src="https://docs.google.com/spreadsheets/d/1beaV3CNNnqAf78hTCrR3w86GaeAFOVOynCVnEGiKXJw/edit" width="100%" height="500" frameborder="0">
-</iframe>
-  </main>
-
-  <script src="js/auth.js"></script>
-  <script src="js/gsheet.js"></script>
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Cloudinary SDK -->
   <script src="https://upload-widget.cloudinary.com/global/all.js"></script>
   <script>
     // ตั้งค่า Cloudinary
@@ -36,6 +14,287 @@
       uploadPreset: 'uploadNaphatDev',
       apiKey: '386419728339566'
     };
+  </script>
+</head>
+<body>
+  <header>
+    <div class="container d-flex justify-content-between align-items-center">
+      <h1>แก้ไขรูปภาพ</h1>
+      <nav>
+        <a href="index.html">หน้าหลัก</a>
+        <a href="#" id="logoutBtn">ออกจากระบบ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <form id="editForm">
+      <input type="hidden" id="imageId">
+      <input type="hidden" id="currentPublicId">
+
+      <div class="form-group">
+        <label for="editImageTitle">ชื่อภาพ</label>
+        <input type="text" id="editImageTitle" required>
+      </div>
+
+      <div class="form-group">
+        <label for="editImageDescription">รายละเอียดภาพ</label>
+        <textarea id="editImageDescription" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="editImageLocation">สถานที่ (หมวดหมู่)</label>
+        <input type="text" id="editImageLocation" list="editLocations" required>
+        <datalist id="editLocations">
+          <!-- Existing locations will be populated by JavaScript -->
+        </datalist>
+      </div>
+
+      <div class="form-group">
+        <label>รูปภาพปัจจุบัน</label>
+        <img id="currentImage" src="" alt="Current Image" style="max-width: 300px; display: block;">
+      </div>
+
+      <div class="form-group">
+        <label for="newImageFile">เลือกรูปภาพใหม่ (หากต้องการเปลี่ยน)</label>
+        <input type="file" id="newImageFile" accept="image/*">
+      </div>
+
+      <div class="button-group">
+        <button type="submit">บันทึกการเปลี่ยนแปลง</button>
+        <button type="button" id="deleteBtn">ลบรูปภาพ</button>
+      </div>
+    </form>
+  </main>
+
+  <!-- Popup สำหรับแสดงรูปภาพใหญ่ -->
+  <div id="imagePopup" class="popup">
+    <span class="close-btn">&times;</span>
+    <div class="popup-content">
+      <img id="popupImage" src="" alt="Popup Image">
+      <div class="image-details">
+        <h3 id="popupTitle"></h3>
+        <p id="popupDescription"></p>
+        <div class="image-meta">
+          <span id="popupLocation"></span>
+          <span id="popupDate"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- สคริปต์ที่จำเป็น -->
+  <script src="/js/auth.js"></script>
+  <script src="/js/gsheet.js"></script>
+  <script>
+    // ฟังก์ชันดึงค่า parameter จาก URL
+    function getUrlParameter(name) {
+      name = name.replace(/[[]/, '\\[').replace(/[\]]/, '\\]');
+      const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+      const results = regex.exec(location.search);
+      return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+    // ฟังก์ชันแสดง Popup
+    function showImagePopup(imageData) {
+      const popup = document.getElementById('imagePopup');
+      const popupImg = document.getElementById('popupImage');
+      const popupTitle = document.getElementById('popupTitle');
+      const popupDesc = document.getElementById('popupDescription');
+      const popupLoc = document.getElementById('popupLocation');
+      const popupDate = document.getElementById('popupDate');
+      
+      popupImg.src = imageData.image_url || imageData.image;
+      popupImg.alt = imageData.title || '';
+      popupTitle.textContent = imageData.title || 'ไม่มีชื่อ';
+      popupDesc.textContent = imageData.description || '';
+      popupLoc.textContent = `สถานที่: ${imageData.location || 'ไม่ระบุ'}`;
+      popupDate.textContent = `วันที่: ${imageData.uploadDate ? new Date(imageData.uploadDate).toLocaleDateString() : 'ไม่ระบุ'}`;
+      
+      popup.style.display = 'block';
+      
+      document.querySelector('.close-btn').onclick = function() {
+        popup.style.display = 'none';
+      };
+      
+      popup.onclick = function(event) {
+        if (event.target === popup) {
+          popup.style.display = 'none';
+        }
+      };
+    }
+
+    // เมื่อหน้าเว็บโหลดเสร็จ
+    document.addEventListener('DOMContentLoaded', async () => {
+      // ตรวจสอบการล็อกอิน
+      if (localStorage.getItem('authenticated') !== 'true') {
+        alert('กรุณาล็อกอินก่อนแก้ไขข้อมูล');
+        window.location.href = 'login.html';
+        return;
+      }
+
+      // ดึง ID รูปภาพจาก URL
+      const imageId = getUrlParameter('id');
+      if (!imageId) {
+        alert('ไม่พบ ID รูปภาพ');
+        window.location.href = 'index.html';
+        return;
+      }
+
+      try {
+        // ดึงข้อมูลรูปภาพจาก Google Sheets
+        const response = await fetch(`${SCRIPT_URL}?action=getImage&id=${imageId}`);
+        if (!response.ok) throw new Error('Failed to fetch image data');
+        
+        const imageData = await response.json();
+        
+        // แสดงข้อมูลในฟอร์ม
+        document.getElementById('imageId').value = imageData.id;
+        document.getElementById('editImageTitle').value = imageData.title;
+        document.getElementById('editImageDescription').value = imageData.description;
+        document.getElementById('editImageLocation').value = imageData.location;
+        document.getElementById('currentImage').src = imageData.image_url;
+        document.getElementById('currentPublicId').value = imageData.public_id;
+        
+        // โหลดหมวดหมู่ที่มีอยู่
+        const categoriesResponse = await fetch(`${SCRIPT_URL}?action=getCategories`);
+        if (categoriesResponse.ok) {
+          const categories = await categoriesResponse.json();
+          const datalist = document.getElementById('editLocations');
+          datalist.innerHTML = '';
+          categories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category;
+            datalist.appendChild(option);
+          });
+        }
+
+        // เมื่อคลิกที่รูปภาพปัจจุบันให้แสดง Popup
+        document.getElementById('currentImage').addEventListener('click', () => {
+          showImagePopup(imageData);
+        });
+
+        // เมื่อเลือกไฟล์ใหม่
+        document.getElementById('newImageFile').addEventListener('change', async (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          
+          try {
+            // อัปโหลดไปยัง Cloudinary
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', cloudinaryConfig.uploadPreset);
+            
+            const uploadResponse = await fetch(
+              `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`,
+              { method: 'POST', body: formData }
+            );
+            
+            const result = await uploadResponse.json();
+            document.getElementById('currentImage').src = result.secure_url;
+            document.getElementById('currentPublicId').value = result.public_id;
+          } catch (error) {
+            console.error('Image upload error:', error);
+            alert('ไม่สามารถอัปโหลดรูปภาพได้: ' + error.message);
+          }
+        });
+
+        // เมื่อส่งฟอร์มแก้ไข
+        document.getElementById('editForm').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          
+          const formData = {
+            id: document.getElementById('imageId').value,
+            title: document.getElementById('editImageTitle').value,
+            description: document.getElementById('editImageDescription').value,
+            location: document.getElementById('editImageLocation').value,
+            public_id: document.getElementById('currentPublicId').value
+          };
+          
+          try {
+            // อัปเดตข้อมูลใน Google Sheets
+            const response = await fetch(SCRIPT_URL, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+              },
+              body: new URLSearchParams({
+                action: 'updateImage',
+                ...formData
+              })
+            });
+            
+            const result = await response.json();
+            if (result.success) {
+              alert('บันทึกการเปลี่ยนแปลงสำเร็จ');
+              window.location.href = 'index.html';
+            } else {
+              alert('บันทึกไม่สำเร็จ: ' + (result.error || ''));
+            }
+          } catch (error) {
+            console.error('Update error:', error);
+            alert('เกิดข้อผิดพลาดในการบันทึก: ' + error.message);
+          }
+        });
+
+        // ปุ่มลบรูปภาพ
+        document.getElementById('deleteBtn').addEventListener('click', async () => {
+          if (confirm('คุณแน่ใจที่จะลบรูปภาพนี้吗?')) {
+            try {
+              // ลบจาก Cloudinary ก่อน
+              const publicId = document.getElementById('currentPublicId').value;
+              if (publicId) {
+                const deleteResponse = await fetch(
+                  `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/destroy`,
+                  {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      public_id: publicId,
+                      signature: 'YOUR_SIGNATURE', // ควรสร้างจากเซิร์ฟเวอร์
+                      api_key: cloudinaryConfig.apiKey,
+                      timestamp: Math.round(Date.now() / 1000)
+                    })
+                  }
+                );
+                await deleteResponse.json();
+              }
+              
+              // ลบข้อมูลจาก Google Sheets
+              const imageId = document.getElementById('imageId').value;
+              const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                  action: 'deleteImage',
+                  id: imageId
+                })
+              });
+              
+              const result = await response.json();
+              if (result.success) {
+                alert('ลบรูปภาพสำเร็จ');
+                window.location.href = 'index.html';
+              } else {
+                alert('ลบไม่สำเร็จ: ' + (result.error || ''));
+              }
+            } catch (error) {
+              console.error('Delete error:', error);
+              alert('เกิดข้อผิดพลาดในการลบ: ' + error.message);
+            }
+          }
+        });
+
+      } catch (error) {
+        console.error('Error loading image data:', error);
+        alert('เกิดข้อผิดพลาดในการโหลดข้อมูลรูปภาพ');
+        window.location.href = 'index.html';
+      }
+    });
   </script>
 </body>
 </html>
