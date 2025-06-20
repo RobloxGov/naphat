@@ -40,8 +40,19 @@
   </main>
 
   <!-- Popup แสดงรูปภาพใหญ่ -->
-  <div id="imagePopup" class="popup">
-    <!-- เนื้อหา popup เดิม -->
+  <div id="imagePopup" class="popup" style="display: block;">
+    <span class="close-btn">×</span>
+    <div class="popup-content">
+      <img id="popupImage" src="https://res.cloudinary.com/dk01phng7/image/upload/v1750408185/vguou0obsdtqwhxlce2b.jpg" alt="จุดเริ่มต้นวิศวกร">
+      <div class="image-details">
+        <h3 id="popupTitle">จุดเริ่มต้นวิศวกร</h3>
+        <p id="popupDescription">คณะวิศวกรรมศาสตร์ สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง</p>
+        <div class="image-meta">
+          <span id="popupLocation">สถานที่: คณะวิศวกรรมศาสตร์</span>
+          <span id="popupDate">วันที่: 20/06/2025</span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="js/gsheet.js"></script>
