@@ -33,17 +33,18 @@ function displayImages(images) {
               <a href="edit.html?id=${image.id || ''}" class="edit-link">แก้ไข</a>
               <button class="delete-btn" data-id="${image.id}" data-public-id="${image.public_id}">ลบ</button>
             </div>
+          ` : ''}
         </div>
-      `
-    
-    // Event สำหรับแสดง Popup
-    card.addEventListener('click', (e) => {
-      if (!e.target.closest('a') && !e.target.closest('button')) {
-        showImagePopup(image);
-      }
-    });
-    
-    gallery.appendChild(card);
+      `;
+      
+      // Event สำหรับแสดง Popup
+      card.addEventListener('click', (e) => {
+        if (!e.target.closest('a') && !e.target.closest('button')) {
+          showImagePopup(image);
+        }
+      });
+      
+      gallery.appendChild(card);
   });
   
   // เพิ่ม Event สำหรับปุ่มลบ
