@@ -68,19 +68,9 @@ function displayImages(images) {
       </div>
     `;
 
-    // ในฟังก์ชัน displayImages()
     card.addEventListener('click', (e) => {
       if (!e.target.closest('a') && !e.target.closest('button')) {
-        // ส่ง object image ที่มีข้อมูลครบถ้วน
-        showImagePopup({
-          image_url: image.image_url,
-          public_id: image.public_id,
-          image: image.image, // กรณีใช้ base64
-          title: image.title,
-          description: image.description,
-          location: image.location,
-          uploadDate: image.uploadDate
-        });
+        showImagePopup(image);
       }
     });
 
@@ -95,7 +85,7 @@ function displayImages(images) {
   }
 }
 
-// ฟังก์ชันแสดง Popup รูปภาพ (แก้ไขแล้ว)
+// ฟังก์ชันแสดง Popup รูปภาพ
 function showImagePopup(imageData) {
   const popup = document.getElementById('imagePopup');
   const popupImg = document.getElementById('popupImage');
@@ -104,40 +94,27 @@ function showImagePopup(imageData) {
   const popupLoc = document.getElementById('popupLocation');
   const popupDate = document.getElementById('popupDate');
 
-  // ตรวจสอบและสร้าง URL รูปภาพ
-  let imageUrl;
-  if (imageData.image_url) {
-    imageUrl = imageData.image_url;
-  } else if (imageData.public_id) {
-    imageUrl = `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/upload/${imageData.public_id}`;
-  } else if (imageData.image) {
-    imageUrl = imageData.image; // กรณีใช้ base64 (แบบเก่า)
-  } else {
-    imageUrl = ''; // หรือ URL รูปภาพเริ่มต้น
-  }
+  // สร้าง URL รูปภาพขนาดเต็ม
+  const imageUrl = imageData.image_url || 
+    `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/upload/${imageData.public_id}`;
 
-  // ตั้งค่าข้อมูลใน Popup
   popupImg.src = imageUrl;
-  popupImg.alt = imageData.title || 'รูปภาพ';
+  popupImg.alt = imageData.title || '';
   popupTitle.textContent = imageData.title || 'ไม่มีชื่อ';
   popupDesc.textContent = imageData.description || '';
   popupLoc.textContent = `สถานที่: ${imageData.location || 'ไม่ระบุ'}`;
   popupDate.textContent = `วันที่: ${imageData.uploadDate ? new Date(imageData.uploadDate).toLocaleDateString() : 'ไม่ระบุ'}`;
 
-  // แสดง Popup
   popup.style.display = 'block';
 
   // ปุ่มปิด Popup
-  const closeBtn = document.querySelector('.close-btn');
-  if (closeBtn) {
-    closeBtn.onclick = function() {
-      popup.style.display = 'none';
-    };
-  }
+  document.querySelector('.close-btn').onclick = () => {
+    popup.style.display = 'none';
+  };
 
   // คลิกนอก Popup เพื่อปิด
-  popup.onclick = function(event) {
-    if (event.target === popup) {
+  popup.onclick = (e) => {
+    if (e.target === popup) {
       popup.style.display = 'none';
     }
   };
@@ -149,7 +126,7 @@ async function handleDeleteImage(e) {
   const id = e.target.dataset.id;
   const publicId = e.target.dataset.publicId;
 
-  if (confirm('คุณแน่ใจที่จะลบรูปภาพนี้?')) {
+  if (confirm('คุณแน่ใจที่จะลบรูปภาพนี้吗?')) {
     try {
       // ลบจาก Cloudinary ก่อน
       if (publicId) {
