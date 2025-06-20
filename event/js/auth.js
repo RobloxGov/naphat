@@ -1,32 +1,23 @@
-// auth.js
+// ระบบ Authentication
+const CLOUDINARY_CONFIG = {
+  cloudName: 'your_cloud_name',
+  uploadPreset: 'your_upload_preset',
+  apiKey: 'your_api_key'
+};
 
-// ฟังก์ชันตรวจสอบการล็อกอิน
+// ตรวจสอบการล็อกอิน
 function isLoggedIn() {
   return localStorage.getItem('authenticated') === 'true';
 }
 
-// ฟังก์ชันตรวจสอบ Cloudinary Config
-function checkCloudinaryConfig() {
-  return window.cloudinaryConfig && 
-         window.cloudinaryConfig.cloudName && 
-         window.cloudinaryConfig.uploadPreset;
-}
-
-// ฟังก์ชันล็อกอิน (แก้ไขเพิ่มการตรวจสอบ Cloudinary)
+// ฟังก์ชันล็อกอิน
 async function login(username, password) {
   try {
-    const response = await fetch('/event/member.json');
-    if (!response.ok) throw new Error('Failed to fetch user data');
-    
+    const response = await fetch('/member.json');
     const users = await response.json();
     const user = users.find(u => u.username === username && u.password === password);
     
     if (user) {
-      // ตรวจสอบการตั้งค่า Cloudinary
-      if (!checkCloudinaryConfig()) {
-        console.warn('Cloudinary config is not properly set');
-      }
-      
       localStorage.setItem('authenticated', 'true');
       localStorage.setItem('username', username);
       return true;
@@ -42,30 +33,40 @@ async function login(username, password) {
 function logout() {
   localStorage.removeItem('authenticated');
   localStorage.removeItem('username');
-  // ไม่ต้อง redirect ที่นี่ จะทำในส่วนที่เรียกใช้
+  window.location.href = 'login.html';
 }
 
-// ตรวจสอบการล็อกอินเมื่อโหลดหน้า
+// ตรวจสอบสิทธิ์เมื่อโหลดหน้า
 function checkAuth() {
   const currentPage = window.location.pathname.split('/').pop();
   const isLoginPage = currentPage === 'login.html';
-  const isAuthenticated = isLoggedIn();
   
-  if (!isAuthenticated && !isLoginPage) {
+  if (!isLoggedIn() && !isLoginPage) {
     window.location.href = 'login.html';
     return false;
   }
   
-  if (isAuthenticated && isLoginPage) {
+  if (isLoggedIn() && isLoginPage) {
     window.location.href = 'index.html';
     return true;
   }
   
-  return isAuthenticated;
+  return isLoggedIn();
+}
+
+// ตรวจสอบการตั้งค่า Cloudinary
+function checkCloudinaryConfig() {
+  return CLOUDINARY_CONFIG.cloudName && 
+         CLOUDINARY_CONFIG.uploadPreset && 
+         CLOUDINARY_CONFIG.apiKey;
 }
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
+  // ตั้งค่า Cloudinary Global
+  window.cloudinaryConfig = CLOUDINARY_CONFIG;
+  
+  // ฟอร์มล็อกอิน
   if (document.getElementById('loginForm')) {
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -80,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
+  // ปุ่มล็อกเอาท์
   if (document.getElementById('logoutBtn')) {
     document.getElementById('logoutBtn').addEventListener('click', (e) => {
       e.preventDefault();
