@@ -5,16 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>แก้ไขรูปภาพ</title>
   <link rel="stylesheet" href="/css/style.css">
-  <!-- Cloudinary SDK -->
-  <script src="https://upload-widget.cloudinary.com/global/all.js"></script>
-  <script>
-    // ตั้งค่า Cloudinary
-    window.cloudinaryConfig = {
-      cloudName: 'dk01phng7',
-      uploadPreset: 'uploadNaphatDev',
-      apiKey: '386419728339566'
-    };
-  </script>
 </head>
 <body>
   <header>
@@ -86,6 +76,16 @@
   <!-- สคริปต์ที่จำเป็น -->
   <script src="/js/auth.js"></script>
   <script src="/js/gsheet.js"></script>
+  <!-- Cloudinary SDK -->
+  <script src="https://upload-widget.cloudinary.com/global/all.js"></script>
+  <script>
+    // ตั้งค่า Cloudinary
+    window.cloudinaryConfig = {
+      cloudName: 'dk01phng7',
+      uploadPreset: 'uploadNaphatDev',
+      apiKey: '386419728339566'
+    };
+  </script>
   <script>
     // ฟังก์ชันดึงค่า parameter จาก URL
     function getUrlParameter(name) {
@@ -253,7 +253,7 @@
                     },
                     body: JSON.stringify({
                       public_id: publicId,
-                      signature: 'YOUR_SIGNATURE', // ควรสร้างจากเซิร์ฟเวอร์
+                      signature: 'naphatdev', // ควรสร้างจากเซิร์ฟเวอร์
                       api_key: cloudinaryConfig.apiKey,
                       timestamp: Math.round(Date.now() / 1000)
                     })
