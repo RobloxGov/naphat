@@ -24,10 +24,17 @@ async function uploadToCloudinary(file) {
         body: formData
       }
     );
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Cloudinary error details:', errorData);
+      throw new Error(`Cloudinary upload failed: ${errorData.error.message || 'Unknown error'}`);
+    }
+    
     return await response.json();
   } catch (error) {
     console.error('Cloudinary upload error:', error);
-    throw error;
+    throw new Error('ไม่สามารถอัปโหลดรูปภาพได้: ' + error.message);
   }
 }
 
