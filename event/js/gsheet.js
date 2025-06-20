@@ -75,10 +75,26 @@ async function fetchImages() {
 // ฟังก์ชันอัปโหลดข้อมูลรูปภาพ
 async function uploadImage(imageData) {
   try {
-    // อัปโหลดรูปไปยัง Cloudinary ก่อน
-    const cloudinaryResult = await uploadToCloudinary(imageData.file);
+    // 1. อัปโหลดรูปภาพไปยัง Cloudinary
+    const formData = new FormData();
+    formData.append('file', imageData.file);
+    formData.append('upload_preset', cloudinaryConfig.uploadPreset);
     
-    // เตรียมข้อมูลสำหรับ Google Sheets
+    const cloudinaryResponse = await fetch(
+      `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`,
+      {
+        method: 'POST',
+        body: formData
+      }
+    );
+    
+    if (!cloudinaryResponse.ok) {
+      throw new Error('Cloudinary upload failed');
+    }
+    
+    const cloudinaryResult = await cloudinaryResponse.json();
+
+    // 2. เตรียมข้อมูลสำหรับ Google Sheets
     const sheetData = {
       title: imageData.title,
       description: imageData.description,
@@ -88,8 +104,8 @@ async function uploadImage(imageData) {
       uploadDate: new Date().toISOString(),
       uploadBy: localStorage.getItem('username') || 'anonymous'
     };
-    
-    // บันทึกข้อมูลลง Google Sheets
+
+    // 3. ส่งข้อมูลไปยัง Google Apps Script
     const response = await fetch(SCRIPT_URL, {
       method: 'POST',
       headers: {
@@ -100,11 +116,18 @@ async function uploadImage(imageData) {
         ...sheetData
       })
     });
-    
+
+    if (!response.ok) {
+      throw new Error('Failed to save to Google Sheets');
+    }
+
     return await response.json();
   } catch (error) {
-    console.error('Upload failed:', error);
-    return { success: false, error: error.message };
+    console.error('Upload process failed:', error);
+    return { 
+      success: false, 
+      error: error.message 
+    };
   }
 }
 
