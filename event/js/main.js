@@ -1,8 +1,8 @@
 // ตั้งค่า Cloudinary
 const cloudinaryConfig = {
-  cloudName: 'your_cloud_name', // เปลี่ยนเป็นค่าของคุณ
-  uploadPreset: 'your_upload_preset', // เปลี่ยนเป็นค่าของคุณ
-  apiKey: 'your_api_key' // เปลี่ยนเป็นค่าของคุณ
+  cloudName: 'dk01phng7', // เปลี่ยนเป็นค่าของคุณ
+  uploadPreset: 'uploadNaphatDev', // เปลี่ยนเป็นค่าของคุณ
+  apiKey: '386419728339566' // เปลี่ยนเป็นค่าของคุณ
 };
 
 // URL ของ Google Apps Script
