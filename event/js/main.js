@@ -68,12 +68,13 @@ function displayImages(images) {
       </div>
     `;
 
+    // Event สำหรับแสดง Popup
     card.addEventListener('click', (e) => {
       if (!e.target.closest('a') && !e.target.closest('button')) {
         showImagePopup(image);
       }
     });
-
+    
     gallery.appendChild(card);
   });
 
@@ -85,7 +86,7 @@ function displayImages(images) {
   }
 }
 
-// ฟังก์ชันแสดง Popup รูปภาพ
+// ฟังก์ชันแสดง Popup
 function showImagePopup(imageData) {
   const popup = document.getElementById('imagePopup');
   const popupImg = document.getElementById('popupImage');
@@ -93,25 +94,25 @@ function showImagePopup(imageData) {
   const popupDesc = document.getElementById('popupDescription');
   const popupLoc = document.getElementById('popupLocation');
   const popupDate = document.getElementById('popupDate');
-
+  
   // สร้าง URL รูปภาพขนาดเต็ม
   const imageUrl = imageData.image_url || 
     `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/upload/${imageData.public_id}`;
-
+  
   popupImg.src = imageUrl;
   popupImg.alt = imageData.title || '';
   popupTitle.textContent = imageData.title || 'ไม่มีชื่อ';
   popupDesc.textContent = imageData.description || '';
   popupLoc.textContent = `สถานที่: ${imageData.location || 'ไม่ระบุ'}`;
   popupDate.textContent = `วันที่: ${imageData.uploadDate ? new Date(imageData.uploadDate).toLocaleDateString() : 'ไม่ระบุ'}`;
-
+  
   popup.style.display = 'block';
-
+  
   // ปุ่มปิด Popup
   document.querySelector('.close-btn').onclick = () => {
     popup.style.display = 'none';
   };
-
+  
   // คลิกนอก Popup เพื่อปิด
   popup.onclick = (e) => {
     if (e.target === popup) {
