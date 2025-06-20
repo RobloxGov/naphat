@@ -428,20 +428,44 @@ img[loading="lazy"].loaded {
   background: #2980b9;
 }
 
+#authSection {
+  margin-left: auto;
+}
+
+#authSection a {
+  margin-left: 15px;
+}
+
+/* สไตล์ปุ่มแก้ไข/ลบ */
+.image-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.edit-link, .delete-btn {
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  text-decoration: none;
+}
+
+.edit-link {
+  background-color: #3498db;
+  color: white;
+}
+
+.edit-link:hover {
+  background-color: #2980b9;
+}
+
 .delete-btn {
-  background: #e74c3c;
+  background-color: #e74c3c;
   color: white;
   border: none;
   cursor: pointer;
 }
 
 .delete-btn:hover {
-  background: #c0392b;
-}
-
-/* Responsive images */
-.image-card img {
-  max-width: 100%;
-  height: auto;
-  display: block;
+  background-color: #c0392b;
 }
