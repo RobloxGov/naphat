@@ -33,7 +33,6 @@ function displayImages(images) {
             <a href="edit.html?id=${image.id || ''}" class="edit-link">แก้ไข</a>
             <button class="delete-btn" data-id="${image.id}" data-public-id="${image.public_id}">ลบ</button>
           </div>
-        ` : ''}
       </div>
     `;
     
