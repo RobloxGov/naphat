@@ -42,7 +42,7 @@ async function login(username, password) {
 function logout() {
   localStorage.removeItem('authenticated');
   localStorage.removeItem('username');
-  window.location.href = 'login.html';
+  // ไม่ต้อง redirect ที่นี่ จะทำในส่วนที่เรียกใช้
 }
 
 // ตรวจสอบการล็อกอินเมื่อโหลดหน้า
