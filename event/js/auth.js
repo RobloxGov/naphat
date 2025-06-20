@@ -1,10 +1,3 @@
-// ระบบ Authentication
-const CLOUDINARY_CONFIG = {
-  cloudName: 'your_cloud_name',
-  uploadPreset: 'your_upload_preset',
-  apiKey: 'your_api_key'
-};
-
 // ตรวจสอบการล็อกอิน
 function isLoggedIn() {
   return localStorage.getItem('authenticated') === 'true';
