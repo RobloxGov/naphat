@@ -29,29 +29,28 @@ function updateAuthUI(loggedIn) {
 }
 
 // ฟังก์ชันแสดงรูปภาพ
+// ฟังก์ชันแสดงรูปภาพ (แก้ไขส่วน event listener)
 function displayImages(images) {
   const gallery = document.getElementById('imageGallery');
   if (!gallery) return;
-
+  
   gallery.innerHTML = images.length === 0 
     ? '<p class="no-images">ไม่พบรูปภาพ</p>'
     : '';
 
-  const loggedIn = isLoggedIn();
-  updateAuthUI(loggedIn);
-
   images.forEach(image => {
     if (!image) return;
-
+    
     const card = document.createElement('div');
     card.className = 'image-card';
-
-    // สร้าง URL รูปภาพด้วย Cloudinary Transformation
+    
     const imageUrl = image.image_url || 
       `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/upload/w_600,h_400,c_fill/${image.public_id}`;
-
+    
     card.innerHTML = `
-      <img src="${imageUrl}" alt="${image.title || 'ไม่มีชื่อ'}" loading="lazy">
+      <div class="image-container">
+        <img src="${imageUrl}" alt="${image.title || 'ไม่มีชื่อ'}" loading="lazy">
+      </div>
       <div class="image-info">
         <h3>${image.title || 'ไม่มีชื่อ'}</h3>
         <p>${image.description || ''}</p>
@@ -59,7 +58,7 @@ function displayImages(images) {
           <span>สถานที่: ${image.location || 'ไม่ระบุ'}</span>
           <span>วันที่: ${image.uploadDate ? new Date(image.uploadDate).toLocaleDateString() : 'ไม่ระบุ'}</span>
         </div>
-        ${loggedIn ? `
+        ${isLoggedIn() ? `
           <div class="image-actions">
             <a href="edit.html?id=${image.id || ''}" class="edit-link">แก้ไข</a>
             <button class="delete-btn" data-id="${image.id}" data-public-id="${image.public_id}">ลบ</button>
@@ -67,22 +66,15 @@ function displayImages(images) {
         ` : ''}
       </div>
     `;
-
-    card.addEventListener('click', (e) => {
-      if (!e.target.closest('a') && !e.target.closest('button')) {
-        showImagePopup(image);
-      }
+    
+    // แก้ไขส่วน event listener
+    const imgElement = card.querySelector('.image-container');
+    imgElement.addEventListener('click', () => {
+      showImagePopup(image);
     });
-
+    
     gallery.appendChild(card);
   });
-
-  // เพิ่ม Event สำหรับปุ่มลบ (ถ้ามี)
-  if (loggedIn) {
-    document.querySelectorAll('.delete-btn').forEach(btn => {
-      btn.addEventListener('click', handleDeleteImage);
-    });
-  }
 }
 
 // ฟังก์ชันแสดง Popup รูปภาพ
