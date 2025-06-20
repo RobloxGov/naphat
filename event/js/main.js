@@ -68,9 +68,19 @@ function displayImages(images) {
       </div>
     `;
 
+    // ในฟังก์ชัน displayImages()
     card.addEventListener('click', (e) => {
       if (!e.target.closest('a') && !e.target.closest('button')) {
-        showImagePopup(image);
+        // ส่ง object image ที่มีข้อมูลครบถ้วน
+        showImagePopup({
+          image_url: image.image_url,
+          public_id: image.public_id,
+          image: image.image, // กรณีใช้ base64
+          title: image.title,
+          description: image.description,
+          location: image.location,
+          uploadDate: image.uploadDate
+        });
       }
     });
 
