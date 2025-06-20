@@ -237,7 +237,7 @@ option {
     align-items: center;
 }
 
-input, button, select {
+input, button, select, textarea {
     font-family: inherit;
 }
 
