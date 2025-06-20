@@ -1,92 +1,26 @@
-// ตั้งค่า Cloudinary
-const cloudinaryConfig = {
-  cloudName: 'dk01phng7', // เปลี่ยนเป็นค่าของคุณ
-  uploadPreset: 'uploadNaphatDev', // เปลี่ยนเป็นค่าของคุณ
-  apiKey: '386419728339566' // เปลี่ยนเป็นค่าของคุณ
-};
-// ตรวจสอบการล็อกอิน
-function isLoggedIn() {
-  return localStorage.getItem('authenticated') === 'true';
+// ไม่ต้องแก้ไขหลัก แต่สามารถเพิ่มฟังก์ชันตรวจสอบ Cloudinary Upload Preset ได้
+async function checkCloudinaryConfig() {
+  if (!window.cloudinaryConfig) {
+    console.error('Cloudinary config is missing');
+    return false;
+  }
+  return true;
 }
 
-// ฟังก์ชันล็อกอิน
+// ตัวอย่างการเรียกใช้ในฟังก์ชัน login
 async function login(username, password) {
-  try {
-    const response = await fetch('/member.json');
-    const users = await response.json();
-    const user = users.find(u => u.username === username && u.password === password);
-    
-    if (user) {
-      localStorage.setItem('authenticated', 'true');
-      localStorage.setItem('username', username);
-      return true;
+  // ...โค้ดเดิม...
+  
+  if (user) {
+    // ตรวจสอบการตั้งค่า Cloudinary ด้วย
+    const cloudinaryReady = await checkCloudinaryConfig();
+    if (!cloudinaryReady) {
+      alert('ระบบอัปโหลดรูปภาพยังไม่พร้อมใช้งาน');
+      return false;
     }
-    return false;
-  } catch (error) {
-    console.error('Login error:', error);
-    return false;
-  }
-}
-
-// ฟังก์ชันล็อกเอาท์
-function logout() {
-  localStorage.removeItem('authenticated');
-  localStorage.removeItem('username');
-  window.location.href = 'login.html';
-}
-
-// ตรวจสอบสิทธิ์เมื่อโหลดหน้า
-function checkAuth() {
-  const currentPage = window.location.pathname.split('/').pop();
-  const isLoginPage = currentPage === 'login.html';
-  
-  if (!isLoggedIn() && !isLoginPage) {
-    window.location.href = 'login.html';
-    return false;
-  }
-  
-  if (isLoggedIn() && isLoginPage) {
-    window.location.href = 'index.html';
+    
+    localStorage.setItem('authenticated', 'true');
     return true;
   }
-  
-  return isLoggedIn();
+  // ...โค้ดเดิม...
 }
-
-// ตรวจสอบการตั้งค่า Cloudinary
-function checkCloudinaryConfig() {
-  return CLOUDINARY_CONFIG.cloudName && 
-         CLOUDINARY_CONFIG.uploadPreset && 
-         CLOUDINARY_CONFIG.apiKey;
-}
-
-// Event Listeners
-document.addEventListener('DOMContentLoaded', () => {
-  // ตั้งค่า Cloudinary Global
-  window.cloudinaryConfig = CLOUDINARY_CONFIG;
-  
-  // ฟอร์มล็อกอิน
-  if (document.getElementById('loginForm')) {
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-      
-      if (await login(username, password)) {
-        window.location.href = 'index.html';
-      } else {
-        alert('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
-      }
-    });
-  }
-  
-  // ปุ่มล็อกเอาท์
-  if (document.getElementById('logoutBtn')) {
-    document.getElementById('logoutBtn').addEventListener('click', (e) => {
-      e.preventDefault();
-      logout();
-    });
-  }
-  
-  checkAuth();
-});
