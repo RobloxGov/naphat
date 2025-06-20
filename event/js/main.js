@@ -305,59 +305,92 @@ async function uploadImage(imageData) {
 }
 
 // ฟังก์ชันอัปเดตรูปภาพ (สำหรับหน้า edit.html)
-async function updateImage(imageData) {
+document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const fileInput = document.getElementById('imageFile');
+  const file = fileInput.files[0];
+  
+  if (!file) {
+    alert('กรุณาเลือกรูปภาพ');
+    return;
+  }
+
+  // แสดง loading indicator
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  const originalBtnText = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'กำลังอัปโหลด...';
+
   try {
-    let imageUrl = imageData.currentImageUrl;
-    let publicId = imageData.currentPublicId;
-
-    // หากมีรูปภาพใหม่ให้อัปโหลด
-    if (imageData.newFile) {
-      const formData = new FormData();
-      formData.append('file', imageData.newFile);
-      formData.append('upload_preset', cloudinaryConfig.uploadPreset);
-
-      const uploadResponse = await fetch(
-        `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`,
-        { method: 'POST', body: formData }
-      );
-      
-      const cloudinaryResult = await uploadResponse.json();
-      imageUrl = cloudinaryResult.secure_url;
-      publicId = cloudinaryResult.public_id;
-
-      // ลบรูปภาพเก่าออก (ถ้ามี)
-      if (imageData.currentPublicId) {
-        await fetch(
-          `${SCRIPT_URL}?action=deleteCloudinaryImage&publicId=${imageData.currentPublicId}`
-        );
+    // 1. อัปโหลดรูปภาพไปยัง Cloudinary
+    const cloudinaryFormData = new FormData();
+    cloudinaryFormData.append('file', file);
+    cloudinaryFormData.append('upload_preset', cloudinaryConfig.uploadPreset);
+    
+    const cloudinaryResponse = await fetch(
+      `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`,
+      {
+        method: 'POST',
+        body: cloudinaryFormData
       }
+    );
+
+    if (!cloudinaryResponse.ok) {
+      throw new Error('อัปโหลดรูปภาพไม่สำเร็จ');
     }
 
-    // เตรียมข้อมูลสำหรับอัปเดต
-    const updateData = {
-      id: imageData.id,
-      title: imageData.title,
-      description: imageData.description,
-      location: imageData.location,
-      image_url: imageUrl,
-      public_id: publicId
+    const cloudinaryData = await cloudinaryResponse.json();
+
+    // 2. เตรียมข้อมูลสำหรับ Google Sheets
+    const sheetData = {
+      title: document.getElementById('imageTitle').value,
+      description: document.getElementById('imageDescription').value,
+      location: document.getElementById('imageLocation').value,
+      image_url: cloudinaryData.secure_url,
+      public_id: cloudinaryData.public_id,
+      uploadDate: new Date().toISOString(),
+      uploadBy: localStorage.getItem('username') || 'anonymous'
     };
 
-    // อัปเดตข้อมูลใน Google Sheets
-    const response = await fetch(SCRIPT_URL, {
+    // 3. ส่งข้อมูลไปยัง Google Apps Script
+    const scriptResponse = await fetch(SCRIPT_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: new URLSearchParams({
-        action: 'updateImage',
-        ...updateData
+        action: 'uploadImage',
+        ...sheetData
       })
     });
 
-    return await response.json();
+    if (!scriptResponse.ok) {
+      throw new Error('บันทึกข้อมูลไม่สำเร็จ');
+    }
+
+    const result = await scriptResponse.json();
+
+    if (!result.success) {
+      throw new Error(result.error || 'เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+    }
+
+    // 4. เมื่อสำเร็จ
+    alert('อัปโหลดรูปภาพและบันทึกข้อมูลสำเร็จ');
+    document.getElementById('uploadForm').reset();
+
+    // 5. รีเฟรชหน้าหลัก (ถ้าอยู่ในหน้า index.html)
+    if (window.location.pathname.includes('index.html')) {
+      const images = await fetchImages();
+      displayImages(images);
+    }
+
   } catch (error) {
-    console.error('Update error:', error);
-    return { success: false, error: error.message };
+    console.error('Upload error:', error);
+    alert('เกิดข้อผิดพลาด: ' + error.message);
+  } finally {
+    // คืนสถานะปุ่มเป็นปกติ
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalBtnText;
   }
-}
+});
