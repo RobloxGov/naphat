@@ -94,11 +94,11 @@ function showImagePopup(imageData) {
   const popupLoc = document.getElementById('popupLocation');
   const popupDate = document.getElementById('popupDate');
   
-  // สร้าง URL รูปภาพขนาดเต็ม
-  const imageUrl = imageData.image_url || 
-    `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/upload/${imageData.public_id}`;
+  // // สร้าง URL รูปภาพขนาดเต็ม
+  // const imageUrl = imageData.image_url || 
+  //   `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/upload/${imageData.public_id}`;
   
-  popupImg.src = imageUrl;
+  popupImg.src = imageUrl.image_url;
   popupImg.alt = imageData.title || '';
   popupTitle.textContent = imageData.title || 'ไม่มีชื่อ';
   popupDesc.textContent = imageData.description || '';
@@ -126,7 +126,7 @@ async function handleDeleteImage(e) {
   const id = e.target.dataset.id;
   const publicId = e.target.dataset.publicId;
 
-  if (confirm('คุณแน่ใจที่จะลบรูปภาพนี้吗?')) {
+  if (confirm('คุณแน่ใจที่จะลบรูปภาพนี้?')) {
     try {
       // ลบจาก Cloudinary ก่อน
       if (publicId) {
