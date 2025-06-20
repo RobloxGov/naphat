@@ -26,7 +26,7 @@ function displayImages(images) {
           <p>${image.description || ''}</p>
           <div class="image-meta">
             <span>สถานที่: ${image.location || 'ไม่ระบุ'}</span>
-            <span>วันที่: ${image.uploadDate ? new Date(image.uploadDate).toLocaleDateString() : 'ไม่ระบุ'}</span>
+            <span>วันที่: ${image.uploadDate || 'ไม่ระบุ'}</span>
           </div>
           ${isLoggedIn() ? `
             <div class="image-actions">
@@ -86,7 +86,7 @@ function showImagePopup(imageData) {
   popupTitle.textContent = imageData.title || 'ไม่มีชื่อ';
   popupDesc.textContent = imageData.description || '';
   popupLoc.textContent = `สถานที่: ${imageData.location || 'ไม่ระบุ'}`;
-  popupDate.textContent = `วันที่: ${imageData.uploadDate ? new Date(imageData.uploadDate).toLocaleDateString() : 'ไม่ระบุ'}`;
+  popupDate.textContent = `วันที่: ${imageData.uploadDate || 'ไม่ระบุ'}`;
   
   popup.style.display = 'block';
   
