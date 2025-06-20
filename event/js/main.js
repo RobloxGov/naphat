@@ -316,81 +316,79 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
     return;
   }
 
-  // แสดง loading indicator
+  // ตรวจสอบประเภทไฟล์
+  const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+  if (!validTypes.includes(file.type)) {
+    alert('กรุณาเลือกไฟล์รูปภาพ (JPEG, PNG, GIF)');
+    return;
+  }
+
+  // ตรวจสอบขนาดไฟล์ (ไม่เกิน 10MB)
+  if (file.size > 10 * 1024 * 1024) {
+    alert('ขนาดไฟล์ต้องไม่เกิน 10MB');
+    return;
+  }
+
   const submitBtn = e.target.querySelector('button[type="submit"]');
   const originalBtnText = submitBtn.textContent;
   submitBtn.disabled = true;
   submitBtn.textContent = 'กำลังอัปโหลด...';
 
   try {
-    // 1. อัปโหลดรูปภาพไปยัง Cloudinary
-    const cloudinaryFormData = new FormData();
-    cloudinaryFormData.append('file', file);
-    cloudinaryFormData.append('upload_preset', cloudinaryConfig.uploadPreset);
-    
-    const cloudinaryResponse = await fetch(
-      `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`,
-      {
-        method: 'POST',
-        body: cloudinaryFormData
-      }
-    );
+    console.log('Starting upload to Cloudinary...');
+    const cloudinaryResult = await uploadToCloudinary(file);
+    console.log('Cloudinary upload success:', cloudinaryResult);
 
-    if (!cloudinaryResponse.ok) {
-      throw new Error('อัปโหลดรูปภาพไม่สำเร็จ');
-    }
-
-    const cloudinaryData = await cloudinaryResponse.json();
-
-    // 2. เตรียมข้อมูลสำหรับ Google Sheets
+    // เตรียมข้อมูลสำหรับ Google Sheets
     const sheetData = {
       title: document.getElementById('imageTitle').value,
       description: document.getElementById('imageDescription').value,
       location: document.getElementById('imageLocation').value,
-      image_url: cloudinaryData.secure_url,
-      public_id: cloudinaryData.public_id,
+      image_url: cloudinaryResult.secure_url,
+      public_id: cloudinaryResult.public_id,
       uploadDate: new Date().toISOString(),
       uploadBy: localStorage.getItem('username') || 'anonymous'
     };
 
-    // 3. ส่งข้อมูลไปยัง Google Apps Script
-    const scriptResponse = await fetch(SCRIPT_URL, {
+    console.log('Saving to Google Sheets:', sheetData);
+    const result = await saveToGoogleSheets(sheetData);
+    
+    if (result.success) {
+      alert('อัปโหลดรูปภาพสำเร็จ');
+      document.getElementById('uploadForm').reset();
+    } else {
+      throw new Error(result.error || 'บันทึกข้อมูลไม่สำเร็จ');
+    }
+  } catch (error) {
+    console.error('Upload process error:', error);
+    alert('เกิดข้อผิดพลาด: ' + error.message);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalBtnText;
+  }
+});
+
+async function saveToGoogleSheets(data) {
+  try {
+    const response = await fetch(SCRIPT_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: new URLSearchParams({
         action: 'uploadImage',
-        ...sheetData
+        ...data
       })
     });
 
-    if (!scriptResponse.ok) {
-      throw new Error('บันทึกข้อมูลไม่สำเร็จ');
+    if (!response.ok) {
+      const errorData = await response.text();
+      throw new Error(`HTTP error! status: ${response.status}, details: ${errorData}`);
     }
 
-    const result = await scriptResponse.json();
-
-    if (!result.success) {
-      throw new Error(result.error || 'เกิดข้อผิดพลาดในการบันทึกข้อมูล');
-    }
-
-    // 4. เมื่อสำเร็จ
-    alert('อัปโหลดรูปภาพและบันทึกข้อมูลสำเร็จ');
-    document.getElementById('uploadForm').reset();
-
-    // 5. รีเฟรชหน้าหลัก (ถ้าอยู่ในหน้า index.html)
-    if (window.location.pathname.includes('index.html')) {
-      const images = await fetchImages();
-      displayImages(images);
-    }
-
+    return await response.json();
   } catch (error) {
-    console.error('Upload error:', error);
-    alert('เกิดข้อผิดพลาด: ' + error.message);
-  } finally {
-    // คืนสถานะปุ่มเป็นปกติ
-    submitBtn.disabled = false;
-    submitBtn.textContent = originalBtnText;
+    console.error('Google Sheets save error:', error);
+    return { success: false, error: error.message };
   }
-});
+}
