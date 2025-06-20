@@ -8,7 +8,7 @@ const cloudinaryConfig = {
 };
 
 // ตั้งค่า Google Apps Script
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzD8EdRiH5xPY-qY3YpKdHH4EGGjjjUGxEaqVu36XVVWszNV2hLz3k-Uv6twTkoIMXh/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxwNqd828yrLKfMao9JWvO0PTxoUHVZAS7oPDPFDSmQLo29a0RSLeRiYIjttXoXqfuL/exec';
 
 // ฟังก์ชันอัปโหลดรูปภาพไปยัง Cloudinary
 async function uploadToCloudinary(file) {
