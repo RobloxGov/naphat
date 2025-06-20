@@ -1,3 +1,4 @@
+
 // ฟังก์ชันตรวจสอบการล็อกอิน
 function isLoggedIn() {
   return localStorage.getItem('authenticated') === 'true';
