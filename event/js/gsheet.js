@@ -10,18 +10,6 @@ const cloudinaryConfig = {
 // ตั้งค่า Google Apps Script
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzD8EdRiH5xPY-qY3YpKdHH4EGGjjjUGxEaqVu36XVVWszNV2hLz3k-Uv6twTkoIMXh/exec';
 
-// gsheet.js
-
-// ตั้งค่า Cloudinary
-const cloudinaryConfig = {
-  cloudName: 'dk01phng7', // เปลี่ยนเป็นค่าของคุณ
-  uploadPreset: 'uploadNaphatDev', // เปลี่ยนเป็นค่าของคุณ
-  apiKey: '386419728339566' // เปลี่ยนเป็นค่าของคุณ
-};
-
-// ตั้งค่า Google Apps Script
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxwnDU8HV7D4JtZF3Fee-laSwZ6leY3MUnuLbmUsgp0hpnWSwbuhNa24_7boioxlqev/exec';
-
 // ฟังก์ชันอัปโหลดรูปภาพไปยัง Cloudinary
 async function uploadToCloudinary(file) {
   const formData = new FormData();
@@ -178,6 +166,19 @@ async function updateImage(imageData) {
     return { success: false, error: error.message };
   }
 }
+
+
+// gsheet.js
+
+// // ตั้งค่า Cloudinary
+// const cloudinaryConfig = {
+//   cloudName: 'dk01phng7', // เปลี่ยนเป็นค่าของคุณ
+//   uploadPreset: 'uploadNaphatDev', // เปลี่ยนเป็นค่าของคุณ
+//   apiKey: '386419728339566' // เปลี่ยนเป็นค่าของคุณ
+// };
+
+// // ตั้งค่า Google Apps Script
+// const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxwnDU8HV7D4JtZF3Fee-laSwZ6leY3MUnuLbmUsgp0hpnWSwbuhNa24_7boioxlqev/exec';
 
 // // ฟังก์ชันอัปโหลดรูปภาพไปยัง Cloudinary
 // async function uploadToCloudinary(file) {
