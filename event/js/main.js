@@ -1,13 +1,3 @@
-// ตั้งค่า Cloudinary
-const cloudinaryConfig = {
-  cloudName: 'dk01phng7', // เปลี่ยนเป็นค่าของคุณ
-  uploadPreset: 'uploadNaphatDev', // เปลี่ยนเป็นค่าของคุณ
-  apiKey: '386419728339566' // เปลี่ยนเป็นค่าของคุณ
-};
-
-// URL ของ Google Apps Script
-const SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
-
 // ฟังก์ชันตรวจสอบการล็อกอิน
 function isLoggedIn() {
   return localStorage.getItem('authenticated') === 'true';
