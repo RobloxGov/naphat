@@ -1,29 +1,25 @@
-// แสดงผลรูปภาพ
+// ต้องแก้ไขส่วนที่เกี่ยวข้องกับการแสดงผลและการจัดการรูปภาพ
+
+// แก้ไขฟังก์ชัน displayImages
 function displayImages(images) {
   const gallery = document.getElementById('imageGallery');
-  if (!gallery) return;
-  
-  gallery.innerHTML = images.length === 0 
-    ? '<p class="no-images">ไม่พบรูปภาพ</p>'
-    : '';
+  gallery.innerHTML = '';
   
   images.forEach(image => {
-    if (!image) return;
-    
     const card = document.createElement('div');
     card.className = 'image-card';
     
-    const imageUrl = image.image_url || 
-      `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/upload/w_600,h_400,c_fill/${image.public_id}`;
+    // ใช้ image_url จาก Cloudinary แทน image (base64)
+    const imageUrl = image.image_url || `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/upload/w_500/${image.public_id}`;
     
     card.innerHTML = `
-      <img src="${imageUrl}" alt="${image.title || 'ไม่มีชื่อ'}" loading="lazy">
+      <img src="${imageUrl}" alt="${image.title}" loading="lazy">
       <div class="image-info">
-        <h3>${image.title || 'ไม่มีชื่อ'}</h3>
-        <p>${image.description || ''}</p>
+        <h3>${image.title}</h3>
+        <p>${image.description}</p>
         <div class="image-meta">
-          <span>สถานที่: ${image.location || 'ไม่ระบุ'}</span>
-          <span>วันที่: ${image.uploadDate ? new Date(image.uploadDate).toLocaleDateString() : 'ไม่ระบุ'}</span>
+          <span>สถานที่: ${image.location}</span>
+          <span>วันที่: ${new Date(image.uploadDate).toLocaleDateString()}</span>
         </div>
         ${isLoggedIn() ? `
           <div class="image-actions">
@@ -34,184 +30,95 @@ function displayImages(images) {
       </div>
     `;
     
-    card.addEventListener('click', (e) => {
-      if (!e.target.closest('a') && !e.target.closest('button')) {
-        showImagePopup(image);
-      }
-    });
-    
     gallery.appendChild(card);
   });
   
-  // จัดการปุ่มลบ
+  // เพิ่ม Event Listener สำหรับปุ่มลบ
   document.querySelectorAll('.delete-btn').forEach(btn => {
     btn.addEventListener('click', async (e) => {
       e.stopPropagation();
+      const id = btn.dataset.id;
+      const publicId = btn.dataset.publicId;
+      
       if (confirm('คุณแน่ใจที่จะลบรูปภาพนี้吗?')) {
-        const result = await deleteImage(btn.dataset.id, btn.dataset.publicId);
-        if (result.success) {
-          const images = await fetchImages();
-          displayImages(images);
-        }
-      }
-    });
-  });
-}
-
-// แสดง Popup รูปภาพ
-function showImagePopup(image) {
-  const popup = document.getElementById('imagePopup');
-  if (!popup) return;
-  
-  const imageUrl = image.image_url || 
-    `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/upload/${image.public_id}`;
-  
-  document.getElementById('popupImage').src = imageUrl;
-  document.getElementById('popupTitle').textContent = image.title || 'ไม่มีชื่อ';
-  document.getElementById('popupDescription').textContent = image.description || '';
-  document.getElementById('popupLocation').textContent = `สถานที่: ${image.location || 'ไม่ระบุ'}`;
-  document.getElementById('popupDate').textContent = `วันที่: ${image.uploadDate ? new Date(image.uploadDate).toLocaleDateString() : 'ไม่ระบุ'}`;
-  
-  popup.style.display = 'block';
-  
-  document.querySelector('.close-btn').onclick = () => {
-    popup.style.display = 'none';
-  };
-  
-  popup.onclick = (e) => {
-    if (e.target === popup) popup.style.display = 'none';
-  };
-}
-
-// กรองหมวดหมู่
-function populateCategories(images) {
-  if (!Array.isArray(images)) return;
-  
-  const categories = [...new Set(images.map(img => img.location).filter(Boolean)];
-  const elements = [
-    document.getElementById('categoryFilter'),
-    document.getElementById('locations'),
-    document.getElementById('editLocations')
-  ].filter(Boolean);
-  
-  elements.forEach(el => {
-    el.innerHTML = el.id === 'categoryFilter' 
-      ? '<option value="">ทั้งหมด</option>'
-      : '';
-      
-    categories.forEach(cat => {
-      const option = document.createElement('option');
-      option.value = cat;
-      option.textContent = cat;
-      el.appendChild(option);
-    });
-  });
-}
-
-// กรองรูปภาพ
-function filterImagesByCategory(category, images) {
-  if (!Array.isArray(images)) return;
-  
-  const filtered = category 
-    ? images.filter(img => img.location === category)
-    : images;
-  
-  displayImages(filtered);
-}
-
-// เริ่มต้นระบบ
-document.addEventListener('DOMContentLoaded', async () => {
-  try {
-    // หน้า Gallery
-    if (document.getElementById('imageGallery')) {
-      const images = await fetchImages();
-      displayImages(images);
-      populateCategories(images);
-      
-      document.getElementById('categoryFilter').addEventListener('change', (e) => {
-        filterImagesByCategory(e.target.value, images);
-      });
-    }
-    
-    // หน้า Upload
-    if (document.getElementById('uploadForm')) {
-      document.getElementById('uploadForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const file = document.getElementById('imageFile').files[0];
-        if (!file) return alert('กรุณาเลือกรูปภาพ');
-        
         try {
-          const result = await uploadToCloudinary(file);
-          const saveResult = await saveImageData({
-            title: document.getElementById('imageTitle').value,
-            description: document.getElementById('imageDescription').value,
-            location: document.getElementById('imageLocation').value,
-            image_url: result.secure_url,
-            public_id: result.public_id,
-            uploadDate: new Date().toISOString()
-          });
+          // ลบจาก Cloudinary ก่อน
+          await deleteFromCloudinary(publicId);
           
-          if (saveResult.success) {
-            alert('อัปโหลดสำเร็จ');
-            document.getElementById('uploadForm').reset();
+          // ลบข้อมูลจาก Google Sheets
+          const result = await deleteImage(id);
+          
+          if (result.success) {
+            alert('ลบรูปภาพสำเร็จ');
+            // รีเฟรชรายการรูปภาพ
+            const images = await fetchImages();
+            displayImages(images);
+          } else {
+            alert('ลบรูปภาพไม่สำเร็จ: ' + (result.error || ''));
           }
         } catch (error) {
-          alert('อัปโหลดไม่สำเร็จ: ' + error.message);
-        }
-      });
-    }
-    
-    // หน้า Edit
-    if (document.getElementById('editForm')) {
-      const imageId = new URLSearchParams(window.location.search).get('id');
-      if (imageId) {
-        const response = await fetch(`${SCRIPT_URL}?action=getImage&id=${imageId}`);
-        if (response.ok) {
-          const image = await response.json();
-          document.getElementById('imageId').value = image.id;
-          document.getElementById('editImageTitle').value = image.title;
-          document.getElementById('editImageDescription').value = image.description;
-          document.getElementById('editImageLocation').value = image.location;
-          document.getElementById('currentImage').src = image.image_url;
-          document.getElementById('editForm').dataset.publicId = image.public_id;
+          console.error('Delete error:', error);
+          alert('เกิดข้อผิดพลาดในการลบ: ' + error.message);
         }
       }
-      
-      document.getElementById('editForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const form = e.target;
-        const result = await updateImage({
-          id: form.imageId.value,
-          title: form.editImageTitle.value,
-          description: form.editImageDescription.value,
-          location: form.editImageLocation.value,
-          currentImageUrl: document.getElementById('currentImage').src,
-          currentPublicId: form.dataset.publicId,
-          newFile: form.newImageFile.files[0]
-        });
-        
-        if (result.success) window.location.href = 'index.html';
-      });
-    }
+    });
+  });
+}
+
+// แก้ไขฟังก์ชันสำหรับหน้า Upload
+if (document.getElementById('uploadForm')) {
+  document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
     
-    // Lazy Loading
-    if ('IntersectionObserver' in window) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const img = entry.target;
-            img.src = img.dataset.src || img.src;
-            img.classList.add('loaded');
-            observer.unobserve(img);
-          }
-        });
-      });
-      
-      document.querySelectorAll('img[loading="lazy"]').forEach(img => {
-        observer.observe(img);
-      });
+    const fileInput = document.getElementById('imageFile');
+    if (!fileInput.files[0]) {
+      alert('กรุณาเลือกรูปภาพ');
+      return;
     }
-  } catch (error) {
-    console.error('Initialization error:', error);
-  }
-});
+
+    const formData = {
+      title: document.getElementById('imageTitle').value,
+      description: document.getElementById('imageDescription').value,
+      location: document.getElementById('imageLocation').value,
+      file: fileInput.files[0]
+    };
+
+    try {
+      const result = await uploadImage(formData);
+      
+      if (result.success) {
+        alert('อัปโหลดรูปภาพสำเร็จ');
+        document.getElementById('uploadForm').reset();
+        // รีเฟรชรายการรูปภาพ
+        const images = await fetchImages();
+        displayImages(images);
+      } else {
+        alert('อัปโหลดไม่สำเร็จ: ' + (result.error || ''));
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('เกิดข้อผิดพลาด: ' + error.message);
+    }
+  });
+}
+
+// แก้ไขฟังก์ชันสำหรับหน้า Edit
+if (document.getElementById('editForm')) {
+  // ...โค้ดเดิม...
+  
+  // เมื่ออัปโหลดรูปภาพใหม่ในหน้า Edit
+  document.getElementById('newImageFile').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    try {
+      const result = await uploadToCloudinary(file);
+      document.getElementById('currentImage').src = result.secure_url;
+      // บันทึก public_id ใหม่ชั่วคราว
+      document.getElementById('editForm').dataset.newPublicId = result.public_id;
+    } catch (error) {
+      console.error('Image upload error:', error);
+      alert('ไม่สามารถอัปโหลดรูปภาพได้: ' + error.message);
+    }
+  });
+}
