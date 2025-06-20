@@ -1,3 +1,9 @@
+// ตั้งค่า Cloudinary
+const cloudinaryConfig = {
+  cloudName: 'dk01phng7', // เปลี่ยนเป็นค่าของคุณ
+  uploadPreset: 'uploadNaphatDev', // เปลี่ยนเป็นค่าของคุณ
+  apiKey: '386419728339566' // เปลี่ยนเป็นค่าของคุณ
+};
 // ตรวจสอบการล็อกอิน
 function isLoggedIn() {
   return localStorage.getItem('authenticated') === 'true';
