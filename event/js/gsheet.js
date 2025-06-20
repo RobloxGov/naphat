@@ -3,7 +3,7 @@
 // ตั้งค่า Cloudinary
 const cloudinaryConfig = {
   cloudName: 'dk01phng7', // เปลี่ยนเป็นค่าของคุณ
-  uploadPreset: 'uploadNaphatDev', // เปลี่ยนเป็นค่าของคุณ
+  uploadPreset: 'ml_default', // เปลี่ยนเป็นค่าของคุณ
   apiKey: '386419728339566' // เปลี่ยนเป็นค่าของคุณ
 };
 
