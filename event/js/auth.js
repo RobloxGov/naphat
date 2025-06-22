@@ -50,19 +50,22 @@ function checkAuth() {
   const currentPage = window.location.pathname.split('/').pop();
   const isLoginPage = currentPage === 'login.html';
   const isAuthenticated = isLoggedIn();
-  
-  // if (!isAuthenticated && !isLoginPage) {
-  //   window.location.href = 'login.html';
-  //   return false;
-  // }
-  
-  // if (isAuthenticated && isLoginPage) {
-  //   window.location.href = 'index.html';
-  //   return true;
-  // }
-  
+
+  // ✅ ยังไม่ล็อกอิน แต่พยายามเข้าหน้าอื่นที่ไม่ใช่ login หรือ index → ส่งไป login
+  if (!isAuthenticated && !isLoginPage && currentPage !== 'index.html') {
+    window.location.href = 'login.html';
+    return false;
+  }
+
+  // ✅ ล็อกอินแล้ว แต่ยังอยู่หน้า login → ส่งไป index
+  if (isAuthenticated && isLoginPage) {
+    window.location.href = 'index.html';
+    return true;
+  }
+
   return isAuthenticated;
 }
+
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
