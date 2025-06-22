@@ -49,22 +49,25 @@ function logout() {
 function checkAuth() {
   const currentPage = window.location.pathname.split('/').pop();
   const isLoginPage = currentPage === 'login.html';
+  const isIndexPage = currentPage === 'index.html';
+  const isUploadPage = currentPage === 'upload.html';
   const isAuthenticated = isLoggedIn();
 
-  // ✅ ยังไม่ล็อกอิน แต่พยายามเข้าหน้าอื่นที่ไม่ใช่ login หรือ index → ส่งไป login
-  if (!isAuthenticated && !isLoginPage && currentPage !== 'upload.html') {
+  // ถ้าอยู่หน้า upload แต่ยังไม่ล็อกอิน → ไป login
+  if (isUploadPage && !isAuthenticated) {
     window.location.href = 'login.html';
     return false;
   }
 
-  // ✅ ล็อกอินแล้ว แต่ยังอยู่หน้า login → ส่งไป index
-  if (isAuthenticated && isLoginPage) {
+  // ถ้าอยู่หน้า login แล้วล็อกอินแล้ว → ไป index
+  if (isLoginPage && isAuthenticated) {
     window.location.href = 'index.html';
     return true;
   }
 
   return isAuthenticated;
 }
+
 
 
 // Event Listeners
