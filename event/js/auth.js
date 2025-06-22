@@ -51,15 +51,15 @@ function checkAuth() {
   const isLoginPage = currentPage === 'login.html';
   const isAuthenticated = isLoggedIn();
   
-  if (!isAuthenticated && !isLoginPage) {
-    window.location.href = 'login.html';
-    return false;
-  }
+  // if (!isAuthenticated && !isLoginPage) {
+  //   window.location.href = 'login.html';
+  //   return false;
+  // }
   
-  if (isAuthenticated && isLoginPage) {
-    window.location.href = 'index.html';
-    return true;
-  }
+  // if (isAuthenticated && isLoginPage) {
+  //   window.location.href = 'index.html';
+  //   return true;
+  // }
   
   return isAuthenticated;
 }
