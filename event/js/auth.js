@@ -49,8 +49,8 @@ function logout() {
 function checkAuth() {
   const currentPage = window.location.pathname.split('/').pop();
   const isLoginPage = currentPage === 'login.html';
-  const isIndexPage = currentPage === 'index.html';
-  const isUploadPage = currentPage === 'upload';
+  const isIndexPage = currentPage === 'index' || currentPage === 'index.html';
+  const isUploadPage = currentPage === 'upload' || currentPage === 'upload.html';
   const isAuthenticated = isLoggedIn();
 
   // ถ้าอยู่หน้า upload แต่ยังไม่ล็อกอิน → ไป login
