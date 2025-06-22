@@ -57,11 +57,11 @@ function checkAuth() {
   //   return false;
   // }
 
-  // ✅ ล็อกอินแล้ว แต่ยังอยู่หน้า login → ส่งไป index
-  if (isAuthenticated && isLoginPage) {
-    window.location.href = 'index.html';
-    return true;
-  }
+  // // ✅ ล็อกอินแล้ว แต่ยังอยู่หน้า login → ส่งไป index
+  // if (isAuthenticated && isLoginPage) {
+  //   window.location.href = 'index.html';
+  //   return true;
+  // }
 
   return isAuthenticated;
 }
