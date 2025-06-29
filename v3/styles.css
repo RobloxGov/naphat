@@ -447,7 +447,7 @@ h2[data-h2] {
 .mission {
     padding: 5em 0;
     position: relative;
-    background: url(/img/mission.jpg) fixed no-repeat;
+    background: url(img/mission.jpg) fixed no-repeat;
     background-size: cover;
     color: #fff;
     z-index: 0;
@@ -694,7 +694,7 @@ button {
 .next {
     padding: 5em 0;
     position: relative;
-    background: url(/img/mission.jpg) fixed no-repeat;
+    background: url(img/mission.jpg) fixed no-repeat;
     background-size: cover;
     color: #fff;
     z-index: 0;
