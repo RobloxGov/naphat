@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายงานผลคะแนนส่วนบุคคล แยกตามรายวิชา</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #F16322;
+            --secondary-color: #FFF;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            font-family: "Kanit", sans-serif;
+        }
+        
+        .header {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        
+        .subject-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            height: 100%;
+            background-color: var(--secondary-color);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .subject-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .grade-box {
+            display: inline-block;
+            padding: 5px 15px;
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .select-term {
+            max-width: 300px;
+            margin: 0 auto 30px;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .point-info {
+            font-size: 1rem;
+            color: #555;
+        }
+        
+        .credit-info {
+            font-size: 0.9rem;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="header text-center">
+        <h1>รายงานผลคะแนนส่วนบุคคล แยกตามรายวิชา</h1>
+    </div>
+    
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <select class="form-select select-term" id="termSelect">
+                    <option value="" selected disabled>เลือกภาคการศึกษา</option>
+                    <option value="1">ภาคการศึกษาที่ 1</option>
+                    <option value="2">ภาคการศึกษาที่ 2</option>
+                    <option value="3">ภาคการศึกษาที่ 3</option>
+                    <option value="4">ภาคการศึกษาที่ 4</option>
+                    <option value="5">ภาคการศึกษาที่ 5</option>
+                    <option value="6">ภาคการศึกษาที่ 6</option>
+                    <option value="7">ภาคการศึกษาที่ 7</option>
+                    <option value="8">ภาคการศึกษาที่ 8</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="loading" id="loading">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">กำลังโหลดข้อมูล...</p>
+        </div>
+        
+        <div class="row" id="subjectsContainer">
+            <!-- ข้อมูลวิชาจะถูกแสดงที่นี่ -->
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('termSelect').addEventListener('change', function() {
+            const term = this.value;
+            if (term) {
+                fetchSubjects(term);
+            }
+        });
+        
+        function fetchSubjects(term) {
+            const container = document.getElementById('subjectsContainer');
+            const loading = document.getElementById('loading');
+            
+            container.innerHTML = '';
+            loading.style.display = 'block';
+            
+            const url = `https://script.google.com/macros/s/AKfycbyHHsWjhV7Yw8jRnCPRyOfGq63PIEBO4JgP6cA-zWSOPK3Ou7y-XgywnqY4j1nEW9Bf/exec?term=${term}`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    loading.style.display = 'none';
+                    displaySubjects(data);
+                })
+                .catch(error => {
+                    loading.style.display = 'none';
+                    container.innerHTML = `
+                        <div class="col-12 text-center text-danger">
+                            <p>เกิดข้อผิดพลาดในการโหลดข้อมูล: ${error.message}</p>
+                        </div>
+                    `;
+                });
+        }
+        
+        function displaySubjects(subjects) {
+            const container = document.getElementById('subjectsContainer');
+            
+            if (subjects.length === 0) {
+                container.innerHTML = `
+                    <div class="col-12 text-center">
+                        <p>ไม่พบข้อมูลสำหรับภาคการศึกษานี้</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            subjects.forEach(subject => {
+                const subjectCard = document.createElement('div');
+                subjectCard.className = 'col-md-4 col-sm-6 col-12';
+                
+                subjectCard.innerHTML = `
+                    <div class="subject-card">
+                        <h3 class="mb-3">${subject.subject}</h3>
+                        <h6 class="text-muted mb-4">${subject.id_subject || 'ไม่มีรหัสวิชา'}</h6>
+                        <div class="d-flex justify-content-between align-items-end">
+                            <div>
+                                <span class="point-info">คะแนน: ${subject.point}</span><br>
+                                <span class="credit-info">หน่วยกิต: ${subject.credit}</span>
+                            </div>
+                            <div class="grade-box">${subject.grade}</div>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(subjectCard);
+            });
+        }
+    </script>
+</body>
+</html>
