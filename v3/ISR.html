@@ -120,13 +120,17 @@
             container.innerHTML = '';
             loading.style.display = 'block';
             
-            const url = `https://script.google.com/macros/s/AKfycbyHHsWjhV7Yw8jRnCPRyOfGq63PIEBO4JgP6cA-zWSOPK3Ou7y-XgywnqY4j1nEW9Bf/exec?term=${term}`;
+            // URL เดิมที่ไม่ได้ส่ง parameter term ไปจริงๆ
+            const url = `https://script.google.com/macros/s/AKfycbyHHsWjhV7Yw8jRnCPRyOfGq63PIEBO4JgP6cA-zWSOPK3Ou7y-XgywnqY4j1nEW9Bf/exec`;
             
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
                     loading.style.display = 'none';
-                    displaySubjects(data);
+                    
+                    // กรองข้อมูลเฉพาะ term ที่เลือก
+                    const filteredData = data.filter(subject => subject.term === term);
+                    displaySubjects(filteredData);
                 })
                 .catch(error => {
                     loading.style.display = 'none';
