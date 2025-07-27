@@ -16,10 +16,10 @@ function replacePi(inputId) {
 
 // ---------- สร้างโจทย์ฟังก์ชันตรีโกณ ----------
 let funcLabel = randChoice(['ไซน์', 'โคไซน์']);
-let funcType = funcLabel === 'ไซน์' ? 'sin' : 'cos';  // ใช้กับการตรวจ
+let funcType = funcLabel === 'ไซน์' ? 'sin' : 'cos';
 let A = randInt(1, 5);
 let D = randInt(-3, 3);
-let period = randInt(2, 6); // คาบยาว
+let period = randInt(2, 6);
 let B = (2 * Math.PI) / period;
 let C = randInt(-3, 3);
 
@@ -30,14 +30,26 @@ let yIntercept = funcType === 'sin'
     : A * Math.cos(-C) + D;
 yIntercept = Math.round(yIntercept);
 
-let startShape = randChoice([
-    'ลดลงแบบเว้าขึ้น',
-    'เพิ่มขึ้นแบบเว้าขึ้น',
-    'ลดลงแบบเว้าลง',
-    'เพิ่มขึ้นแบบเว้าลง'
-]);
+// ---------- คัดกรอง startShape ให้ถูกต้อง ----------
+let validShapes;
+if (funcType === 'sin') {
+    // sin(x) เริ่มที่กลาง → เพิ่มแบบเว้าลง หรือ ลดแบบเว้าขึ้น
+    validShapes = ['เพิ่มขึ้นแบบเว้าลง', 'ลดลงแบบเว้าขึ้น'];
+} else {
+    // cos(x) เริ่มที่สูงสุด → ลดแบบเว้าลง, ต่ำสุด → เพิ่มเว้าขึ้น
+    let startY = A * Math.cos(C) + D;
+    if (startY > D) {
+        validShapes = ['ลดลงแบบเว้าลง'];
+    } else if (startY < D) {
+        validShapes = ['เพิ่มขึ้นแบบเว้าขึ้น'];
+    } else {
+        validShapes = ['เพิ่มขึ้นแบบเว้าลง', 'ลดลงแบบเว้าขึ้น']; // กลางกราฟ
+    }
+}
 
-let trigQuestion = `จงหาฟังก์ชันรูป ${funcLabel} ที่มีค่าเฉลี่ยเป็น ${D}, ค่าสูงสุดคือ ${yMax}, ค่าต่ำสุดคือ ${yMin}, จุดตัดแกนตั้งอยู่ที่ ${yIntercept}, เริ่มต้นด้วยค่าที่ ${startShape}, มีคาบยาวประมาณ ${period}, แกนนอนคือ x แกนตั้งคือ y`;
+let startShape = randChoice(validShapes);
+
+let trigQuestion = `จงหาฟังก์ชันรูป${funcLabel} ที่มีค่าเฉลี่ยเป็น ${D}, ค่าสูงสุดคือ ${yMax}, ค่าต่ำสุดคือ ${yMin}, จุดตัดแกนตั้งอยู่ที่ ${yIntercept}, เริ่มต้นด้วยค่าที่ ${startShape}, มีคาบยาวประมาณ ${period}, แกนนอนคือ x แกนตั้งคือ y`;
 document.getElementById("trig-question").innerText = trigQuestion;
 
 // ---------- ตรวจคำตอบฟังก์ชันตรีโกณ ----------
