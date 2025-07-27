@@ -15,7 +15,7 @@ function replacePi(inputId) {
 }
 
 // ---------- สร้างโจทย์ฟังก์ชันตรีโกณ ----------
-let funcType = randChoice(['sin', 'cos']);
+let funcType = randChoice(['ไซน์', 'โคไซน์']);
 let A = randInt(1, 5);
 let D = randInt(-3, 3);
 let period = randInt(2, 6); // คาบยาว
