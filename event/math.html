@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>แบบทดสอบฟังก์ชัน</title>
+    <style>
+        body {
+            font-family: "Courier New", monospace;
+            background-color: #fffff0;
+            padding: 20px;
+        }
+        .box {
+            border: 1px solid black;
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <h2>แบบทดสอบกราฟฟังก์ชันตรีโกณ</h2>
+    <div class="box" id="trig-box">
+        <p id="trig-question"></p>
+        <input type="text" id="trig-answer" placeholder="พิมพ์สมการ เช่น y = 3sin(2x - π) + 1">
+        <button onclick="checkTrig()">ส่ง</button>
+        <p id="trig-result"></p>
+    </div>
+
+    <h2>แบบทดสอบสมการควอดราติก</h2>
+    <div class="box" id="quad-box">
+        <p id="quad-question"></p>
+        <input type="text" id="quad-answer" placeholder="พิมพ์สมการ เช่น y = x^2 + 3x + 2">
+        <button onclick="checkQuad()">ส่ง</button>
+        <p id="quad-result"></p>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
