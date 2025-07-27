@@ -27,7 +27,7 @@ let yMin = -A + D;
 let yIntercept = funcType === 'sin'
     ? A * Math.sin(-C) + D
     : A * Math.cos(-C) + D;
-yIntercept = Math.round(yIntercept * 100) / 100;
+yIntercept = Math.round(yIntercept);
 
 let startShape = randChoice([
     'ลดลงแบบเว้าขึ้น',
