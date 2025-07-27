@@ -49,7 +49,7 @@ if (funcType === 'sin') {
 
 let startShape = randChoice(validShapes);
 
-let trigQuestion = `จงหาฟังก์ชันรูป${funcLabel} ที่มีค่าเฉลี่ยเป็น ${D}, ค่าสูงสุดคือ ${yMax}, ค่าต่ำสุดคือ ${yMin}, จุดตัดแกนตั้งอยู่ที่ ${yIntercept}, เริ่มต้นด้วยค่าที่ ${startShape}, มีคาบยาวประมาณ ${period}, แกนนอนคือ x แกนตั้งคือ y`;
+let trigQuestion = `จงหาฟังก์ชันรูป${funcLabel} ที่มีค่าเฉลี่ยเป็น ${D} ค่าสูงสุดคือ ${yMax} ค่าต่ำสุดคือ ${yMin} จุดตัดแกนตั้งอยู่ที่ ${yIntercept} เริ่มต้นด้วยค่าที่${startShape} มีคาบยาว ${period} แกนนอนคือ x แกนตั้งคือ y`;
 document.getElementById("trig-question").innerText = trigQuestion;
 
 // ---------- ตรวจคำตอบฟังก์ชันตรีโกณ ----------
