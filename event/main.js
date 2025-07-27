@@ -38,7 +38,29 @@ let startShape = randChoice([
 
 let trigQuestion = `จงหาฟังก์ชันรูป${funcType}ที่มีค่าเฉลี่ยเป็น ${D}, ค่าสูงสุดคือ ${yMax}, ค่าต่ำสุดคือ ${yMin}, จุดตัดแกนตั้งอยู่ที่ ${yIntercept}, เริ่มต้นด้วยค่าที่ ${startShape}, มีคาบยาวประมาณ ${period}, แกนนอนคือ x แกนตั้งคือ y`;
 document.getElementById("trig-question").innerText = trigQuestion;
-
+// ---------- ตรวจคำตอบฟังก์ชันตรีโกณ ----------
+function checkTrig() {
+    let ans = document.getElementById("trig-answer").value.trim().toLowerCase();
+    ans = ans.replace(/\s+/g, ''); // ลบช่องว่างทั้งหมด
+    if (!ans.startsWith("y=")) {
+        document.getElementById("trig-result").innerText = "❌ คำตอบควรขึ้นต้นด้วย y =";
+        return;
+    }
+    if (!ans.includes(funcType)) {
+        document.getElementById("trig-result").innerText = ❌ ควรใช้ฟังก์ชัน ${funcType} ในสมการ;
+        return;
+    }
+    document.getElementById("trig-result").innerText = "✅ ตรวจเบื้องต้นผ่าน (ไม่ตรวจตัวเลขละเอียด)";
+}
+// ---------- ตรวจคำตอบควอดราติก ----------
+function checkQuad() {
+    let ans = document.getElementById("quad-answer").value.trim().toLowerCase();
+    if (!ans.includes("x")) {
+        document.getElementById("quad-result").innerText = "❌ คำตอบควรมีตัวแปร x";
+        return;
+    }
+    document.getElementById("quad-result").innerText = "✅ ตรวจเบื้องต้นผ่าน (ยังไม่ตรวจค่าจริง)";
+}
 // ---------- สร้างโจทย์ควอดราติก ----------
 let points = [
     [randInt(-5, 5), randInt(-5, 15)],
