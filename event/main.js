@@ -15,16 +15,17 @@ function replacePi(inputId) {
 }
 
 // ---------- สร้างโจทย์ฟังก์ชันตรีโกณ ----------
-let funcType = randChoice(['ไซน์', 'โคไซน์']);
+let funcLabel = randChoice(['ไซน์', 'โคไซน์']);
+let funcType = funcLabel === 'ไซน์' ? 'sin' : 'cos';  // ใช้กับการตรวจ
 let A = randInt(1, 5);
 let D = randInt(-3, 3);
-let period = randInt(2, 6);
+let period = randInt(2, 6); // คาบยาว
 let B = (2 * Math.PI) / period;
 let C = randInt(-3, 3);
 
 let yMax = A + D;
 let yMin = -A + D;
-let yIntercept = funcType === 'ไซน์'
+let yIntercept = funcType === 'sin'
     ? A * Math.sin(-C) + D
     : A * Math.cos(-C) + D;
 yIntercept = Math.round(yIntercept);
@@ -36,31 +37,30 @@ let startShape = randChoice([
     'เพิ่มขึ้นแบบเว้าลง'
 ]);
 
-let trigQuestion = `จงหาฟังก์ชันรูป${funcType}ที่มีค่าเฉลี่ยเป็น ${D}, ค่าสูงสุดคือ ${yMax}, ค่าต่ำสุดคือ ${yMin}, จุดตัดแกนตั้งอยู่ที่ ${yIntercept}, เริ่มต้นด้วยค่าที่ ${startShape}, มีคาบยาวประมาณ ${period}, แกนนอนคือ x แกนตั้งคือ y`;
+let trigQuestion = `จงหาฟังก์ชันรูป ${funcLabel} ที่มีค่าเฉลี่ยเป็น ${D}, ค่าสูงสุดคือ ${yMax}, ค่าต่ำสุดคือ ${yMin}, จุดตัดแกนตั้งอยู่ที่ ${yIntercept}, เริ่มต้นด้วยค่าที่ ${startShape}, มีคาบยาวประมาณ ${period}, แกนนอนคือ x แกนตั้งคือ y`;
 document.getElementById("trig-question").innerText = trigQuestion;
+
 // ---------- ตรวจคำตอบฟังก์ชันตรีโกณ ----------
 function checkTrig() {
     let ans = document.getElementById("trig-answer").value.trim().toLowerCase();
-    ans = ans.replace(/\s+/g, ''); // ลบช่องว่างทั้งหมด
+    ans = ans.replace(/\s+/g, '');
+
     if (!ans.startsWith("y=")) {
         document.getElementById("trig-result").innerText = "❌ คำตอบควรขึ้นต้นด้วย y =";
         return;
     }
     if (!ans.includes(funcType)) {
-        document.getElementById("trig-result").innerText = ❌ ควรใช้ฟังก์ชัน ${funcType} ในสมการ;
+        document.getElementById("trig-result").innerText = `❌ ควรใช้ฟังก์ชัน ${funcType} ในสมการ`;
         return;
     }
+
     document.getElementById("trig-result").innerText = "✅ ตรวจเบื้องต้นผ่าน (ไม่ตรวจตัวเลขละเอียด)";
+
+    // log เฉลย
+    let trigFuncText = `y = ${A}${funcType}(${B.toFixed(2)}x + ${C}) + ${D}`;
+    console.log("📌 เฉลยฟังก์ชันตรีโกณ:", trigFuncText);
 }
-// ---------- ตรวจคำตอบควอดราติก ----------
-function checkQuad() {
-    let ans = document.getElementById("quad-answer").value.trim().toLowerCase();
-    if (!ans.includes("x")) {
-        document.getElementById("quad-result").innerText = "❌ คำตอบควรมีตัวแปร x";
-        return;
-    }
-    document.getElementById("quad-result").innerText = "✅ ตรวจเบื้องต้นผ่าน (ยังไม่ตรวจค่าจริง)";
-}
+
 // ---------- สร้างโจทย์ควอดราติก ----------
 let points = [
     [randInt(-5, 5), randInt(-5, 15)],
@@ -70,14 +70,17 @@ let points = [
 let quadQuestion = `จงหาสมการควอดราติกที่ผ่านจุด (${points[0]}), (${points[1]}), (${points[2]})`;
 document.getElementById("quad-question").innerText = quadQuestion;
 
+// ---------- ตรวจคำตอบควอดราติก ----------
+function checkQuad() {
+    let ans = document.getElementById("quad-answer").value.trim().toLowerCase();
+    if (!ans.includes("x")) {
+        document.getElementById("quad-result").innerText = "❌ คำตอบควรมีตัวแปร x";
+        return;
+    }
+    document.getElementById("quad-result").innerText = "✅ ตรวจเบื้องต้นผ่าน (ยังไม่ตรวจค่าจริง)";
+    console.log("📌 จุดควอดราติก:", points);
+}
+
 // ---------- เรียกใช้แปลง pi ใน input ----------
 replacePi("trig-answer");
 replacePi("quad-answer");
-
-// ---------- log เฉลยลง console ----------
-let trigFuncText = funcType === 'ไซน์'
-    ? `y = ${A}sin(${B.toFixed(2)}x + ${C}) + ${D}`
-    : `y = ${A}cos(${B.toFixed(2)}x + ${C}) + ${D}`;
-
-console.log("🔍 เฉลยฟังก์ชันตรีโกณ:", trigFuncText);
-console.log("🔍 จุดควอดราติก:", points);
