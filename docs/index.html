@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NaphatDoc - เก็บและดาวน์โหลดไฟล์</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            padding: 5px;
+        }
+        
+        .logo-img img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            padding: 40px 0;
+            min-height: calc(100vh - 180px);
+        }
+        
+        .search-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        
+        .search-container {
+            display: flex;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .search-container input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px 0 0 8px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        .search-container input:focus {
+            border-color: #2563eb;
+        }
+        
+        .search-container button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 0 25px;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .search-container button:hover {
+            background: #1e40af;
+        }
+        
+        .files-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .section-title {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #1e293b;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+        
+        .file-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .file-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .file-icon {
+            font-size: 32px;
+            margin-right: 15px;
+            color: #2563eb;
+        }
+        
+        .file-info {
+            flex: 1;
+        }
+        
+        .file-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #1e293b;
+        }
+        
+        .file-meta {
+            font-size: 12px;
+            color: #64748b;
+        }
+        
+        .download-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        
+        .download-btn:hover {
+            background: #059669;
+        }
+        
+        /* Footer Styles */
+        footer {
+            background-color: #1e293b;
+            color: #cbd5e1;
+            text-align: center;
+            padding: 20px 0;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .copyright {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        /* Loader Styles */
+        .loader {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        
+        .loader-circle {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #2563eb;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #64748b;
+        }
+        
+        .drive-link {
+            display: block;
+            width: 100%;
+            padding: 12px 20px;
+            background-color: #f8fafc;
+            border: 2px dashed #e2e8f0;
+            border-radius: 8px;
+            margin: 15px 0;
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .drive-link:hover {
+            background-color: #e0f2fe;
+            border-color: #2563eb;
+        }
+        
+        .direct-download {
+            display: block;
+            width: 100%;
+            padding: 12px 20px;
+            background-color: #10b981;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            margin-top: 10px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        
+        .direct-download:hover {
+            background-color: #059669;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                gap: 15px;
+            }
+            
+            .file-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-container {
+                flex-direction: column;
+            }
+            
+            .search-container input {
+                border-radius: 8px;
+                margin-bottom: 10px;
+            }
+            
+            .search-container button {
+                border-radius: 8px;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-img">
+                        <img src="https://naphat.pages.dev/public/assets/images/logo.png" alt="NaphatDoc Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA1MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiByeD0iMTAiIGZpbGw9IiMyNTYzZWIiLz4KPHBhdGggZD0iTTE1IDI1TDIyIDMyTDM1IDE5IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K'">
+                    </div>
+                    <div class="logo-text">NaphatDoc</div>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-home"></i> หน้าแรก</a></li>
+                        <li><a href="#"><i class="fas fa-file-upload"></i> อัพโหลด</a></li>
+                        <li><a href="#"><i class="fas fa-history"></i> ประวัติ</a></li>
+                        <li><a href="#"><i class="fas fa-user"></i> บัญชีของฉัน</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Search Section -->
+            <section class="search-section">
+                <div class="search-container">
+                    <input type="text" placeholder="ค้นหาชื่อไฟล์...">
+                    <button><i class="fas fa-search"></i> ค้นหา</button>
+                </div>
+            </section>
+
+            <!-- Files Section -->
+            <section class="files-section">
+                <h2 class="section-title">ไฟล์ทั้งหมด</h2>
+                <div class="loader">
+                    <div class="loader-circle"></div>
+                </div>
+                <div class="file-list" id="fileList">
+                    <!-- File items will be loaded dynamically from JSON -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Download Modal -->
+    <div class="modal" id="downloadModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">ดาวน์โหลดไฟล์</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <p>คุณกำลังจะดาวน์โหลดไฟล์: <strong id="fileName"></strong></p>
+            <a href="#" class="drive-link" id="driveLink" target="_blank">
+                <i class="fab fa-google-drive"></i> ดาวน์โหลดผ่าน Google Drive
+            </a>
+            <a href="#" class="direct-download" id="directDownload">
+                <i class="fas fa-download"></i> ดาวน์โหลดโดยตรง
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="copyright">
+                    Copyright © 2025 NaphatDoc. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ข้อมูลไฟล์ตัวอย่างในรูปแบบ JSON พร้อมลิงก์ Google Drive
+        const filesData = {
+            "files": [
+                {
+                    "id": 1,
+                    "name": "เคมี.pdf",
+                    "size": "66 KB",
+                    "date": "21/08/2025",
+                    "type": "pdf",
+                    "driveId": "1X2P12jtzmZwrVBIZf6eSs7tCeQzExmza" // ตัวอย่าง ID ของ Google Drive
+                },
+                {
+                    "id": 2,
+                    "name": "[บฝ] ทบทวนวิชา 01006010 Engineering Mechanics 1-2568 ชุด 1.pdf",
+                    "size": "322 KB",
+                    "date": "18/08/2025",
+                    "type": "pdf",
+                    "driveId": "uoAkdgGjKIgt1sFk8xUSSjiq70W"
+                }
+            ]
+        };
+
+        // JavaScript for functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.querySelector('.search-container input');
+            const searchButton = document.querySelector('.search-container button');
+            const fileList = document.getElementById('fileList');
+            const loader = document.querySelector('.loader');
+            const modal = document.getElementById('downloadModal');
+            const closeModal = document.querySelector('.close-modal');
+            const fileName = document.getElementById('fileName');
+            const driveLink = document.getElementById('driveLink');
+            const directDownload = document.getElementById('directDownload');
+            
+            // โหลดข้อมูลไฟล์จาก JSON
+            function loadFiles() {
+                // ลบ loader เมื่อโหลดข้อมูลเสร็จ
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    renderFiles(filesData.files);
+                }, 1500);
+            }
+            
+            // แสดงรายการไฟล์
+            function renderFiles(files) {
+                fileList.innerHTML = '';
+                
+                files.forEach(file => {
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+                    fileItem.innerHTML = `
+                        <div class="file-icon">📂</div>
+                        <div class="file-info">
+                            <div class="file-name">${file.name}</div>
+                            <div class="file-meta">ขนาด: ${file.size} • ${file.date}</div>
+                        </div>
+                        <button class="download-btn" data-id="${file.id}"><i class="fas fa-download"></i></button>
+                    `;
+                    fileList.appendChild(fileItem);
+                });
+                
+                // Add event listeners to download buttons
+                const downloadButtons = document.querySelectorAll('.download-btn');
+                downloadButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const fileId = this.getAttribute('data-id');
+                        const file = filesData.files.find(f => f.id == fileId);
+                        if (file) {
+                            showDownloadModal(file);
+                        }
+                    });
+                });
+            }
+            
+            // แสดง Modal การดาวน์โหลด
+            function showDownloadModal(file) {
+                fileName.textContent = file.name;
+                
+                // สร้างลิงก์ Google Drive
+                const driveUrl = `https://drive.google.com/uc?export=download&id=${file.driveId}`;
+                driveLink.href = `https://drive.google.com/file/d/${file.driveId}/view`;
+                
+                // ลิงก์ดาวน์โหลดโดยตรง
+                directDownload.href = driveUrl;
+                directDownload.download = file.name;
+                
+                // แสดง Modal
+                modal.style.display = 'flex';
+            }
+            
+            // ปิด Modal
+            closeModal.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            // ปิด Modal เมื่อคลิกนอกพื้นที่
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+            
+            // Search functionality
+            searchButton.addEventListener('click', function() {
+                const searchText = searchInput.value.toLowerCase();
+                
+                const filteredFiles = filesData.files.filter(file => 
+                    file.name.toLowerCase().includes(searchText)
+                );
+                
+                renderFiles(filteredFiles);
+            });
+            
+            // Allow pressing Enter to search
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchButton.click();
+                }
+            });
+            
+            // โหลดไฟล์เมื่อหน้าเว็บโหลดเสร็จ
+            loadFiles();
+        });
+    </script>
+</body>
+</html>
