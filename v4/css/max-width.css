@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Momo+Signature&display=swap');
+
+@media screen and (max-width: 960px) {
+    .status {
+        min-width: 48px;
+        min-height: 48px;
+        max-width: 48px;
+        max-height: 48px;
+        border-radius: 100%;
+    }
+    
+    .status .text-status {
+        display: none;
+    }
+
+    .profile {
+        min-width: 48px;
+        max-width: 48px;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-color: #0b57d0;
+    }
+    
+    .not-login {
+        padding: 0;
+    }
+
+    .not-login i {
+        padding: 5px;
+        color: #0b57d0;
+    }
+
+    .profile .not-login p {
+        display: none;
+    }
+    
+    .search input {
+        width: 300px;
+    }
+}
+
+@media screen and (max-width: 760px) {
+    .search input {
+        width: 150px;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    /* .list[flex-direction="col"] 
+    .col-4 {
+
+    } */
+
+    .list[flex-direction="row"] {
+        flex-wrap: wrap;
+    }
+
+    .list[flex-direction="row"] 
+    .col-4 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+
+    .profile {
+        min-width: 48px;
+        max-width: 48px;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-color: #0b57d0;
+    }
+    
+    .not-login {
+        padding: 0;
+    }
+
+    .not-login i {
+        padding: 5px;
+        color: #0b57d0;
+    }
+
+    .profile .not-login p {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1100px) {
+    .profile .not-login p {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .status {
+        display: none;
+    }
+
+    .search input {
+        width: 100px;
+    }
+}
+
+@media screen and (max-width: 944px) {
+    .main-boxes .boxes {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .main-boxes .boxes .box {
+        width: 100%;
+        background-color: #e9eef6;
+        padding: 20px 50px;
+        border-radius: 10px;
+    }
+}
+
+
+@media (max-width: 1130px) {
+    .list[flex-direction="row"]  .info {
+        margin-top: 10px;
+    }
+}
+

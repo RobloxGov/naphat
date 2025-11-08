@@ -1,0 +1,41 @@
+:root {
+    --wh-col: #fff;
+    --gr-01-col: #444746;
+    --gr-02-col: #e9eef6;
+    --gr-03-col: #f8fafd;
+    --main-col: #f16322;
+}
+
+::selection {
+    background: var(--main-col);
+    color: #e9eef6;
+}
+
+@keyframes blink {
+    0%, 100% {
+        background-color: #1e8e3e; /* เขียวปกติ */
+        box-shadow: 0 0 4px rgba(30, 142, 62, 0.6);
+    }
+    50% {
+        background-color: #00c932; /* เขียวสว่าง */
+        box-shadow: 0 0 10px rgba(0, 201, 50, 0.9);
+    }
+}
+
+/* aside[status="naphat"] .aside-menu {
+
+} */
+
+aside[status="members"] .aside-menu #docs,
+aside[status="members"] .aside-menu #textbooks
+{
+    display: none;
+}
+
+aside[status="none"] .aside-menu #list,
+aside[status="none"] .aside-menu #calendar,
+aside[status="none"] .aside-menu #docs,
+aside[status="none"] .aside-menu #textbooks
+{
+    display: none;
+}
