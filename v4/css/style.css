@@ -23,6 +23,7 @@ header {
     top: 0;
     margin-left: 70px;
     background: var(--gr-03-col);
+    z-index: 999;
 }
 
 header .logo img {
@@ -49,7 +50,7 @@ header .logo img {
     transition: all 0.3s ease;
 }
 
-.search .icon-serch{
+.search .icon-serch {
     margin-left: 10px;
     width: 40px;
     height: 40px;
@@ -98,7 +99,7 @@ header .logo img {
     border-radius: 50px;
     width: 120px;
     height: 60px;
-    position: relative; 
+    position: relative;
 }
 
 .status {
@@ -110,7 +111,8 @@ header .logo img {
     border-radius: 50px;
     width: 120px;
     height: 48px;
-    position: relative; /* ต้องมี เพื่อให้ ::before ทำงานภายใน */
+    position: relative;
+    /* ต้องมี เพื่อให้ ::before ทำงานภายใน */
     border: 1px solid transparent;
     transition: border-color .3s ease;
     cursor: pointer;
@@ -182,28 +184,23 @@ header .logo img {
     position: relative;
 }
 
-.profile[login="true"] 
-.login {
+.profile[login="true"] .login {
     display: block;
 }
 
-.profile[login="false"] 
-.login {
+.profile[login="false"] .login {
     display: none;
 }
 
-.profile[login="true"] 
-.not-login {
+.profile[login="true"] .not-login {
     display: none;
 }
 
-.profile[login="false"] 
-.not-login {
+.profile[login="false"] .not-login {
     display: flex;
 }
 
-.login
-.logo-profile {
+.login .logo-profile {
     background: #fff;
     border-radius: 6px;
     display: inline-block;
@@ -293,10 +290,10 @@ header .logo img {
 
 /* ---------------- ASIDE -------------------- */
 
-aside { 
+aside {
     float: left;
     top: 0;
-    width: 70px; 
+    width: 70px;
     height: 100vh;
     background: var(--gr-02-col);
     position: fixed;
@@ -318,7 +315,7 @@ aside {
     transition: all .5s ease;
 }
 
-.aside-mainmenu i:hover{
+.aside-mainmenu i:hover {
     background: #44474612;
     border-radius: 100%;
 }
@@ -381,13 +378,13 @@ main {
 
 .main-boxes .boxes .box p {
     font-size: 14px;
-    text-indent: 2em; 
+    text-indent: 2em;
     text-align: justify;
 }
 
 .main-boxes .boxes .box img {
     width: 100%;
-    object-fit: cover; 
+    object-fit: cover;
     border-radius: 5px;
 }
 
@@ -430,7 +427,7 @@ h3 {
     transition: all .5s ease;
 }
 
-.fa-grid:hover ,
+.fa-grid:hover,
 .fa-list-ul:hover {
     color: #f1bd22;
 }
@@ -446,13 +443,13 @@ h3 {
     flex-wrap: wrap;
 }
 
-.list[flex-direction="col"] .col-4 {  
+.list[flex-direction="col"] .col-4 {
     width: 100%;
     padding-right: 15px;
     padding-left: 15px;
 }
 
-.list[flex-direction="row"] .col-4 {    
+.list[flex-direction="row"] .col-4 {
     flex: 0 0 33.3333333333333%;
     max-width: 33.3333333333333%;
     width: 100%;
@@ -460,8 +457,7 @@ h3 {
     padding-left: 15px;
 }
 
-.list[flex-direction="col"]
-.writer.mb-3.mt-3 {
+.list[flex-direction="col"] .writer.mb-3.mt-3 {
     margin: 0 !important;
 }
 
@@ -472,7 +468,8 @@ h3 {
     flex-direction: column;
 }
 
-.mt-3, .my-3 {
+.mt-3,
+.my-3 {
     margin-top: 1rem !important;
 }
 
@@ -480,7 +477,8 @@ h3 {
     display: flex;
 }
 
-.mb-3, .my-3 {
+.mb-3,
+.my-3 {
     margin-bottom: 1rem !important;
 }
 
@@ -557,12 +555,15 @@ footer {
 .top-footer .logo-footer img {
     box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
     transition: all 0.3s ease;
-    border-radius: 10px; /* ถ้าอยากให้มุมมน */
+    border-radius: 10px;
+    /* ถ้าอยากให้มุมมน */
 }
 
 .top-footer .logo-footer img:hover {
-    transform: translateY(-5px); /* เด้งขึ้น */
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3); /* เงาเข้มขึ้น */
+    transform: translateY(-5px);
+    /* เด้งขึ้น */
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+    /* เงาเข้มขึ้น */
 }
 
 .bottom-footer {
@@ -573,4 +574,97 @@ footer {
     padding: 20px;
     user-select: none;
     cursor: pointer;
+}
+
+/* LOADER */
+
+.css-1ltj605.loader {
+    position: absolute;          /* ให้อยู่ลอยใน .list */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: auto;
+    width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;     /* ไม่บังพื้นหลัง */
+    z-index: 10;
+}
+/* หมุนโลโก้ */
+.css-z01bqi img {
+    display: block;
+    width: 100px;
+    height: 100px;
+    animation: spin 2s linear infinite;
+}
+
+/* keyframes หมุน */
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* -------------------------------   END LOADER   --------------------------------- */
+
+.list {
+    position: relative; /* เพื่อให้ loader ใช้ตำแหน่ง absolute ภายในได้ */
+    min-height: 200px;  /* กันไว้เพื่อให้ loader อยู่กลาง */
+    max-height: 260px;  /* กันไว้เพื่อให้ loader อยู่กลาง */
+}
+
+.list#grade-box {
+    position: relative; /* เพื่อให้ loader ใช้ตำแหน่ง absolute ภายในได้ */
+    min-height: 300px;  /* กันไว้เพื่อให้ loader อยู่กลาง */
+    max-height: 300px;  /* กันไว้เพื่อให้ loader อยู่กลาง */
+}
+
+.list:has(.news-item),
+.list:has(.col-4) {
+    overflow-y: scroll;
+}
+
+.col-4:not(:last-child) {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid ;
+}
+
+.news-item:not(:last-child) {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid ;
+}
+
+/* GRADE */
+
+.menu-select {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.menu-select select {
+    width: 49%;
+    padding: 10px;
+    outline: none;
+    border: 2px solid var(--main-col);
+    background: var(--main-col);
+    color: var(--wh-col);
+}
+
+.menu-select select option {
+    background: var(--gr-01-col);
+    color: var(--wh-col);
+}
+
+select {
+    font-family: inherit;
+    font-weight: 500;
+}
+
+a[active] {
+    color: #000;
+    pointer-events: none;
+   cursor: pointer;
 }
