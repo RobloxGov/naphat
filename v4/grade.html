@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beta -Naphat Systems</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/max-width.css">
+    <link rel="stylesheet" href="css/status.css">
+    <link rel="stylesheet" href="css/all-min.css">
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <a href="/">
+                <img src="image/logo.png" alt="">
+            </a>
+        </div>
+        <div class="menu">
+            <div class="search">
+                <div class="icon-serch">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <input type="text" placeholder="Search">
+            </div>
+            <div class="status">
+                <div class="active">
+                    <div class="light-status">
+                        <div class="active-light"></div>
+                    </div>
+                    <div class="text-status">Active</div>
+                </div>
+            </div>
+            <div class="profile" login="false">
+                <div class="not-login">
+                    <a href="">
+                        <i class="fa-solid fa-circle-user"></i>
+                        <p>เข้าสู่ระบบ</p>
+                    </a>
+                </div>
+                <div class="login" aria-expanded="false">
+                    <div class="logo-profile">
+                        <div style="text-align: center;">
+                            <img src="image/logo.png" alt="">
+                        </div>
+                    </div>
+                    <div class="person-profile">
+                        <img src="" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <aside status="none">
+        <div class="aside-mainmenu">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+        <div class="aside-menu">
+            <a id="performance">
+                <i class="fa-solid fa-trophy"></i>
+                <p>ผลงาน</p>
+            </a>
+            <a id="grade" href="#" active>
+                <i class="fa-solid fa-font"></i>
+                <p>ผลการเรียน</p>
+            </a>
+            <a id="list">
+                <i class="fa-solid fa-list"></i>
+                <p>กิจวัตร</p>
+            </a>
+            <a id="calendar">
+                <i class="fa-solid fa-calendar"></i>
+                <p>ตารางงาน</p>
+            </a>
+            <a id="docs">
+                <i class="fa-solid fa-folder"></i>
+                <p>เอกสาร</p>
+            </a>
+            <a id="textbooks">
+                <i class="fa-solid fa-book"></i>
+                <p>ตำรา</p>
+            </a>
+            <a id="info">
+                <i class="fa-solid fa-circle-info"></i>
+                <p>เกี่ยวกับ</p>
+            </a>
+            <a id="contact">
+                <i class="fa-solid fa-paper-plane"></i>
+                <p>ติดต่อ</p>
+            </a>
+        </div>
+    </aside>
+    <main>
+        <!-- <div class="main-boxes">
+            <div class="boxes">
+                <div class="box"></div>
+                <div class="box"></div>
+            </div>
+        </div> -->
+        <div class="naphat-news">
+            <div class="change-menu">
+                <h3>ผลการเรียน</h3>
+                <div class="change" direction-style="col">
+                    <svg id="col" data-prefix="fas" data-icon="list-ul" role="img" viewBox="0 0 512 512"
+                        aria-hidden="true" class="svg-inline--fa fa-list-ul fa-lg">
+                        <path fill="currentColor"
+                            d="M48 144a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L192 64zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-288 0zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-288 0zM48 464a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM96 256a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z"
+                            class=""></path>
+                    </svg>
+                    <!-- <svg id="row" data-prefix="fas" data-icon="grid" role="img" viewBox="0 0 448 512" aria-hidden="true"
+                        class="svg-inline--fa fa-grid fa-lg">
+                        <path fill="currentColor"
+                            d="M0 64C0 46.3 14.3 32 32 32l48 0c17.7 0 32 14.3 32 32l0 48c0 17.7-14.3 32-32 32l-48 0c-17.7 0-32-14.3-32-32L0 64zM0 232c0-17.7 14.3-32 32-32l48 0c17.7 0 32 14.3 32 32l0 48c0 17.7-14.3 32-32 32l-48 0c-17.7 0-32-14.3-32-32l0-48zM112 400l0 48c0 17.7-14.3 32-32 32l-48 0c-17.7 0-32-14.3-32-32l0-48c0-17.7 14.3-32 32-32l48 0c17.7 0 32 14.3 32 32zM168 64c0-17.7 14.3-32 32-32l48 0c17.7 0 32 14.3 32 32l0 48c0 17.7-14.3 32-32 32l-48 0c-17.7 0-32-14.3-32-32l0-48zM280 232l0 48c0 17.7-14.3 32-32 32l-48 0c-17.7 0-32-14.3-32-32l0-48c0-17.7 14.3-32 32-32l48 0c17.7 0 32 14.3 32 32zM168 400c0-17.7 14.3-32 32-32l48 0c17.7 0 32 14.3 32 32l0 48c0 17.7-14.3 32-32 32l-48 0c-17.7 0-32-14.3-32-32l0-48zM448 64l0 48c0 17.7-14.3 32-32 32l-48 0c-17.7 0-32-14.3-32-32l0-48c0-17.7 14.3-32 32-32l48 0c17.7 0 32 14.3 32 32zM336 232c0-17.7 14.3-32 32-32l48 0c17.7 0 32 14.3 32 32l0 48c0 17.7-14.3 32-32 32l-48 0c-17.7 0-32-14.3-32-32l0-48zM448 400l0 48c0 17.7-14.3 32-32 32l-48 0c-17.7 0-32-14.3-32-32l0-48c0-17.7 14.3-32 32-32l48 0c17.7 0 32 14.3 32 32z"
+                            class=""></path>
+                    </svg> -->
+                </div>
+            </div>
+            <div class="menu-select">
+                <select id="degreeSelect">
+                    <option value="">-- เลือกระดับการศึกษา --</option>
+                </select>
+
+                <select id="levelSelect">
+                    <option value="">-- เลือกระดับชั้น --</option>
+                </select>
+            </div>
+            <div class="list" id="grade-box" flex-direction="">
+                <div class="MuiBox-root css-1ltj605 loader css-1ltj605" id="">
+                    <span
+                        class="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary css-z01bqi"
+                        role="progressbar" style="width: 100px; height: 100px;">
+                        <img src="https://naphat.pages.dev/public/assets/images/NewGear.png" width="150px">
+                    </span>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer id="footer"></footer>
+
+    <script src="js/grade.js"></script>
+    <script src="js/change.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
