@@ -36,7 +36,7 @@
       </div>
       <div class="profile" login="false">
         <div class="not-login">
-          <a href="">
+          <a href="#login" id="login">
             <i class="fa-solid fa-circle-user"></i>
             <p>เข้าสู่ระบบ</p>
           </a>
@@ -50,10 +50,13 @@
             </div>
           </div>
           <div class="person-profile">
-            <img 
+            <img id="profile-image"
               src="" 
               alt="">
           </div>
+        </div>
+        <div class="logout-popup" hidden="">
+          <button id="logout">ออกจากระบบ</button>
         </div>
       </div>
     </div>
@@ -91,6 +94,10 @@
         <i class="fa-solid fa-circle-info"></i>
         <p>เกี่ยวกับ</p>
       </a>
+      <a id="study">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <p>เรียนกับเรา</p>
+      </a>
       <a id="contact">
         <i class="fa-solid fa-paper-plane"></i>
         <p>ติดต่อ</p>
@@ -126,7 +133,40 @@
     </div>
   </main>
   <footer id="footer"></footer>
+  
+  <!-- LOGIN POPUP -->
+  <div class="modal-overlay" id="loginModal" aria-hidden="true">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>เข้าสู่ระบบ</h2>
+        <button class="close-btn" id="closeBtn">✕</button>
+      </div>
 
+      <div class="modal-body">
+        <form id="loginForm">
+          <div class="field">
+            <label>อีเมล</label>
+            <input type="email" name="email" id="email" required placeholder="you@example.com">
+          </div>
+
+          <div class="field">
+            <label>รหัสผ่าน</label>
+            <input type="password" name="password" id="password" required placeholder="••••••••">
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="margin-top:10px;">ล็อกอิน</button>
+
+          <div style="margin-top:14px; font-size:14px;">
+            <a href="javascript:forgetPassword()" style="color:#00c932; text-decoration:none;">ลืมรหัสผ่าน?</a>
+            <br>
+            <a href="sign-in.html" style="color:#00c932; text-decoration:none;">ลงทะเบียน</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/login.js"></script>
   <script src="js/news.js"></script>
   <script src="js/change.js"></script>
   <script src="js/main.js"></script>

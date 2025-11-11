@@ -579,7 +579,8 @@ footer {
 /* LOADER */
 
 .css-1ltj605.loader {
-    position: absolute;          /* ให้อยู่ลอยใน .list */
+    position: absolute;
+    /* ให้อยู่ลอยใน .list */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -588,9 +589,11 @@ footer {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: transparent;     /* ไม่บังพื้นหลัง */
+    background: transparent;
+    /* ไม่บังพื้นหลัง */
     z-index: 10;
 }
+
 /* หมุนโลโก้ */
 .css-z01bqi img {
     display: block;
@@ -601,25 +604,43 @@ footer {
 
 /* keyframes หมุน */
 @keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* -------------------------------   END LOADER   --------------------------------- */
 
 .list {
-    position: relative; /* เพื่อให้ loader ใช้ตำแหน่ง absolute ภายในได้ */
-    min-height: 200px;  /* กันไว้เพื่อให้ loader อยู่กลาง */
-    max-height: 260px;  /* กันไว้เพื่อให้ loader อยู่กลาง */
+    position: relative;
+    /* เพื่อให้ loader ใช้ตำแหน่ง absolute ภายในได้ */
+    min-height: 200px;
+    /* กันไว้เพื่อให้ loader อยู่กลาง */
+    max-height: 260px;
+    /* กันไว้เพื่อให้ loader อยู่กลาง */
 }
 
 .list#grade-box {
-    position: relative; /* เพื่อให้ loader ใช้ตำแหน่ง absolute ภายในได้ */
-    min-height: 300px;  /* กันไว้เพื่อให้ loader อยู่กลาง */
-    max-height: 300px;  /* กันไว้เพื่อให้ loader อยู่กลาง */
+    position: relative;
+    /* เพื่อให้ loader ใช้ตำแหน่ง absolute ภายในได้ */
+    min-height: 300px;
+    /* กันไว้เพื่อให้ loader อยู่กลาง */
+    max-height: 300px;
+    /* กันไว้เพื่อให้ loader อยู่กลาง */
+}
+
+.list.performance-boxes {
+    position: relative;
+    min-height: 500px;
+    max-height: 500px;
 }
 
 .list:has(.news-item),
+.list:has(.box),
 .list:has(.col-4) {
     overflow-y: scroll;
 }
@@ -627,13 +648,13 @@ footer {
 .col-4:not(:last-child) {
     padding-top: 5px;
     padding-bottom: 5px;
-    border-bottom: 1px solid ;
+    border-bottom: 1px solid;
 }
 
 .news-item:not(:last-child) {
     padding-top: 5px;
     padding-bottom: 5px;
-    border-bottom: 1px solid ;
+    border-bottom: 1px solid;
 }
 
 /* GRADE */
@@ -666,5 +687,274 @@ select {
 a[active] {
     color: #000;
     pointer-events: none;
-   cursor: pointer;
+    cursor: pointer;
+}
+
+/* LOGIN POPUP */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    display: none;
+    /* hidden by default */
+    align-items: center;
+    justify-content: center;
+    background: var(--overlay-bg);
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal-overlay.show {
+    display: flex;
+    animation: fadeIn .18s ease-out;
+}
+
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.modal {
+    width: 100%;
+    max-width: var(--maxw);
+    background: var(--modal-bg);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 30px rgba(18, 22, 30, .18);
+    overflow: hidden;
+    transform: translateY(-8px);
+    opacity: 0;
+    transition: transform .18s ease, opacity .18s ease;
+}
+
+.modal-overlay.show .modal {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px;
+    border-bottom: 1px solid #eef2f6;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.close-btn {
+    background: transparent;
+    border: 0;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+}
+
+.close-btn:focus {
+    outline: 2px solid rgba(0, 201, 50, .25);
+}
+
+.modal-body {
+    padding: 18px;
+}
+
+.field {
+    margin-bottom: 12px;
+}
+
+.modal label {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: #222;
+}
+
+.modal input[type="email"],
+.modal input[type="password"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d7dbe2;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.modal input[type="email"]:focus,
+.modal input[type="password"]:focus {
+    outline: 2px solid rgba(0, 201, 50, .14);
+    border-color: var(--accent);
+}
+
+.modal .actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+
+.modal .btn {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 0;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.modal .btn-primary {
+    background: var(--accent);
+    color: white;
+}
+
+.modal .btn-ghost {
+    background: transparent;
+    color: #333;
+    border: 1px solid #e3e7ee;
+}
+
+.modal .small {
+    font-size: 13px;
+    color: #556;
+}
+
+/* responsive */
+@media (max-width:480px) {
+    :root {
+        --maxw: 360px;
+    }
+}
+
+input, button {
+    font-family: inherit;
+}
+
+.logout-popup[hidden="none"] {
+    position: fixed;
+    top: 84px;
+    right: 32px;
+    width: 150px;
+    height: 48px;
+    background: #ffffff;
+    border-radius: 10px;
+    border-top-right-radius: 0px;
+    cursor: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    box-shadow:
+        0 1px 1px 0 rgba(65, 69, 73, .5),
+        0 1px 3px 1px rgba(65, 69, 73, .4);
+}
+
+.logout-popup::before {
+    content: "";
+    float: right;
+}
+
+.logout-popup button {
+    width: 100%;
+    outline: none;
+    border: 1px solid var(--main-col);
+    background: var(--main-col);
+    color: var(--wh-col);
+    padding: 3px 0;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* PERFORMANCE */
+
+.performance-boxes {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.box {
+    width: 32%;
+    padding: 20px;
+    border: 1px solid #000;
+    border-radius: 10px;
+    color: #000;
+    background: #fff;
+}
+
+.performance-boxes .box a {
+    color: var(--main-col);
+}
+
+.performance-boxes .box img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.box h2 {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.naphat-news:has(.performance-boxes) .change-menu {
+    margin-bottom: 20px;
+}
+
+.naphat-news:has(.performance-boxes) .change-menu a {
+    color: var(--main-col);
+}
+
+.load-more-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.load-more {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.table-docs,
+.table-calendar {
+    padding: 20px 50px;
+}
+
+.table-calendar td:not(.today):hover {
+    background-color: var(--main-col);
+    color: white;
+    border-radius: 50%;
+}
+
+.boxx {
+    display: flex;
+    justify-content: space-between;
+}
+
+#box-calendar td {
+    width: 34px;
+    height: 34px;
+}
+
+.box-list {
+    width: 50%;
+}
+
+#eventList {
+    min-height: 300px;
+    max-height: 300px;
+    overflow-y: auto;
 }

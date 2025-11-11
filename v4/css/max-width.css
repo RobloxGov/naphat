@@ -45,6 +45,20 @@
     .search input {
         width: 150px;
     }
+    .boxx {
+        flex-direction: column;
+    }
+
+    .boxx .box-left {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .boxx .box-list {
+        width: 100%;
+    }
 }
 
 @media screen and (max-width: 1024px) {
@@ -117,10 +131,55 @@
     }
 }
 
-
 @media (max-width: 1130px) {
     .list[flex-direction="row"]  .info {
         margin-top: 10px;
     }
 }
 
+
+@media (max-width: 1144px) {
+    .profile[login="true"] {
+        min-width: 48px;
+        max-width: 48px;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-color: var(--main-col);
+
+    }
+
+    .profile[login="true"] .logo-profile {
+        display: none;
+    }
+    
+    .profile[login="true"] .person-profile {
+        padding: 0;
+        margin-right: 0;
+        float: right;
+    }
+}
+
+
+@media (max-width: 900px) {
+    .box {
+        width: 49%;
+    }
+    
+    .load-more-container {
+        width: 100%;
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .load-more {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        background-color: var(--main-col);
+        color: white;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+}
