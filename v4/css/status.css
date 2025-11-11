@@ -4,6 +4,11 @@
     --gr-02-col: #e9eef6;
     --gr-03-col: #f8fafd;
     --main-col: #f16322;
+    --overlay-bg: rgba(0,0,0,0.5);
+    --modal-bg: #fff;
+    --accent: #00c932;
+    --radius: 12px;
+    --maxw: 420px;
 }
 
 ::selection {
@@ -38,4 +43,5 @@ aside[status="none"] .aside-menu #docs,
 aside[status="none"] .aside-menu #textbooks
 {
     display: none;
+
 }
