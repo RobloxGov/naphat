@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naphat DEV</title>
+    <link rel="icon" href="https://naphat.pages.dev/public/assets/images/NAPHAT_DEV.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@100..700&amp;display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Anuphan", sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        .flex {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .logo img {
+            height: 50px;
+        }
+
+        .current-time {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+            background-color: #000;
+            height: -webkit-fill-available;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .grid .summary {
+            margin-bottom: 20px;
+        }
+
+        .summary {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            height: 520px;
+        }
+
+        main {
+            height: 520px;
+        }
+
+        .summary h2 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .summary-item {
+            margin-bottom: 8px;
+        }
+
+        .search-container {
+            margin-bottom: 15px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .subject-list {
+            height: calc(520px - 58.2px);
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .subject-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .subject-item:last-child {
+            border-bottom: none;
+        }
+
+        .subject-info {
+            flex: 1;
+        }
+
+        .subject-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .subject-details {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .subject-count {
+            background-color: #3498db;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .subject-item.unknown-date {
+            background-color: #ffeaea;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .loader {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .today-class {
+            background-color: #e8f4fd;
+            border-left: 4px solid #3498db;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        ul {
+            list-style: none;
+        }
+        .summary-item.day {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .summary-item.day span {
+            display: flex;
+            align-items: center;
+            margin-left: 10px;
+            max-width: 250px;
+            min-height: 76.8px;
+            padding: 10px;
+        }
+
+        #nextClass span {
+            background: #F16322;
+            color: #fff;
+            transition: opacity 0.5s ease;
+        }
+
+        #tomorrowClass span {
+            background: #E30613;
+            color: #fff;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Animation กระพริบ */
+        .blink {
+            animation: fadeBlink 1s infinite;
+        }
+
+        @keyframes fadeBlink {
+            0%   { opacity: 1; }
+            50%  { opacity: 0.2; }
+            100% { opacity: 1; }
+        }
+
+        input {
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="https://naphat.pages.dev/v4/image/logo.png" alt="Logo">
+        </div>
+        <div class="current-time">
+            <span id="currentTime"></span>
+        </div>
+    </header>
+    <div class="container">
+        <div class="flex">
+            
+            <div class="summary">
+                <h2>สรุปการเรียน</h2>
+                <div class="summary-item" id="remainingClasses"></div>
+                <div class="summary-item" id="todayClass"></div>
+                <div class="summary-item day" id="nextClass">
+                    วันนี้เรียนถัดไป: <span id="nextClassDetail"></span>
+                </div>
+
+                <div class="summary-item day" id="tomorrowClass">
+                    พรุ่งนี้เรียน: <span id="tomorrowClassDetail"></span>
+                </div>
+
+            </div>
+
+            <main>
+                <div class="search-container">
+                    <input type="text" class="search-input" id="searchInput" placeholder="ค้นหาวิชา...">
+                </div>
+
+                <div class="subject-list" id="subjectList">
+                    <div class="loader">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // ตัวแปรเก็บข้อมูล
+        let subjects = [];
+        let filteredSubjects = [];
+
+        // อัพเดทเวลาปัจจุบัน
+        function updateCurrentTime() {
+            const now = new Date();
+            const options = { 
+                day: '2-digit', 
+                month: '2-digit', 
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            
+            // ฟังก์ชันแปลงปี พ.ศ.
+            const thaiYear = now.getFullYear() + 543;
+            const day = now.getDate().toString().padStart(2, '0');
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            
+            const timeString = `${day}/${month}/${thaiYear} ${hours}:${minutes}`;
+            document.getElementById('currentTime').textContent = timeString;
+        }
+
+        // โหลดข้อมูลจาก API
+        async function loadSubjects() {
+            try {
+                const response = await fetch('https://script.google.com/macros/s/AKfycbwiz6nMJSFk3_Mg2adyd4Ga0eBbHFyaPxTJC7vQCv7T1mBfRALC4Zq34od6aFLpCxQa/exec');
+                const data = await response.json();
+                
+                // กรองเฉพาะวิชาที่มี type เป็น study และยังไม่ผ่านเวลา
+                subjects = data.filter(subject => {
+                    if (subject['type (study/exam)'] !== 'study') return false;
+                    
+                    // ข้ามวิชาที่มีวันที่ "ยังไม่ระบุ"
+                    if (subject.date === 'ยังไม่ระบุ') return true;
+                    
+                    // ตรวจสอบว่าวิชานี้ยังไม่ผ่านเวลา
+                    const now = new Date();
+                    const [startTime] = subject.time.split(' - ');
+                    const [hours, minutes] = startTime.split(':').map(Number);
+                    
+                    // สร้างวันที่จากข้อมูล subject
+                    const dateParts = subject.date.split(' ');
+                    const day = parseInt(dateParts[1]);
+                    const month = getMonthNumber(dateParts[2]);
+                    const year = parseInt(dateParts[3]) - 543; // แปลงเป็น ค.ศ.
+                    
+                    const subjectDate = new Date(year, month, day, hours, minutes);
+                    
+                    return subjectDate > now;
+                });
+                
+                filteredSubjects = [...subjects];
+                displaySubjects();
+                updateSummary();
+            } catch (error) {
+                console.error('Error loading subjects:', error);
+                document.getElementById('subjectList').innerHTML = '<div class="no-results">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>';
+            }
+        }
+
+        // แปลงชื่อเดือนไทยเป็นตัวเลข
+        function getMonthNumber(monthName) {
+            const months = {
+                'มกราคม': 0,
+                'กุมภาพันธ์': 1,
+                'มีนาคม': 2,
+                'เมษายน': 3,
+                'พฤษภาคม': 4,
+                'มิถุนายน': 5,
+                'กรกฎาคม': 6,
+                'สิงหาคม': 7,
+                'กันยายน': 8,
+                'ตุลาคม': 9,
+                'พฤศจิกายน': 10,
+                'ธันวาคม': 11
+            };
+            return months[monthName] || 0;
+        }
+
+        // แสดงรายวิชา
+        function displaySubjects() {
+            const subjectList = document.getElementById('subjectList');
+            
+            if (filteredSubjects.length === 0) {
+                subjectList.innerHTML = '<div class="no-results">ไม่พบวิชาที่ตรงกับการค้นหา</div>';
+                return;
+            }
+            
+            let html = '';
+            
+            filteredSubjects.forEach(subject => {
+                const isUnknownDate = subject.date === 'ยังไม่ระบุ';
+                const isTodayClass = checkIfToday(subject);
+                
+                let classNames = 'subject-item';
+                if (isUnknownDate) classNames += ' unknown-date';
+                if (isTodayClass) classNames += ' today-class';
+                
+                html += `
+                    <div class="${classNames}">
+                        <div class="subject-info">
+                            <div class="subject-name">${subject.subject}</div>
+                            <div class="subject-details">
+                                ${subject.date} | ${subject.time}
+                                ${subject.cause ? ` | ${subject.cause}` : ''}
+                            </div>
+                        </div>
+                        ${isTodayClass ? `<div class="subject-count" id="countdown-${subject.id_subject}"></div>` : ''}
+                    </div>
+                `;
+            });
+            
+            subjectList.innerHTML = html;
+            
+            // อัพเดทตัวนับเวลาสำหรับวิชาที่เรียนวันนี้
+            filteredSubjects.forEach(subject => {
+                if (checkIfToday(subject)) {
+                    updateCountdown(subject);
+                }
+            });
+        }
+
+        // ตรวจสอบว่าวิชานี้เรียนวันนี้หรือไม่
+        function checkIfToday(subject) {
+            if (subject.date === 'ยังไม่ระบุ') return false;
+            
+            const now = new Date();
+            const dateParts = subject.date.split(' ');
+            const day = parseInt(dateParts[1]);
+            const month = getMonthNumber(dateParts[2]);
+            const year = parseInt(dateParts[3]) - 543; // แปลงเป็น ค.ศ.
+            
+            return now.getDate() === day && 
+                   now.getMonth() === month && 
+                   now.getFullYear() === year;
+        }
+
+        // อัพเดทตัวนับเวลาถอยหลัง
+        function updateCountdown(subject) {
+            if (subject.date === 'ยังไม่ระบุ') return;
+            
+            const now = new Date();
+            const [startTime] = subject.time.split(' - ');
+            const [hours, minutes] = startTime.split(':').map(Number);
+            
+            const dateParts = subject.date.split(' ');
+            const day = parseInt(dateParts[1]);
+            const month = getMonthNumber(dateParts[2]);
+            const year = parseInt(dateParts[3]) - 543; // แปลงเป็น ค.ศ.
+            
+            const subjectDate = new Date(year, month, day, hours, minutes);
+            const timeDiff = subjectDate - now;
+            
+            if (timeDiff > 0) {
+                const hoursLeft = Math.floor(timeDiff / (1000 * 60 * 60));
+                const minutesLeft = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                
+                const countdownElement = document.getElementById(`countdown-${subject.id_subject}`);
+                if (countdownElement) {
+                    countdownElement.textContent = `อีก ${hoursLeft} ชม. ${minutesLeft} นาที`;
+                }
+            }
+        }
+
+        // อัพเดทสรุป
+        function updateSummary() {
+            // นับเฉพาะรายการ type === 'study'
+            const studySubjects = subjects.filter(subject => subject['type (study/exam)'] === 'study');
+
+            const totalRemaining = studySubjects.length;
+            document.getElementById('remainingClasses').textContent = `เหลือเรียนอีก ${totalRemaining} ครั้ง`;
+
+            // แยกรายวิชา
+            const countsBySubject = {};
+            studySubjects.forEach(s => {
+                const name = (s.subject || 'ไม่ระบุชื่อวิชา').trim();
+                countsBySubject[name] = (countsBySubject[name] || 0) + 1;
+            });
+
+            const entries = Object.entries(countsBySubject).sort((a,b) => b[1] - a[1]);
+
+            // แสดงสรุป
+            let html = '<strong>แยกรายวิชา:</strong><br>';
+            html += '<ul style="margin:6px 0 0 18px; padding:0; font-size:0.95rem;">';
+            entries.forEach(([name, count]) => {
+                html += `<li>${name} — ${count} ครั้ง</li>`;
+            });
+            html += '</ul>';
+
+            const todaySubjects = subjects.filter(subject => checkIfToday(subject));
+            if (todaySubjects.length > 0) {
+                const todayNames = [...new Set(todaySubjects.map(s => s.subject))].join(', ');
+                html += `<div style="margin-top:6px;"><strong>วันนี้เรียน:</strong> ${todayNames}</div>`;
+            }
+
+            document.getElementById('todayClass').innerHTML = html;
+
+            // ⭐ ส่วนนี้ไม่ต้องเขียน textContent แล้ว
+            // เพราะเราจะให้ updateNextClass() และ updateTomorrowClass() อัปเดตเอง
+
+            updateNextClass(subjects);
+            updateTomorrowClass(subjects);
+
+            // อัปเดททุก 1 นาที
+            setInterval(() => {
+                updateNextClass(subjects);
+                updateTomorrowClass(subjects);
+            }, 60000);
+        }
+
+
+
+        // ค้นหาวิชา
+        function searchSubjects() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (searchTerm === '') {
+                filteredSubjects = [...subjects];
+            } else {
+                filteredSubjects = subjects.filter(subject => 
+                    subject.subject.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            displaySubjects();
+        }
+
+        // เริ่มต้นการทำงาน
+        document.addEventListener('DOMContentLoaded', function() {
+            // อัพเดทเวลาปัจจุบันทุกวินาที
+            updateCurrentTime();
+            setInterval(updateCurrentTime, 1000);
+            
+            // โหลดข้อมูล
+            loadSubjects();
+            
+            // อัพเดทตัวนับเวลาทุกนาที
+            setInterval(() => {
+                filteredSubjects.forEach(subject => {
+                    if (checkIfToday(subject)) {
+                        updateCountdown(subject);
+                    }
+                });
+            }, 60000);
+            
+            // ตั้งค่าการค้นหา
+            document.getElementById('searchInput').addEventListener('input', searchSubjects);
+        });
+
+        function parseThaiDate(thaiDate, timeString = "00:00") {
+            if (thaiDate === "ยังไม่ระบุ") return null;
+
+            const parts = thaiDate.trim().split(" "); 
+            // parts = ["พุธ","26","พฤศจิกายน","2568"] หรือ ["26","พฤศจิกายน","2568"]
+
+            // ถ้าบรรทัดแรกเป็นชื่อวัน → ข้ามไป
+            let dayIndex = 0;
+            if (isNaN(parseInt(parts[0]))) {
+                // parts[0] เป็นชื่อวัน
+                dayIndex = 1;
+            }
+
+            const day = parseInt(parts[dayIndex]);
+            const month = getMonthNumber(parts[dayIndex + 1]);
+            const year = parseInt(parts[dayIndex + 2]) - 543;
+
+            const [hour, minute] = timeString.split(':').map(Number);
+
+            return new Date(year, month, day, hour, minute);
+        }
+
+        function updateNextClass(subjects) {
+            const now = new Date();
+
+            const classesToday = subjects
+                .filter(s => {
+                    if (s.date === "ยังไม่ระบุ") return false;
+                    const dateObj = parseThaiDate(s.date);
+                    return (
+                        dateObj.getDate() === now.getDate() &&
+                        dateObj.getMonth() === now.getMonth() &&
+                        dateObj.getFullYear() === now.getFullYear()
+                    );
+                })
+                .map(s => {
+                    const start = s.time.split(" - ")[0];
+                    const dateObj = parseThaiDate(s.date, start);
+                    return { ...s, dateObj };
+                })
+                .filter(s => s.dateObj > now)
+                .sort((a, b) => a.dateObj - b.dateObj);
+
+            const span = document.getElementById("nextClassDetail");
+
+            if (classesToday.length === 0) {
+                span.textContent = "วันนี้ไม่มีคาบถัดไป";
+                return;
+            }
+
+            const next = classesToday[0];
+            const left = timeLeftText(next.dateObj);
+
+            span.textContent = `${next.subject} (${next.time} ${left})`;
+        }
+
+
+        function updateTomorrowClass(subjects) {
+            const now = new Date();
+            const tmr = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+
+            const tomorrow = subjects
+                .filter(s => {
+                    if (s.date === "ยังไม่ระบุ") return false;
+                    const c = parseThaiDate(s.date);
+                    return (
+                        c.getDate() === tmr.getDate() &&
+                        c.getMonth() === tmr.getMonth() &&
+                        c.getFullYear() === tmr.getFullYear()
+                    );
+                })
+                .map(s => {
+                    const start = s.time.split(" - ")[0];
+                    return { ...s, dateObj: parseThaiDate(s.date, start) };
+                })
+                .sort((a, b) => a.dateObj - b.dateObj);
+
+            const span = document.getElementById("tomorrowClassDetail");
+
+            if (tomorrow.length === 0) {
+                span.textContent = "พรุ่งนี้ไม่มีเรียน";
+                return;
+            }
+
+            const next = tomorrow[0];
+            const left = timeLeftText(next.dateObj);
+
+            span.textContent = `${next.subject} (${next.time} ${left})`;
+        }
+
+
+        function timeLeftText(targetDate) {
+            const now = new Date();
+            const diff = targetDate - now;
+
+            if (diff <= 0) return "กำลังจะเริ่ม";
+
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+            if (hours <= 0) return `เหลืออีก ${minutes} นาที`;
+            return `เหลืออีก ${hours} ชม. ${minutes} นาที`;
+        }
+
+        function blinkEveryMinute() {
+            const elements = document.querySelectorAll('#nextClass span, #tomorrowClass span');
+
+            // เพิ่มคลาสกระพริบ
+            elements.forEach(el => el.classList.add('blink'));
+
+            // เอาออกหลังจากกระพริบสักพัก (เช่น 10 วินาที)
+            setTimeout(() => {
+                elements.forEach(el => el.classList.remove('blink'));
+            }, 4000); // 10 วินาที
+        }
+
+        // เรียกทุก 1 นาที
+        setInterval(blinkEveryMinute, 60000);
+
+        // เรียกครั้งแรกทันทีเมื่อโหลดหน้า
+        blinkEveryMinute();
+
+        function updateLayout() {
+            const elements = document.querySelectorAll('.flex, .grid');
+
+            elements.forEach(el => {
+                if (window.innerWidth < 842) {
+                    if (!el.classList.contains('grid')) {
+                        el.classList.remove('flex');
+                        el.classList.add('grid');
+                    }
+                } else {
+                    if (!el.classList.contains('flex') && !el.classList.contains('original-grid')) {
+                        el.classList.remove('grid');
+                        el.classList.add('flex');
+                    }
+                }
+            });
+        }
+
+        // เรียกเมื่อโหลดหน้า
+        updateLayout();
+
+        // เรียกทุกครั้งที่ปรับขนาดหน้าจอ
+        window.addEventListener('resize', updateLayout);
+
+    </script>
+</body>
+</html>
