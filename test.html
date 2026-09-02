@@ -1,802 +1,3031 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>📚 Focus Tracker · เรียนเริ่ส</title>
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
-    </script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--bg-body);
-            padding: 1.5rem;
-        }
+<title>FINAL COUNTDOWN // ME ENGINEERING</title>
 
-        /* ---------- THEME VARIABLES ---------- */
-        :root {
-            --bg-body: #f4f1ec;
-            --bg-card: #ffffffd9;
-            --bg-card-solid: #ffffff;
-            --text-primary: #1e1e2a;
-            --text-secondary: #4a4a5a;
-            --accent: #b68b6b;
-            --accent-glow: rgba(182, 139, 107, 0.25);
-            --border-light: rgba(0, 0, 0, 0.06);
-            --shadow: 0 20px 40px rgba(0, 0, 0, 0.06), 0 8px 20px rgba(0, 0, 0, 0.03);
-            --glass: rgba(255, 255, 255, 0.5);
-            --timer-color: #2c2c3a;
-            --btn-bg: #1e1e2a;
-            --btn-text: #faf8f5;
-            --icon-color: #5a5a6e;
-            --input-bg: rgba(255, 255, 255, 0.6);
-            --chart-grid: rgba(0, 0, 0, 0.06);
-            --badge-bg: rgba(255, 255, 255, 0.5);
-        }
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Orbitron:wght@500;600;700;800&display=swap');
 
-        [data-theme="dark"] {
-            --bg-body: #12121a;
-            --bg-card: #1e1e2cd9;
-            --bg-card-solid: #1e1e2c;
-            --text-primary: #ececf0;
-            --text-secondary: #b0b0c0;
-            --accent: #d9b89c;
-            --accent-glow: rgba(217, 184, 156, 0.2);
-            --border-light: rgba(255, 255, 255, 0.06);
-            --shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-            --glass: rgba(30, 30, 44, 0.5);
-            --timer-color: #f0eade;
-            --btn-bg: #ececf0;
-            --btn-text: #1e1e2a;
-            --icon-color: #b0b0c0;
-            --input-bg: rgba(40, 40, 60, 0.6);
-            --chart-grid: rgba(255, 255, 255, 0.08);
-            --badge-bg: rgba(40, 40, 60, 0.5);
-        }
+:root{
+  --bg:#07090d;
+  --panel:#0d1118;
+  --panel2:#111722;
+  --line:#202a38;
+  --text:#edf3ff;
+  --muted:#7f8da3;
+  --accent:#00e5ff;
+  --accent2:#8b5cf6;
+  --green:#48f0a7;
+  --orange:#ff9f43;
+  --danger:#ff5577;
+}
 
-        /* ---------- LAYOUT ---------- */
-        .app-wrapper {
-            max-width: 1100px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 1.8rem;
-        }
+*{
+  box-sizing:border-box;
+}
 
-        .timer-card {
-            width: 100%;
-            padding: 2.2rem 2rem 2rem;
-            background: var(--bg-card);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border-radius: 48px;
-            box-shadow: var(--shadow), 0 0 0 1px var(--border-light);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-        }
+html{
+  scroll-behavior:smooth;
+}
 
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr 1.2fr;
-            gap: 1.8rem;
-        }
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
 
-        @media (max-width: 780px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+  background:
+    radial-gradient(
+      circle at 15% 10%,
+      rgba(0,229,255,.09),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 85% 20%,
+      rgba(139,92,246,.10),
+      transparent 28%
+    ),
+    linear-gradient(
+      135deg,
+      #06080c,
+      #0a0d13 55%,
+      #07090d
+    );
 
-        .dash-card {
-            background: var(--bg-card);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border-radius: 40px;
-            padding: 1.6rem 1.5rem 1.8rem;
-            box-shadow: var(--shadow), 0 0 0 1px var(--border-light);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
+  font-family:Prompt,system-ui,sans-serif;
+  overflow-x:hidden;
+}
 
-        .dash-card h3 {
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: var(--text-primary);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .dash-card h3 i {
-            color: var(--accent);
-        }
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.28;
 
-        /* ---------- CARD HEADER ---------- */
-        .card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1.5rem;
-        }
+  background-image:
+    linear-gradient(
+      rgba(255,255,255,.025) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.025) 1px,
+      transparent 1px
+    );
 
-        .card-header h2 {
-            font-size: 1.3rem;
-            font-weight: 500;
-            letter-spacing: -0.3px;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .card-header h2 i {
-            color: var(--accent);
-            font-size: 1.5rem;
-        }
+  background-size:40px 40px;
+}
 
-        .theme-toggle {
-            background: var(--glass);
-            backdrop-filter: blur(4px);
-            border: 1px solid var(--border-light);
-            border-radius: 60px;
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: var(--text-primary);
-            cursor: pointer;
-            transition: all 0.25s ease;
-        }
-        .theme-toggle:hover {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-            box-shadow: 0 0 20px var(--accent-glow);
-        }
+.container{
+  width:min(1200px,92%);
+  margin:auto;
+}
 
-        /* ---------- INPUTS ---------- */
-        .subject-area {
-            margin-bottom: 1.5rem;
-        }
-        .subject-input {
-            width: 100%;
-            padding: 0.8rem 1.5rem;
-            border-radius: 60px;
-            border: 1px solid var(--border-light);
-            background: var(--input-bg);
-            backdrop-filter: blur(4px);
-            font-size: 1.05rem;
-            font-weight: 450;
-            color: var(--text-primary);
-            text-align: center;
-            outline: none;
-            transition: 0.25s ease;
-        }
-        .subject-input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 4px var(--accent-glow);
-        }
+/* ================= HEADER ================= */
 
-        .timer-display {
-            font-size: 4.6rem;
-            font-weight: 600;
-            letter-spacing: 5px;
-            color: var(--timer-color);
-            background: var(--glass);
-            backdrop-filter: blur(6px);
-            padding: 0.5rem 0.2rem;
-            margin: 0.2rem 0 1.2rem;
-            border-radius: 80px;
-            border: 1px solid var(--border-light);
-            font-variant-numeric: tabular-nums;
-        }
+header{
+  position:sticky;
+  top:0;
+  z-index:10;
 
-        /* ---------- BUTTONS ---------- */
-        .action-group {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-            gap: 0.8rem;
-            margin: 1.2rem 0 0.8rem;
-        }
+  backdrop-filter:blur(18px);
 
-        .btn {
-            border: none;
-            background: var(--btn-bg);
-            color: var(--btn-text);
-            padding: 0.8rem 1.8rem;
-            border-radius: 60px;
-            font-size: 1rem;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            border: 1px solid transparent;
-            flex: 1 1 auto;
-            min-width: 100px;
-            backdrop-filter: blur(4px);
-        }
+  background:rgba(7,9,13,.78);
 
-        .btn-primary {
-            background: var(--accent);
-            color: #1e1e2a;
-            box-shadow: 0 8px 24px var(--accent-glow);
-            border-color: var(--accent);
-        }
-        .btn-primary:hover {
-            transform: scale(1.02);
-            filter: brightness(1.04);
-        }
-        .btn-secondary {
-            background: var(--glass);
-            color: var(--text-primary);
-            border: 1px solid var(--border-light);
-        }
-        .btn-secondary:hover {
-            background: var(--accent);
-            color: #1e1e2a;
-            border-color: var(--accent);
-        }
-        .btn-reset {
-            background: transparent;
-            color: var(--text-secondary);
-            border: 1px solid var(--border-light);
-            flex: 0.5;
-            min-width: 60px;
-        }
-        .btn-reset:hover {
-            background: rgba(200, 80, 80, 0.08);
-            color: #c45a5a;
-            border-color: #c45a5a40;
-        }
-        .btn-save {
-            background: #2b7a4b;
-            color: white;
-            border-color: #2b7a4b;
-        }
-        .btn-save:hover {
-            background: #1f5f39;
-            transform: scale(1.02);
-        }
-        .btn-save i {
-            font-size: 1rem;
-        }
-        .btn:disabled {
-            opacity: 0.5;
-            pointer-events: none;
-            filter: grayscale(0.3);
-        }
+  border-bottom:1px solid var(--line);
+}
 
-        .status-tag {
-            margin-top: 1.2rem;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 14px;
-            flex-wrap: wrap;
-            border-top: 1px solid var(--border-light);
-            padding-top: 1.2rem;
-        }
-        .subject-badge {
-            background: var(--badge-bg);
-            backdrop-filter: blur(4px);
-            padding: 0.3rem 1.2rem;
-            border-radius: 40px;
-            border: 1px solid var(--border-light);
-            color: var(--text-primary);
-            max-width: 200px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .subject-badge i {
-            margin-right: 6px;
-            color: var(--accent);
-        }
+.nav{
+  min-height:74px;
 
-        /* ---------- DASHBOARD TABLE ---------- */
-        .progress-table-wrap {
-            max-height: 240px;
-            overflow-y: auto;
-            border-radius: 20px;
-            scrollbar-width: thin;
-            scrollbar-color: var(--accent) transparent;
-        }
-        .progress-table-wrap::-webkit-scrollbar {
-            width: 4px;
-        }
-        .progress-table-wrap::-webkit-scrollbar-thumb {
-            background: var(--accent);
-            border-radius: 12px;
-        }
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 
-        .progress-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-            color: var(--text-primary);
-        }
-        .progress-table th {
-            text-align: left;
-            padding: 0.6rem 0.4rem 0.6rem 0;
-            font-weight: 500;
-            color: var(--text-secondary);
-            border-bottom: 1px solid var(--border-light);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .progress-table td {
-            padding: 0.55rem 0.4rem 0.55rem 0;
-            border-bottom: 1px solid var(--border-light);
-        }
-        .progress-table tr:last-child td {
-            border-bottom: none;
-        }
-        .hours-badge {
-            background: var(--accent-glow);
-            padding: 0.2rem 0.8rem;
-            border-radius: 40px;
-            font-weight: 500;
-            color: var(--accent);
-            font-size: 0.8rem;
-        }
-        .empty-msg {
-            color: var(--text-secondary);
-            opacity: 0.6;
-            padding: 0.8rem 0;
-            font-style: italic;
-        }
+  gap:20px;
+}
 
-        /* chart container */
-        .chart-container {
-            position: relative;
-            height: 200px;
-            width: 100%;
-            margin-top: 0.2rem;
-        }
+.logo{
+  font-family:Orbitron;
+  color:var(--accent);
 
-        /* notification */
-        .toast-msg {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--bg-card-solid);
-            backdrop-filter: blur(12px);
-            padding: 0.8rem 2rem;
-            border-radius: 60px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--border-light);
-            color: var(--text-primary);
-            font-weight: 450;
-            z-index: 999;
-            opacity: 0;
-            transition: opacity 0.4s ease, bottom 0.4s ease;
-            pointer-events: none;
-            font-size: 0.95rem;
-        }
-        .toast-msg.show {
-            opacity: 1;
-            bottom: 40px;
-        }
+  letter-spacing:2px;
+  font-size:15px;
+}
 
-        @media (max-width: 480px) {
-            .timer-card {
-                padding: 1.5rem 1rem;
-            }
-            .timer-display {
-                font-size: 3.2rem;
-            }
-            .btn {
-                font-size: 0.9rem;
-                padding: 0.6rem 1.2rem;
-                min-width: 70px;
-            }
-            .dash-card {
-                padding: 1.2rem 1rem;
-            }
-            .dashboard-grid {
-                gap: 1.2rem;
-            }
-        }
-    </style>
+.logo span{
+  color:#fff;
+}
+
+/* ================= TABS ================= */
+
+.tabs{
+  display:flex;
+  gap:6px;
+
+  background:#090c12;
+
+  padding:5px;
+
+  border:1px solid var(--line);
+  border-radius:13px;
+}
+
+.tab{
+  border:0;
+  background:transparent;
+
+  color:var(--muted);
+
+  padding:10px 15px;
+
+  border-radius:9px;
+
+  font-family:Prompt;
+
+  cursor:pointer;
+}
+
+.tab.active{
+  background:#16202c;
+  color:#fff;
+
+  box-shadow:
+    inset 0 0 0 1px
+    rgba(0,229,255,.18);
+}
+
+/* ================= MAIN ================= */
+
+main{
+  padding:42px 0 70px;
+}
+
+.view{
+  display:none;
+}
+
+.view.active{
+  display:block;
+}
+
+/* ================= PANEL ================= */
+
+.panel{
+  background:
+    linear-gradient(
+      145deg,
+      rgba(17,23,34,.94),
+      rgba(9,12,18,.94)
+    );
+
+  border:1px solid var(--line);
+
+  border-radius:20px;
+
+  padding:26px;
+
+  box-shadow:
+    0 18px 60px rgba(0,0,0,.28);
+}
+
+/* ================= OVERVIEW ================= */
+
+.hero{
+  display:grid;
+
+  grid-template-columns:
+    1.35fr .65fr;
+
+  gap:20px;
+
+  align-items:stretch;
+}
+
+.eyebrow{
+  font-family:Orbitron;
+
+  color:var(--accent);
+
+  font-size:11px;
+
+  letter-spacing:2px;
+}
+
+h1{
+  font-size:
+    clamp(30px,5vw,58px);
+
+  line-height:1.05;
+
+  margin:12px 0;
+}
+
+.sub{
+  color:var(--muted);
+  margin:0;
+}
+
+.big-count{
+  display:flex;
+  gap:12px;
+
+  margin-top:28px;
+
+  flex-wrap:wrap;
+}
+
+.unit{
+  min-width:105px;
+
+  padding:18px 14px;
+
+  background:#080b10;
+
+  border:1px solid #1d2938;
+
+  border-radius:14px;
+
+  text-align:center;
+
+  position:relative;
+
+  overflow:hidden;
+}
+
+.unit:after{
+  content:"";
+
+  position:absolute;
+
+  inset:auto 0 0;
+
+  height:2px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--accent),
+      transparent
+    );
+}
+
+.num{
+  font-family:Orbitron;
+
+  font-size:30px;
+
+  color:#fff;
+}
+
+.label{
+  font-size:11px;
+
+  color:var(--muted);
+
+  margin-top:5px;
+}
+
+.next-title{
+  font-size:18px;
+
+  font-weight:600;
+
+  margin:10px 0 2px;
+}
+
+.next-meta{
+  color:var(--muted);
+
+  font-size:13px;
+}
+
+.progress{
+  height:7px;
+
+  background:#171d27;
+
+  border-radius:10px;
+
+  overflow:hidden;
+
+  margin:16px 0 8px;
+}
+
+.progress i{
+  display:block;
+
+  height:100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--accent),
+      var(--accent2)
+    );
+
+  border-radius:10px;
+
+  transition:width .3s;
+}
+
+.stats{
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:12px;
+
+  margin-top:20px;
+}
+
+.stat{
+  padding:16px;
+
+  border:1px solid var(--line);
+
+  border-radius:14px;
+
+  background:rgba(255,255,255,.018);
+}
+
+.stat b{
+  font-family:Orbitron;
+
+  font-size:22px;
+}
+
+.stat small{
+  display:block;
+
+  color:var(--muted);
+
+  margin-top:3px;
+}
+
+/* ================= SCHEDULE ================= */
+
+.section-title{
+  display:flex;
+
+  align-items:end;
+
+  justify-content:space-between;
+
+  margin:35px 0 15px;
+}
+
+.section-title h2{
+  margin:0;
+
+  font-size:21px;
+}
+
+.section-title span{
+  color:var(--muted);
+
+  font-size:12px;
+}
+
+.cards{
+  display:grid;
+
+  grid-template-columns:
+    repeat(2,1fr);
+
+  gap:14px;
+}
+
+.course{
+  position:relative;
+
+  padding:20px;
+
+  border:1px solid var(--line);
+
+  border-radius:17px;
+
+  background:rgba(12,16,23,.88);
+
+  transition:.2s;
+
+  cursor:pointer;
+}
+
+.course:hover{
+  transform:translateY(-2px);
+
+  border-color:#34465d;
+}
+
+.course .top{
+  display:flex;
+
+  justify-content:space-between;
+
+  gap:10px;
+}
+
+.code{
+  font-family:Orbitron;
+
+  font-size:10px;
+
+  color:var(--accent);
+
+  letter-spacing:1px;
+}
+
+.percent{
+  font-family:Orbitron;
+
+  font-size:13px;
+
+  color:var(--green);
+}
+
+.course h3{
+  font-size:16px;
+
+  margin:9px 0 5px;
+
+  line-height:1.35;
+}
+
+.group{
+  font-size:12px;
+
+  color:var(--muted);
+}
+
+.exam{
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:end;
+
+  margin-top:17px;
+
+  padding-top:13px;
+
+  border-top:1px solid #1a2230;
+}
+
+.exam strong{
+  font-size:13px;
+}
+
+.exam span{
+  font-size:12px;
+
+  color:var(--muted);
+}
+
+.mini-count{
+  font-family:Orbitron;
+
+  color:var(--orange);
+
+  font-size:12px;
+}
+
+/* ================= SUBJECT ================= */
+
+.detail{
+  display:grid;
+
+  grid-template-columns:
+    300px 1fr;
+
+  gap:18px;
+}
+
+.list{
+  display:flex;
+
+  flex-direction:column;
+
+  gap:8px;
+}
+
+.list button{
+  text-align:left;
+
+  background:#0c1118;
+
+  border:1px solid var(--line);
+
+  color:#dbe5f5;
+
+  padding:14px;
+
+  border-radius:12px;
+
+  cursor:pointer;
+
+  font-family:Prompt;
+}
+
+.list button.active{
+  border-color:
+    rgba(0,229,255,.45);
+
+  background:#101a23;
+}
+
+.detail-main h2{
+  font-size:28px;
+
+  margin:8px 0;
+}
+
+.detail-count{
+  display:grid;
+
+  grid-template-columns:
+    repeat(4,1fr);
+
+  gap:10px;
+
+  margin:22px 0;
+}
+
+.detail-count .unit{
+  min-width:0;
+}
+
+.schedule{
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:12px;
+}
+
+.info{
+  padding:15px;
+
+  border:1px solid var(--line);
+
+  border-radius:12px;
+
+  background:#0a0e14;
+}
+
+.info small{
+  display:block;
+
+  color:var(--muted);
+
+  font-size:11px;
+}
+
+.info b{
+  display:block;
+
+  margin-top:5px;
+}
+
+.quote{
+  margin-top:18px;
+
+  padding:15px;
+
+  border-left:
+    2px solid var(--accent);
+
+  background:
+    rgba(0,229,255,.025);
+
+  color:#aebbd0;
+
+  font-size:13px;
+}
+
+/* ================= STUDY ================= */
+
+.study-grid{
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:18px;
+
+  margin-top:18px;
+}
+
+.timer-wrap{
+  text-align:center;
+}
+
+.study-subject{
+  margin-top:22px;
+
+  text-align:left;
+}
+
+.study-subject label{
+  display:block;
+
+  font-size:10px;
+
+  color:var(--muted);
+
+  font-family:Orbitron;
+
+  letter-spacing:1.5px;
+
+  margin-bottom:8px;
+}
+
+.study-subject select{
+  width:100%;
+
+  padding:13px 15px;
+
+  border-radius:11px;
+
+  border:1px solid var(--line);
+
+  background:#080c12;
+
+  color:#fff;
+
+  font-family:Prompt;
+
+  outline:none;
+}
+
+.study-subject select:focus{
+  border-color:var(--accent);
+
+  box-shadow:
+    0 0 20px
+    rgba(0,229,255,.08);
+}
+
+.active-subject{
+  margin-top:15px;
+}
+
+.active-subject span{
+  display:inline-block;
+
+  padding:7px 13px;
+
+  border-radius:999px;
+
+  border:1px solid
+    rgba(0,229,255,.25);
+
+  color:var(--accent);
+
+  background:
+    rgba(0,229,255,.04);
+
+  font-size:11px;
+}
+
+.stopwatch{
+  font-family:Orbitron;
+
+  font-size:
+    clamp(48px,9vw,92px);
+
+  letter-spacing:3px;
+
+  margin:30px 0;
+}
+
+.status{
+  color:var(--muted);
+
+  font-size:13px;
+
+  margin:-15px 0 20px;
+}
+
+.controls{
+  display:flex;
+
+  justify-content:center;
+
+  gap:10px;
+
+  flex-wrap:wrap;
+}
+
+.btn{
+  border:1px solid #263548;
+
+  background:#111925;
+
+  color:#fff;
+
+  padding:12px 20px;
+
+  border-radius:11px;
+
+  font-family:Prompt;
+
+  cursor:pointer;
+
+  transition:.2s;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+
+  border-color:#45617e;
+}
+
+.btn.primary{
+  background:
+    linear-gradient(
+      90deg,
+      #087b91,
+      #4b3aa8
+    );
+
+  border:0;
+}
+
+.save-btn{
+  border-color:
+    rgba(72,240,167,.35);
+}
+
+.study-stat-grid{
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:12px;
+
+  margin-top:20px;
+}
+
+.study-stat{
+  padding:18px;
+
+  border:1px solid var(--line);
+
+  border-radius:14px;
+
+  background:
+    rgba(255,255,255,.02);
+}
+
+.study-stat small{
+  display:block;
+
+  color:var(--muted);
+
+  font-family:Orbitron;
+
+  font-size:9px;
+
+  letter-spacing:1px;
+}
+
+.study-stat strong{
+  display:inline-block;
+
+  font-family:Orbitron;
+
+  font-size:30px;
+
+  margin-top:7px;
+}
+
+.study-stat span{
+  color:var(--muted);
+
+  font-size:11px;
+}
+
+.chart-container{
+  height:260px;
+
+  margin-top:25px;
+}
+
+.table-wrap{
+  overflow-x:auto;
+}
+
+.study-table{
+  width:100%;
+
+  border-collapse:collapse;
+}
+
+.study-table th{
+  text-align:left;
+
+  color:var(--muted);
+
+  font-family:Orbitron;
+
+  font-size:10px;
+
+  letter-spacing:1px;
+
+  padding:13px;
+
+  border-bottom:
+    1px solid var(--line);
+}
+
+.study-table td{
+  padding:15px 13px;
+
+  border-bottom:
+    1px solid var(--line);
+
+  font-size:13px;
+}
+
+.study-table td:last-child{
+  text-align:right;
+}
+
+.hours-badge{
+  display:inline-block;
+
+  padding:5px 10px;
+
+  border-radius:8px;
+
+  background:
+    rgba(0,229,255,.06);
+
+  border:1px solid
+    rgba(0,229,255,.15);
+
+  color:var(--accent);
+
+  font-family:Orbitron;
+
+  font-size:10px;
+}
+
+.empty-msg{
+  text-align:center !important;
+
+  color:var(--muted);
+}
+
+/* ================= TOAST ================= */
+
+.toast{
+  position:fixed;
+
+  bottom:25px;
+  right:25px;
+
+  z-index:100;
+
+  padding:13px 18px;
+
+  border-radius:11px;
+
+  background:#111722;
+
+  border:1px solid var(--line);
+
+  color:#fff;
+
+  font-size:13px;
+
+  transform:translateY(100px);
+
+  opacity:0;
+
+  transition:.25s;
+}
+
+.toast.show{
+  transform:translateY(0);
+
+  opacity:1;
+}
+
+/* ================= FOOTER ================= */
+
+footer{
+  text-align:center;
+
+  color:#526075;
+
+  font-size:11px;
+
+  margin-top:35px;
+
+  font-family:Orbitron;
+
+  letter-spacing:1px;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:850px){
+
+  .hero,
+  .detail,
+  .study-grid{
+    grid-template-columns:1fr;
+  }
+
+  .cards{
+    grid-template-columns:1fr;
+  }
+
+  .detail-count{
+    grid-template-columns:
+      repeat(2,1fr);
+  }
+
+  .nav{
+    min-height:auto;
+
+    padding:12px 0;
+
+    align-items:flex-start;
+
+    flex-direction:column;
+  }
+
+  .tabs{
+    width:100%;
+
+    overflow:auto;
+  }
+
+  .tab{
+    flex:1;
+
+    white-space:nowrap;
+  }
+
+  .study-stat-grid{
+    grid-template-columns:1fr;
+  }
+}
+</style>
 </head>
+
 <body>
 
-    <div class="app-wrapper">
-        <!-- TIMER CARD -->
-        <div class="timer-card">
-            <div class="card-header">
-                <h2><i class="fas fa-book-open"></i> <span id="headerSubject">Focus</span></h2>
-                <button class="theme-toggle" id="themeToggle" aria-label="เปลี่ยนโทนสี">
-                    <i class="fas fa-moon" id="themeIcon"></i>
-                </button>
-            </div>
+<header>
 
-            <div class="subject-area">
-                <input type="text" class="subject-input" id="subjectInput" placeholder="📘 ชื่อวิชาที่อ่าน ..." maxlength="40" value="Thermodynamics">
-            </div>
+<div class="container nav">
 
-            <div class="timer-display" id="timerDisplay">00:00:00</div>
+<div class="logo">
+FINAL<span>//COUNTDOWN</span>
+</div>
 
-            <div class="action-group">
-                <button class="btn btn-primary" id="startBtn"><i class="fas fa-play"></i> เริ่ม</button>
-                <button class="btn btn-secondary" id="pauseBtn"><i class="fas fa-pause"></i> หยุด</button>
-                <button class="btn btn-reset" id="resetBtn"><i class="fas fa-undo-alt"></i></button>
-                <button class="btn btn-save" id="saveBtn"><i class="fas fa-cloud-upload-alt"></i> บันทึก</button>
-            </div>
+<div class="tabs">
 
-            <div class="status-tag">
-                <i class="fas fa-clock"></i>
-                <span id="statusText">⏸️ ยังไม่เริ่ม</span>
-                <span class="subject-badge"><i class="fas fa-tag"></i> <span id="badgeSubject">Thermodynamics</span></span>
-            </div>
-        </div>
+<button class="tab active"
+data-view="overview">
+01 ภาพรวม
+</button>
 
-        <!-- DASHBOARD -->
-        <div class="dashboard-grid">
-            <!-- TABLE -->
-            <div class="dash-card">
-                <h3><i class="fas fa-table"></i> ความคืบหน้ารายวิชา</h3>
-                <div class="progress-table-wrap">
-                    <table class="progress-table" id="progressTable">
-                        <thead>
-                            <tr><th>วิชา</th><th style="text-align:right;">ชั่วโมง</th></tr>
-                        </thead>
-                        <tbody id="tableBody">
-                            <tr><td colspan="2" class="empty-msg">ยังไม่มีข้อมูล</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div style="margin-top: 0.8rem; font-size:0.8rem; color:var(--text-secondary); opacity:0.6; display:flex; gap:12px; flex-wrap:wrap;">
-                    <span><i class="fas fa-database"></i> <span id="totalHoursDisplay">0</span> ชม.</span>
-                    <span><i class="fas fa-book"></i> <span id="subjectCountDisplay">0</span> วิชา</span>
-                </div>
-            </div>
+<button class="tab"
+data-view="subjects">
+02 รายวิชา
+</button>
 
-            <!-- CHART -->
-            <div class="dash-card">
-                <h3><i class="fas fa-chart-bar"></i> กราฟชั่วโมงสะสม</h3>
-                <div class="chart-container">
-                    <canvas id="progressChart"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
+<button class="tab"
+data-view="study">
+03 STUDY TIMER
+</button>
 
-    <!-- TOAST -->
-    <div id="toastMsg" class="toast-msg">✅ บันทึกเรียบร้อย</div>
+</div>
 
-    <script>
-        (function() {
-            'use strict';
+</div>
 
-            // -------------------- DOM --------------------
-            const timerDisplay = document.getElementById('timerDisplay');
-            const startBtn = document.getElementById('startBtn');
-            const pauseBtn = document.getElementById('pauseBtn');
-            const resetBtn = document.getElementById('resetBtn');
-            const saveBtn = document.getElementById('saveBtn');
-            const subjectInput = document.getElementById('subjectInput');
-            const badgeSubject = document.getElementById('badgeSubject');
-            const headerSubject = document.getElementById('headerSubject');
-            const statusText = document.getElementById('statusText');
-            const themeToggle = document.getElementById('themeToggle');
-            const themeIcon = document.getElementById('themeIcon');
-            const tableBody = document.getElementById('tableBody');
-            const totalHoursDisplay = document.getElementById('totalHoursDisplay');
-            const subjectCountDisplay = document.getElementById('subjectCountDisplay');
-            const toast = document.getElementById('toastMsg');
+</header>
 
-            // -------------------- STATE --------------------
-            let timerInterval = null;
-            let seconds = 0;
-            let isRunning = false;
-            let isPaused = false;
-            let currentTheme = 'light';
 
-            // ข้อมูลจาก GG (จำลอง)
-            let subjectData = {}; // { "คณิตศาสตร์": 2.5, "ฟิสิกส์": 1.2 }
+<main class="container">
 
-            // Chart instance
-            let chartInstance = null;
+<!-- ================================================= -->
+<!-- OVERVIEW -->
+<!-- ================================================= -->
 
-            // -------------------- GG SHEET CONFIG --------------------
-            // ใช้ Google Apps Script Web App URL (เปลี่ยนเป็น URL ของคุณ)
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzBP843GELq4xldrzR40OuJbra80PhBU7gprMyQcuQEgbVZq_MBQwraVMDqYFjg5K6t/exec';
+<section id="overview" class="view active">
 
-            // -------------------- HELPERS --------------------
-            function formatTime(sec) {
-                const hrs = Math.floor(sec / 3600);
-                const mins = Math.floor((sec % 3600) / 60);
-                const secs = sec % 60;
-                return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-            }
+<div class="hero">
 
-            function secondsToHours(sec) {
-                return Math.round((sec / 3600) * 100) / 100;
-            }
+<div class="panel">
 
-            function updateTimerDisplay() {
-                timerDisplay.textContent = formatTime(seconds);
-            }
+<div class="eyebrow">
+NEXT EXAM // FINAL 2026
+</div>
 
-            function updateSubjectUI() {
-                const val = subjectInput.value.trim() || 'ไม่ระบุวิชา';
-                badgeSubject.textContent = val;
-                headerSubject.textContent = val;
-            }
+<h1 id="heroTitle">
+ENGINEERING MATHEMATICS 3
+</h1>
 
-            function setStatusText(text) {
-                statusText.textContent = text;
-            }
+<p class="sub" id="heroMeta">
+กำลังโหลด...
+</p>
 
-            function showToast(msg, isError = false) {
-                toast.textContent = msg;
-                toast.style.background = isError ? '#c45a5a' : 'var(--bg-card-solid)';
-                toast.style.color = isError ? '#fff' : 'var(--text-primary)';
-                toast.classList.add('show');
-                clearTimeout(toast._hide);
-                toast._hide = setTimeout(() => toast.classList.remove('show'), 2800);
-            }
+<div class="big-count"
+id="heroCountdown">
+</div>
 
-            // -------------------- STOP TIMER --------------------
-            function stopTimer() {
-                if (timerInterval) {
-                    clearInterval(timerInterval);
-                    timerInterval = null;
-                }
-                isRunning = false;
-                isPaused = false;
-            }
+</div>
 
-            // -------------------- TIMER CONTROLS --------------------
-            function startCount() {
-                if (isRunning && !isPaused) return;
-                if (isPaused) {
-                    isPaused = false;
-                    isRunning = true;
-                    timerInterval = setInterval(() => { seconds++;
-                        updateTimerDisplay(); }, 1000);
-                    setStatusText('▶️ กำลังอ่าน...');
-                    return;
-                }
-                if (timerInterval) clearInterval(timerInterval);
-                isRunning = true;
-                isPaused = false;
-                timerInterval = setInterval(() => { seconds++;
-                    updateTimerDisplay(); }, 1000);
-                setStatusText('▶️ กำลังอ่าน...');
-            }
 
-            function pauseCount() {
-                if (!isRunning || isPaused) return;
-                if (timerInterval) {
-                    clearInterval(timerInterval);
-                    timerInterval = null;
-                }
-                isPaused = true;
-                setStatusText('⏸️ หยุดชั่วคราว');
-            }
+<div class="panel">
 
-            function resetCount() {
-                stopTimer();
-                seconds = 0;
-                updateTimerDisplay();
-                isRunning = false;
-                isPaused = false;
-                setStatusText('⏹️ รีเซ็ตแล้ว');
-                if (seconds === 0) setStatusText('⏸️ ยังไม่เริ่ม');
-            }
+<div class="eyebrow">
+EXAM PROGRESS
+</div>
 
-            // -------------------- GOOGLE SHEET : PULL (GET) --------------------
-            async function fetchFromSheet() {
-                try {
-                    const res = await fetch(SCRIPT_URL, { method: 'GET' });
-                    if (!res.ok) throw new Error('Network error');
-                    const data = await res.json();
-                    if (data && data.data) {
-                        subjectData = data.data;
-                    } else {
-                        // ถ้าไม่มี data ให้ใช้ mock
-                        subjectData = { 'คณิตศาสตร์': 2.5, 'ฟิสิกส์': 1.2, 'เคมี': 0.8 };
-                    }
-                    renderTableAndChart();
-                } catch (err) {
-                    console.warn('ใช้ข้อมูลจำลอง (ไม่สามารถดึงจาก GG)', err);
-                    subjectData = { 'คณิตศาสตร์': 2.5, 'ฟิสิกส์': 1.2, 'เคมี': 0.8 };
-                    renderTableAndChart();
-                    showToast('⚠️ ใช้ข้อมูลจำลอง (ไม่เชื่อม GG)', true);
-                }
-            }
+<div
+style="
+font-size:44px;
+font-family:Orbitron;
+margin:15px 0 4px
+"
+id="heroPercent">
+57%
+</div>
 
-            // -------------------- GOOGLE SHEET : PUSH (POST) --------------------
-            async function pushToSheet(subject, hours) {
-                try {
-                    const payload = { subject, hours };
-                    const res = await fetch(SCRIPT_URL, {
-                        method: 'POST',
-                        mode: 'no-cors', // ใช้ no-cors เพื่อหลีกเลี่ยง CORS (แต่ต้องปรับฝั่ง Apps Script)
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    // ด้วย no-cors response จะเป็น opaque ไม่สามารถอ่านได้
-                    // แต่เราถือว่าสำเร็จ และทำการ refresh ข้อมูล
-                    showToast('✅ บันทึกสำเร็จ! (โหลดข้อมูลใหม่)');
-                    // ดึงข้อมูลล่าสุด
-                    await fetchFromSheet();
-                } catch (err) {
-                    console.error('Push error:', err);
-                    showToast('❌ บันทึกไม่สำเร็จ', true);
-                }
-            }
+<div class="progress">
 
-            // -------------------- RENDER TABLE & CHART --------------------
-            function renderTableAndChart() {
-                // table
-                const entries = Object.entries(subjectData);
-                if (entries.length === 0) {
-                    tableBody.innerHTML = `<tr><td colspan="2" class="empty-msg">ยังไม่มีข้อมูล</td></tr>`;
-                    totalHoursDisplay.textContent = '0';
-                    subjectCountDisplay.textContent = '0';
-                } else {
-                    let html = '';
-                    let total = 0;
-                    entries.forEach(([name, hrs]) => {
-                        total += hrs;
-                        html += `<tr><td>${name}</td><td style="text-align:right;"><span class="hours-badge">${hrs.toFixed(2)} ชม.</span></td></tr>`;
-                    });
-                    tableBody.innerHTML = html;
-                    totalHoursDisplay.textContent = total.toFixed(2);
-                    subjectCountDisplay.textContent = entries.length;
-                }
+<i
+id="heroBar"
+style="width:57%">
+</i>
 
-                // chart
-                updateChart(entries);
-            }
+</div>
 
-            // -------------------- CHART.JS --------------------
-            function updateChart(entries) {
-                const ctx = document.getElementById('progressChart').getContext('2d');
-                const labels = entries.map(e => e[0]);
-                const data = entries.map(e => e[1]);
+<div
+class="next-title"
+id="daysText">
+กำลังคำนวณ...
+</div>
 
-                if (chartInstance) {
-                    chartInstance.destroy();
-                }
+<div class="next-meta">
+จากวันนี้ถึงวันสอบ
+</div>
 
-                if (entries.length === 0) {
-                    chartInstance = new Chart(ctx, {
-                        type: 'bar',
-                        data: { labels: ['ไม่มีข้อมูล'], datasets: [{ label: 'ชั่วโมง', data: [0], backgroundColor: 'var(--accent)',
-                                borderRadius: 8 }] },
-                        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-                    });
-                    return;
-                }
+<div class="stats">
 
-                chartInstance = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'ชั่วโมงสะสม',
-                            data: data,
-                            backgroundColor: 'var(--accent)',
-                            borderRadius: 8,
-                            barPercentage: 0.6,
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false },
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: { color: 'var(--chart-grid)' },
-                                ticks: { color: 'var(--text-secondary)' }
-                            },
-                            x: {
-                                grid: { display: false },
-                                ticks: { color: 'var(--text-secondary)', maxRotation: 20 }
-                            }
-                        }
-                    }
-                });
-            }
+<div class="stat">
+<b id="examCount">6</b>
+<small>วิชา</small>
+</div>
 
-            // -------------------- SAVE (บันทึก) --------------------
-            async function handleSave() {
-                const subject = subjectInput.value.trim() || 'ไม่ระบุวิชา';
-                if (seconds === 0) {
-                    showToast('⚠️ ยังไม่มีเวลาให้บันทึก', true);
-                    return;
-                }
-                const hours = secondsToHours(seconds);
-                // บันทึกไป GG
-                await pushToSheet(subject, hours);
-                // หลังจาก push แล้ว fetch ใหม่ (ใน pushToSheet เรียก fetch แล้ว)
-                // reset เวลา หลังจากบันทึก
-                resetCount();
-                // โหลดข้อมูลใหม่ (fetchFromSheet ถูกเรียกใน pushToSheet แล้ว)
-            }
+<div class="stat">
+<b id="hoursLeft">—</b>
+<small>ชั่วโมง</small>
+</div>
 
-            // -------------------- THEME --------------------
-            function toggleTheme() {
-                const html = document.documentElement;
-                if (currentTheme === 'light') {
-                    html.setAttribute('data-theme', 'dark');
-                    themeIcon.className = 'fas fa-sun';
-                    currentTheme = 'dark';
-                } else {
-                    html.removeAttribute('data-theme');
-                    themeIcon.className = 'fas fa-moon';
-                    currentTheme = 'light';
-                }
-                // re-render chart เพื่อให้สีเปลี่ยน (ต้องทำใหม่)
-                const entries = Object.entries(subjectData);
-                updateChart(entries);
-            }
+<div class="stat">
+<b id="studyTotal">0h</b>
+<small>อ่านแล้ว</small>
+</div>
 
-            // -------------------- INIT --------------------
-            async function init() {
-                // ตั้งค่าเริ่มต้น
-                updateSubjectUI();
-                updateTimerDisplay();
-                setStatusText('⏸️ ยังไม่เริ่ม');
-                themeIcon.className = 'fas fa-moon';
-                currentTheme = 'light';
+</div>
 
-                // โหลดข้อมูลจาก GG
-                await fetchFromSheet();
+</div>
 
-                // Event listeners
-                startBtn.addEventListener('click', startCount);
-                pauseBtn.addEventListener('click', pauseCount);
-                resetBtn.addEventListener('click', resetCount);
-                saveBtn.addEventListener('click', handleSave);
-                subjectInput.addEventListener('input', updateSubjectUI);
-                themeToggle.addEventListener('click', toggleTheme);
+</div>
 
-                // กด Enter ใน input ให้ focus ที่ปุ่ม start
-                subjectInput.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter') startBtn.click();
-                });
 
-                // cleanup
-                window.addEventListener('beforeunload', () => {
-                    if (timerInterval) clearInterval(timerInterval);
-                });
-            }
+<div class="section-title">
 
-            init();
+<h2>FINAL SCHEDULE</h2>
 
-        })();
-    </script>
+<span>
+เรียงตามวันสอบ
+</span>
+
+</div>
+
+<div
+class="cards"
+id="overviewCards">
+</div>
+
+</section>
+
+
+<!-- ================================================= -->
+<!-- SUBJECTS -->
+<!-- ================================================= -->
+
+<section id="subjects" class="view">
+
+<div class="section-title">
+
+<h2>
+SUBJECT CONTROL CENTER
+</h2>
+
+<span>
+เลือกวิชาเพื่อดู Countdown แบบละเอียด
+</span>
+
+</div>
+
+
+<div class="detail">
+
+<div
+class="list"
+id="subjectList">
+</div>
+
+
+<div class="panel detail-main">
+
+<div class="eyebrow">
+SUBJECT // LIVE COUNTDOWN
+</div>
+
+<h2 id="detailName"></h2>
+
+<div
+class="sub"
+id="detailCode">
+</div>
+
+
+<div
+class="detail-count"
+id="detailCountdown">
+</div>
+
+
+<div class="schedule">
+
+<div class="info">
+<small>วันสอบ</small>
+<b id="detailDate"></b>
+</div>
+
+<div class="info">
+<small>เวลา</small>
+<b id="detailTime"></b>
+</div>
+
+<div class="info">
+<small>กลุ่ม</small>
+<b id="detailGroup"></b>
+</div>
+
+<div class="info">
+<small>สถานะการเตรียมตัว</small>
+<b id="detailPercent"></b>
+</div>
+
+</div>
+
+
+<div class="progress">
+
+<i id="detailBar"></i>
+
+</div>
+
+
+<div
+class="quote"
+id="detailMessage">
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================================================= -->
+<!-- STUDY -->
+<!-- ================================================= -->
+
+<section id="study" class="view">
+
+<div class="section-title">
+
+<h2>
+STUDY TIMER
+</h2>
+
+<span>
+FOCUS · TRACK · IMPROVE
+</span>
+
+</div>
+
+
+<div class="study-grid">
+
+
+<!-- TIMER -->
+
+<div class="panel timer-wrap">
+
+<div class="eyebrow">
+FOCUS SESSION // LIVE
+</div>
+
+
+<div class="study-subject">
+
+<label>
+SUBJECT
+</label>
+
+<select id="subjectInput">
+
+<option value="">
+เลือกวิชา
+</option>
+
+<option value="01006003 ENGINEERING MATHEMATICS 3">
+ENGINEERING MATHEMATICS 3
+</option>
+
+<option value="01156232 FLUID MECHANICS">
+FLUID MECHANICS
+</option>
+
+<option value="01156236 COMPUTER-AIDED DESIGN AND RAPID PROTOTYPING TECHNOLOGY">
+COMPUTER-AIDED DESIGN AND RAPID PROTOTYPING TECHNOLOGY
+</option>
+
+<option value="01156237 MANUFACTURING PROCESSES">
+MANUFACTURING PROCESSES
+</option>
+
+<option value="01156231 THERMODYNAMICS">
+THERMODYNAMICS
+</option>
+
+<option value="01156233 MECHANICS OF MATERIALS">
+MECHANICS OF MATERIALS
+</option>
+
+</select>
+
+</div>
+
+
+<div class="active-subject">
+
+<span id="badgeSubject">
+ไม่ระบุวิชา
+</span>
+
+</div>
+
+
+<div
+class="stopwatch"
+id="timerDisplay">
+00:00:00
+</div>
+
+
+<div
+class="status"
+id="statusText">
+⏸️ ยังไม่เริ่ม
+</div>
+
+
+<div class="controls">
+
+<button
+class="btn primary"
+id="startBtn">
+▶ START
+</button>
+
+<button
+class="btn"
+id="pauseBtn">
+⏸ PAUSE
+</button>
+
+<button
+class="btn"
+id="resetBtn">
+⏹ RESET
+</button>
+
+<button
+class="btn save-btn"
+id="saveBtn">
+💾 SAVE
+</button>
+
+</div>
+
+
+<div class="quote">
+
+เลือกวิชา → กด START → อ่านหนังสือ → กด SAVE
+
+<br>
+
+ระบบจะบันทึกเวลาที่อ่านลง Google Sheets
+
+</div>
+
+</div>
+
+
+<!-- ANALYTICS -->
+
+<div class="panel">
+
+<div class="eyebrow">
+STUDY ANALYTICS
+</div>
+
+
+<div class="study-stat-grid">
+
+<div class="study-stat">
+
+<small>
+TOTAL HOURS
+</small>
+
+<strong
+id="totalHoursDisplay">
+0
+</strong>
+
+<span>
+ชั่วโมง
+</span>
+
+</div>
+
+
+<div class="study-stat">
+
+<small>
+SUBJECTS
+</small>
+
+<strong
+id="subjectCountDisplay">
+0
+</strong>
+
+<span>
+วิชา
+</span>
+
+</div>
+
+</div>
+
+
+<div class="chart-container">
+
+<canvas
+id="progressChart">
+</canvas>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- TABLE -->
+
+<div class="section-title">
+
+<h2>
+STUDY LOG
+</h2>
+
+<span>
+เวลาที่อ่านสะสมรายวิชา
+</span>
+
+</div>
+
+
+<div class="panel">
+
+<div class="table-wrap">
+
+<table class="study-table">
+
+<thead>
+
+<tr>
+
+<th>
+SUBJECT
+</th>
+
+<th>
+STUDY TIME
+</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="tableBody">
+
+<tr>
+
+<td
+colspan="2"
+class="empty-msg">
+
+กำลังโหลดข้อมูล...
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+
+<div
+id="toastMsg"
+class="toast">
+บันทึกแล้ว
+</div>
+
+
+<footer>
+
+ME ENGINEERING // FINAL 2026 // BUILT FOR FOCUS
+
+</footer>
+
+</main>
+
+
+<script
+src="https://cdn.jsdelivr.net/npm/chart.js">
+</script>
+
+
+<script>
+
+/* =====================================================
+   EXAM DATA
+===================================================== */
+
+const exams = [
+
+{
+code:"01006003",
+name:"ENGINEERING MATHEMATICS 3",
+group:"13",
+date:"2026-10-26",
+time:"09:30",
+end:"12:30",
+percent:57
+},
+
+{
+code:"01156232",
+name:"FLUID MECHANICS",
+group:"22",
+date:"2026-10-27",
+time:"09:30",
+end:"12:30",
+percent:57
+},
+
+{
+code:"01156236",
+name:"COMPUTER-AIDED DESIGN AND RAPID PROTOTYPING TECHNOLOGY",
+group:"22 / 222",
+date:"2026-10-29",
+time:"09:30",
+end:"12:30",
+percent:56
+},
+
+{
+code:"01156237",
+name:"MANUFACTURING PROCESSES",
+group:"22",
+date:"2026-10-30",
+time:"09:30",
+end:"12:30",
+percent:55
+},
+
+{
+code:"01156231",
+name:"THERMODYNAMICS",
+group:"22",
+date:"2026-11-02",
+time:"09:30",
+end:"12:30",
+percent:54
+},
+
+{
+code:"01156233",
+name:"MECHANICS OF MATERIALS",
+group:"22",
+date:"2026-11-04",
+time:"09:30",
+end:"12:30",
+percent:53
+}
+
+];
+
+
+/* =====================================================
+   THAI DATE
+===================================================== */
+
+const thaiDays = [
+"อาทิตย์",
+"จันทร์",
+"อังคาร",
+"พุธ",
+"พฤหัสบดี",
+"ศุกร์",
+"เสาร์"
+];
+
+const thaiMonths = [
+"มกราคม",
+"กุมภาพันธ์",
+"มีนาคม",
+"เมษายน",
+"พฤษภาคม",
+"มิถุนายน",
+"กรกฎาคม",
+"สิงหาคม",
+"กันยายน",
+"ตุลาคม",
+"พฤศจิกายน",
+"ธันวาคม"
+];
+
+
+function fmtDate(dateString){
+
+const d =
+new Date(dateString+"T00:00:00");
+
+return `${thaiDays[d.getDay()]}
+${d.getDate()}
+${thaiMonths[d.getMonth()]}
+${d.getFullYear()+543}`;
+
+}
+
+
+function examDateTime(exam){
+
+return new Date(
+`${exam.date}T${exam.time}:00`
+);
+
+}
+
+
+/* =====================================================
+   COUNTDOWN
+===================================================== */
+
+function diffParts(target){
+
+const ms =
+Math.max(
+0,
+target - new Date()
+);
+
+const sec =
+Math.floor(ms / 1000);
+
+return {
+
+days:
+Math.floor(sec / 86400),
+
+hours:
+Math.floor(
+(sec % 86400) / 3600
+),
+
+mins:
+Math.floor(
+(sec % 3600) / 60
+),
+
+secs:
+sec % 60,
+
+ms
+
+};
+
+}
+
+
+function countdownHTML(d){
+
+return [
+
+["DAYS",d.days],
+
+[
+"HOURS",
+String(d.hours).padStart(2,"0")
+],
+
+[
+"MIN",
+String(d.mins).padStart(2,"0")
+],
+
+[
+"SEC",
+String(d.secs).padStart(2,"0")
+]
+
+]
+
+.map(
+x => `
+<div class="unit">
+
+<div class="num">
+${x[1]}
+</div>
+
+<div class="label">
+${x[0]}
+</div>
+
+</div>
+`
+)
+
+.join("");
+
+}
+
+
+function nextExam(){
+
+const now =
+new Date();
+
+return (
+exams.find(
+e => examDateTime(e) > now
+)
+||
+exams[exams.length-1]
+);
+
+}
+
+
+/* =====================================================
+   OVERVIEW
+===================================================== */
+
+function renderOverview(){
+
+const next =
+nextExam();
+
+const d =
+diffParts(
+examDateTime(next)
+);
+
+
+document.getElementById(
+"heroTitle"
+).textContent =
+next.name;
+
+
+document.getElementById(
+"heroMeta"
+).textContent =
+`${next.code} · กลุ่ม ${next.group} · ${fmtDate(next.date)} · ${next.time}–${next.end}`;
+
+
+document.getElementById(
+"heroCountdown"
+).innerHTML =
+countdownHTML(d);
+
+
+document.getElementById(
+"heroPercent"
+).textContent =
+next.percent+"%";
+
+
+document.getElementById(
+"heroBar"
+).style.width =
+next.percent+"%";
+
+
+document.getElementById(
+"daysText"
+).textContent =
+`เหลือ ${d.days} วัน`;
+
+
+document.getElementById(
+"examCount"
+).textContent =
+exams.length;
+
+
+document.getElementById(
+"hoursLeft"
+).textContent =
+Math.floor(
+d.ms / 3600000
+);
+
+
+const html =
+exams.map(
+(e,i)=>{
+
+const x =
+diffParts(
+examDateTime(e)
+);
+
+return `
+
+<article
+class="course"
+onclick="selectSubject(${i})">
+
+<div class="top">
+
+<div class="code">
+${e.code}
+</div>
+
+<div class="percent">
+${e.percent}%
+</div>
+
+</div>
+
+
+<h3>
+${e.name}
+</h3>
+
+
+<div class="group">
+กลุ่ม ${e.group}
+</div>
+
+
+<div class="progress">
+
+<i
+style="width:${e.percent}%">
+</i>
+
+</div>
+
+
+<div class="exam">
+
+<div>
+
+<strong>
+${fmtDate(e.date)}
+</strong>
+
+<br>
+
+<span>
+${e.time} – ${e.end}
+</span>
+
+</div>
+
+
+<div class="mini-count">
+
+${x.days}D
+${String(x.hours).padStart(2,"0")}H
+
+</div>
+
+</div>
+
+</article>
+
+`;
+
+}
+).join("");
+
+
+document.getElementById(
+"overviewCards"
+).innerHTML =
+html;
+
+}
+
+
+/* =====================================================
+   SUBJECT LIST
+===================================================== */
+
+function renderList(){
+
+document.getElementById(
+"subjectList"
+).innerHTML =
+
+exams.map(
+(e,i)=>`
+
+<button
+id="sbtn${i}"
+onclick="selectSubject(${i})">
+
+<div class="code">
+${e.code}
+</div>
+
+<b>
+${e.name}
+</b>
+
+<div class="group">
+กลุ่ม ${e.group}
+</div>
+
+</button>
+
+`
+).join("");
+
+}
+
+
+window.selected = 0;
+
+
+function selectSubject(i){
+
+const e =
+exams[i];
+
+window.selected =
+i;
+
+
+document
+.querySelectorAll(
+"#subjectList button"
+)
+.forEach(
+(b,j)=>
+b.classList.toggle(
+"active",
+j===i
+)
+);
+
+
+document.getElementById(
+"detailName"
+).textContent =
+e.name;
+
+
+document.getElementById(
+"detailCode"
+).textContent =
+`${e.code} · FINAL 2026`;
+
+
+document.getElementById(
+"detailDate"
+).textContent =
+fmtDate(e.date);
+
+
+document.getElementById(
+"detailTime"
+).textContent =
+`${e.time} – ${e.end}`;
+
+
+document.getElementById(
+"detailGroup"
+).textContent =
+e.group;
+
+
+document.getElementById(
+"detailPercent"
+).textContent =
+e.percent+"%";
+
+
+document.getElementById(
+"detailBar"
+).style.width =
+e.percent+"%";
+
+
+updateDetail();
+
+}
+
+
+function updateDetail(){
+
+const e =
+exams[
+window.selected || 0
+];
+
+const d =
+diffParts(
+examDateTime(e)
+);
+
+
+document.getElementById(
+"detailCountdown"
+).innerHTML =
+countdownHTML(d);
+
+
+document.getElementById(
+"detailMessage"
+).textContent =
+
+d.ms > 0
+
+?
+
+`เหลือ ${d.days} วัน ${d.hours} ชั่วโมง ${d.mins} นาที ${d.secs} วินาที ก่อนสอบ ${e.name}`
+
+:
+
+"ถึงเวลาสอบแล้ว";
+
+}
+
+
+/* =====================================================
+   TAB
+===================================================== */
+
+document
+.querySelectorAll(".tab")
+.forEach(
+btn => {
+
+btn.onclick = () => {
+
+document
+.querySelectorAll(".tab")
+.forEach(
+x =>
+x.classList.remove("active")
+);
+
+document
+.querySelectorAll(".view")
+.forEach(
+x =>
+x.classList.remove("active")
+);
+
+btn.classList.add("active");
+
+document
+.getElementById(
+btn.dataset.view
+)
+.classList.add("active");
+
+};
+
+}
+);
+
+
+/* =====================================================
+   GOOGLE APPS SCRIPT
+===================================================== */
+
+const SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbzBP843GELq4xldrzR40OuJbra80PhBU7gprMyQcuQEgbVZq_MBQwraVMDqYFjg5K6t/exec";
+
+
+/* =====================================================
+   DOM
+===================================================== */
+
+const timerDisplay =
+document.getElementById(
+"timerDisplay"
+);
+
+const startBtn =
+document.getElementById(
+"startBtn"
+);
+
+const pauseBtn =
+document.getElementById(
+"pauseBtn"
+);
+
+const resetBtn =
+document.getElementById(
+"resetBtn"
+);
+
+const saveBtn =
+document.getElementById(
+"saveBtn"
+);
+
+const subjectInput =
+document.getElementById(
+"subjectInput"
+);
+
+const badgeSubject =
+document.getElementById(
+"badgeSubject"
+);
+
+const statusText =
+document.getElementById(
+"statusText"
+);
+
+const tableBody =
+document.getElementById(
+"tableBody"
+);
+
+const totalHoursDisplay =
+document.getElementById(
+"totalHoursDisplay"
+);
+
+const subjectCountDisplay =
+document.getElementById(
+"subjectCountDisplay"
+);
+
+const toast =
+document.getElementById(
+"toastMsg"
+);
+
+
+/* =====================================================
+   TIMER STATE
+===================================================== */
+
+let timerInterval = null;
+
+let seconds = 0;
+
+let isRunning = false;
+
+let isSaving = false;
+
+
+/* =====================================================
+   STUDY DATA
+===================================================== */
+
+let subjectData = {};
+
+let chartInstance = null;
+
+
+/* =====================================================
+   TIMER DISPLAY
+===================================================== */
+
+function formatTime(sec){
+
+const hrs =
+Math.floor(sec / 3600);
+
+const mins =
+Math.floor(
+(sec % 3600) / 60
+);
+
+const secs =
+sec % 60;
+
+return `${String(hrs).padStart(2,"0")}:
+${String(mins).padStart(2,"0")}:
+${String(secs).padStart(2,"0")}`;
+
+}
+
+
+function updateTimerDisplay(){
+
+timerDisplay.textContent =
+formatTime(seconds);
+
+}
+
+
+function setStatus(text){
+
+statusText.textContent =
+text;
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+function showToast(
+message,
+error=false
+){
+
+toast.textContent =
+message;
+
+toast.style.borderColor =
+error
+? "var(--danger)"
+: "var(--accent)";
+
+toast.classList.add("show");
+
+clearTimeout(
+toast._timer
+);
+
+toast._timer =
+setTimeout(
+()=>{
+toast.classList.remove("show");
+},
+2800
+);
+
+}
+
+
+/* =====================================================
+   SUBJECT
+===================================================== */
+
+function updateSubjectUI(){
+
+const value =
+subjectInput.value.trim();
+
+badgeSubject.textContent =
+value || "ไม่ระบุวิชา";
+
+}
+
+
+/* =====================================================
+   START TIMER
+===================================================== */
+
+function startTimer(){
+
+if(isRunning)
+return;
+
+
+const subject =
+subjectInput.value.trim();
+
+if(!subject){
+
+showToast(
+"⚠️ กรุณาเลือกวิชาก่อน",
+true
+);
+
+return;
+
+}
+
+
+isRunning = true;
+
+
+timerInterval =
+setInterval(
+()=>{
+
+seconds++;
+
+updateTimerDisplay();
+
+},
+1000
+);
+
+
+setStatus(
+"▶️ กำลังอ่าน..."
+);
+
+}
+
+
+/* =====================================================
+   PAUSE
+===================================================== */
+
+function pauseTimer(){
+
+if(!isRunning)
+return;
+
+
+clearInterval(
+timerInterval
+);
+
+timerInterval =
+null;
+
+isRunning =
+false;
+
+
+setStatus(
+"⏸️ หยุดชั่วคราว"
+);
+
+}
+
+
+/* =====================================================
+   RESET
+===================================================== */
+
+function resetTimer(){
+
+clearInterval(
+timerInterval
+);
+
+timerInterval =
+null;
+
+seconds =
+0;
+
+isRunning =
+false;
+
+isSaving =
+false;
+
+
+updateTimerDisplay();
+
+
+setStatus(
+"⏸️ ยังไม่เริ่ม"
+);
+
+}
+
+
+/* =====================================================
+   GOOGLE SHEETS GET
+===================================================== */
+
+async function fetchFromSheet(){
+
+try{
+
+const response =
+await fetch(
+SCRIPT_URL,
+{
+method:"GET"
+}
+);
+
+
+if(!response.ok)
+throw new Error(
+"Network error"
+);
+
+
+const data =
+await response.json();
+
+
+if(
+!data ||
+!data.data
+){
+
+throw new Error(
+"Invalid response"
+);
+
+}
+
+
+subjectData =
+data.data;
+
+
+localStorage.setItem(
+"studyData",
+JSON.stringify(
+subjectData
+)
+);
+
+
+renderStudyData();
+
+
+}
+catch(error){
+
+console.warn(
+"Google Sheet unavailable",
+error
+);
+
+
+const saved =
+localStorage.getItem(
+"studyData"
+);
+
+
+if(saved){
+
+try{
+
+subjectData =
+JSON.parse(saved);
+
+}
+catch{
+
+subjectData = {};
+
+}
+
+
+showToast(
+"⚠️ ใช้ข้อมูลล่าสุดจากเครื่อง",
+true
+);
+
+}
+else{
+
+subjectData = {};
+
+showToast(
+"⚠️ ไม่สามารถเชื่อม Google Sheets",
+true
+);
+
+}
+
+
+renderStudyData();
+
+}
+
+}
+
+
+/* =====================================================
+   GOOGLE SHEETS POST
+===================================================== */
+
+async function pushToSheet(
+subject,
+hours
+){
+
+try{
+
+await fetch(
+SCRIPT_URL,
+{
+
+method:"POST",
+
+mode:"no-cors",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:JSON.stringify({
+
+subject:
+subject,
+
+hours:
+hours
+
+})
+
+}
+);
+
+
+return true;
+
+}
+catch(error){
+
+console.error(
+"Push error:",
+error
+);
+
+return false;
+
+}
+
+}
+
+
+/* =====================================================
+   SAVE SESSION
+===================================================== */
+
+async function saveSession(){
+
+if(isSaving)
+return;
+
+
+const subject =
+subjectInput.value.trim();
+
+
+if(!subject){
+
+showToast(
+"⚠️ กรุณาเลือกวิชาก่อน",
+true
+);
+
+return;
+
+}
+
+
+if(seconds <= 0){
+
+showToast(
+"⚠️ ยังไม่มีเวลาให้บันทึก",
+true
+);
+
+return;
+
+}
+
+
+isSaving = true;
+
+
+pauseTimer();
+
+
+const hours =
+Math.round(
+(seconds / 3600) * 100
+) / 100;
+
+
+/*
+   Optimistic update
+*/
+
+if(
+!subjectData[subject]
+){
+
+subjectData[subject] =
+0;
+
+}
+
+
+subjectData[subject] +=
+hours;
+
+
+localStorage.setItem(
+"studyData",
+JSON.stringify(
+subjectData
+)
+);
+
+
+renderStudyData();
+
+
+showToast(
+"⏳ กำลังบันทึก..."
+);
+
+
+const success =
+await pushToSheet(
+subject,
+hours
+);
+
+
+if(success){
+
+showToast(
+`✅ บันทึก ${hours.toFixed(2)} ชม. แล้ว`
+);
+
+
+/*
+   รอ Apps Script
+   แล้วโหลดข้อมูลใหม่
+*/
+
+setTimeout(
+fetchFromSheet,
+1500
+);
+
+
+seconds =
+0;
+
+updateTimerDisplay();
+
+setStatus(
+"⏸️ บันทึกแล้ว · พร้อมเริ่มใหม่"
+);
+
+}
+else{
+
+showToast(
+"❌ บันทึก Google Sheets ไม่สำเร็จ",
+true
+);
+
+}
+
+
+isSaving = false;
+
+}
+
+
+/* =====================================================
+   RENDER STUDY DATA
+===================================================== */
+
+function renderStudyData(){
+
+const entries =
+Object.entries(
+subjectData
+);
+
+
+/* TABLE */
+
+if(
+entries.length === 0
+){
+
+tableBody.innerHTML = `
+
+<tr>
+
+<td
+colspan="2"
+class="empty-msg">
+
+ยังไม่มีข้อมูล
+
+</td>
+
+</tr>
+
+`;
+
+}
+else{
+
+tableBody.innerHTML =
+
+entries.map(
+([name,hours])=>{
+
+const value =
+Number(hours) || 0;
+
+
+return `
+
+<tr>
+
+<td>
+${escapeHTML(name)}
+</td>
+
+<td>
+
+<span
+class="hours-badge">
+
+${value.toFixed(2)}
+ชม.
+
+</span>
+
+</td>
+
+</tr>
+
+`;
+
+}
+).join("");
+
+}
+
+
+/* TOTAL */
+
+const total =
+entries.reduce(
+(sum,[,hours]) =>
+sum +
+(Number(hours)||0),
+0
+);
+
+
+totalHoursDisplay.textContent =
+total.toFixed(2);
+
+
+subjectCountDisplay.textContent =
+entries.length;
+
+
+/* OVERVIEW */
+
+document.getElementById(
+"studyTotal"
+).textContent =
+`${total.toFixed(1)}h`;
+
+
+/* CHART */
+
+updateChart(
+entries
+);
+
+}
+
+
+/* =====================================================
+   CHART
+===================================================== */
+
+function updateChart(entries){
+
+const canvas =
+document.getElementById(
+"progressChart"
+);
+
+if(!canvas)
+return;
+
+
+const ctx =
+canvas.getContext("2d");
+
+
+if(chartInstance){
+
+chartInstance.destroy();
+
+}
+
+
+const labels =
+entries.map(
+([name])=>{
+
+/*
+   เอา code ออกเพื่อให้
+   label สั้นลง
+*/
+
+const parts =
+name.split(" ");
+
+return parts.length > 1
+? parts.slice(1).join(" ")
+: name;
+
+}
+);
+
+
+const values =
+entries.map(
+([,hours]) =>
+Number(hours)||0
+);
+
+
+chartInstance =
+new Chart(
+ctx,
+{
+
+type:"bar",
+
+data:{
+
+labels,
+
+datasets:[
+
+{
+
+label:
+"ชั่วโมงสะสม",
+
+data:
+values,
+
+backgroundColor:
+"#00e5ff",
+
+borderRadius:
+8,
+
+barPercentage:
+.55
+
+}
+
+]
+
+},
+
+options:{
+
+responsive:true,
+
+maintainAspectRatio:false,
+
+plugins:{
+
+legend:{
+display:false
+}
+
+},
+
+scales:{
+
+y:{
+
+beginAtZero:true,
+
+grid:{
+color:
+"rgba(255,255,255,.06)"
+},
+
+ticks:{
+color:
+"#7f8da3"
+}
+
+},
+
+x:{
+
+grid:{
+display:false
+},
+
+ticks:{
+
+color:
+"#7f8da3",
+
+maxRotation:25,
+
+minRotation:0
+
+}
+
+}
+
+}
+
+}
+
+}
+
+);
+
+}
+
+
+/* =====================================================
+   SECURITY
+===================================================== */
+
+function escapeHTML(value){
+
+return String(value)
+
+.replaceAll(
+"&",
+"&amp;"
+)
+
+.replaceAll(
+"<",
+"&lt;"
+)
+
+.replaceAll(
+">",
+"&gt;"
+)
+
+.replaceAll(
+'"',
+"&quot;"
+)
+
+.replaceAll(
+"'",
+"&#039;"
+);
+
+}
+
+
+/* =====================================================
+   EVENTS
+===================================================== */
+
+subjectInput.addEventListener(
+"change",
+updateSubjectUI
+);
+
+
+startBtn.addEventListener(
+"click",
+startTimer
+);
+
+
+pauseBtn.addEventListener(
+"click",
+pauseTimer
+);
+
+
+resetBtn.addEventListener(
+"click",
+resetTimer
+);
+
+
+saveBtn.addEventListener(
+"click",
+saveSession
+);
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+renderOverview();
+
+renderList();
+
+selectSubject(0);
+
+updateTimerDisplay();
+
+updateSubjectUI();
+
+setStatus(
+"⏸️ ยังไม่เริ่ม"
+);
+
+
+/*
+   โหลดข้อมูล Google Sheets
+*/
+
+fetchFromSheet();
+
+
+/*
+   Countdown ทุก 1 วินาที
+*/
+
+setInterval(
+()=>{
+
+renderOverview();
+
+updateDetail();
+
+},
+1000
+);
+
+</script>
 
 </body>
 </html>
