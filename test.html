@@ -1,24 +1,40 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FINAL COUNTDOWN // ME ENGINEERING</title>
-    <link rel="stylesheet" href="/public/assets/css/intest.css">
+    <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>FINAL COUNTDOWN // ME ENGINEERING</title> <link rel="stylesheet" href="/public/assets/css/intest.css">
 </head>
+
 <body>
+
 <header>
-  <div class="container nav">
-      <div class="logo">
-          FINAL<span>//COUNTDOWN</span>
-      </div>
-    
-      <div class="tabs">
-        <button class="tab active" data-view="overview"> 01 ภาพรวม</button>
-        <button class="tab" data-view="subjects"> 02 รายวิชา</button>
-        <button class="tab" data-view="study"> 03 STUDY TIMER</button>
-      </div>
-  </div>
+
+<div class="container nav">
+
+<div class="logo">
+FINAL<span>//COUNTDOWN</span>
+</div>
+
+<div class="tabs">
+
+<button class="tab active"
+data-view="overview">
+01 ภาพรวม
+</button>
+
+<button class="tab"
+data-view="subjects">
+02 รายวิชา
+</button>
+
+<button class="tab"
+data-view="study">
+03 STUDY TIMER
+</button>
+
+</div>
+
+</div>
+
 </header>
 
 
@@ -626,26 +642,6 @@ return new Date(
 
 }
 
-// =====================================================
-// EXAM PROGRESS — AUTO UPDATE
-// =====================================================
-
-// วันที่เริ่มนับความคืบหน้า ปรับได้ตามต้องการ
-const PROGRESS_START_DATE = new Date("2026-10-01T00:00:00");
-
-function getExamPercent(exam) {
-    const start = PROGRESS_START_DATE.getTime();
-    const end = examDateTime(exam).getTime();
-    const now = Date.now();
-
-    if (now >= end) return 100;
-    if (now <= start) return 0;
-
-    const progress = ((now - start) / (end - start)) * 100;
-
-    return Math.min(100, Math.max(0, progress));
-}
-
 
 /* =====================================================
    COUNTDOWN
@@ -761,14 +757,6 @@ diffParts(
 examDateTime(next)
 );
 
-const percent = getExamPercent(e);
-
-document.getElementById("detailPercent").textContent =
-    Math.floor(percent) + "%";
-
-document.getElementById("detailBar").style.width =
-    percent + "%";
-
 
 document.getElementById(
 "heroTitle"
@@ -828,8 +816,7 @@ const x =
 diffParts(
 examDateTime(e)
 );
-const percent = getExamPercent(e);
-  
+
 return `
 
 <article
@@ -843,7 +830,7 @@ ${e.code}
 </div>
 
 <div class="percent">
-    ${Math.floor(percent)}%
+${e.percent}%
 </div>
 
 </div>
@@ -861,7 +848,9 @@ ${e.name}
 
 <div class="progress">
 
-<i style="width:${percent}%"></i>
+<i
+style="width:${e.percent}%">
+</i>
 
 </div>
 
